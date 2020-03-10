@@ -8,6 +8,7 @@
     <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
     <META HTTP-EQUIV="expires" CONTENT="0">
     <title>Aero Txt Viewer</title>
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
     <style>
         body {
             overflow-x: hidden;
@@ -215,8 +216,10 @@
         <p id="pw_zone">加密内容：<input id="pw_input" type="text" /></p>
     </div>
     <div id="main"></div>
+    <div id="gitalk-container"></div>
     <script src="util.js"></script>
     <script src="aes.js"></script>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
     <script type="text/javascript">
         var date = new Date();
         var n = GetQueryString("n");
@@ -251,7 +254,17 @@
                         return;
                     }
                     RenderContent();
+                    var gitalk = new Gitalk({
+                        clientID: 'bdb84036d2da38be8d03',
+                        clientSecret: '8f1edc27c5ede8c0ec4b8b44ca8b679e1365319c',
+                        repo: 'Blog',
+                        owner: 'Aeroblast',
+                        admin: ['Aeroblast'],
+                        id: n,
+                        distractionFreeMode: false
+                    })
 
+                    gitalk.render('gitalk-container')
                 }
                 else if (loader.status == 404) {
                     log.innerHTML += "【404】似乎不存在这个文档呢……:" + n;
