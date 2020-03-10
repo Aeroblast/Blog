@@ -371,7 +371,9 @@ function LoadGitalk() {
         repo: 'Blog',
         owner: 'Aeroblast',
         admin: ['Aeroblast'],
+        createIssueManually:true,
         id: filename,
+        title:title,
         distractionFreeMode: false,
         pagerDirection: 'first'
     })
