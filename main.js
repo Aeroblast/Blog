@@ -40,7 +40,8 @@ function LoadIndex() {
                 }
             }
             if (!hit) {
-                mainwin.src = "viewer.html?n=welcome";
+                filename = "welcome";
+                LoadContent();
             }
         }
 }
@@ -170,6 +171,9 @@ function ReadIndex(element) {
     return r;
 }
 //////////Viewer//////////
+mainwin_container.addEventListener("click", function () {
+    CloseIndex();
+});
 var content_ok;
 var date = new Date();
 var log;
@@ -190,8 +194,8 @@ function LoadContent() {
     main_frame.innerHTML = main_template;
     log = main_frame.getElementById("log");
     main = main_frame.getElementById("main");
-    log.innerHTML += "文档【" + query_n + "】;";
-    let txtpath = "Text/" + query_n + ".atxt";
+    log.innerHTML += "文档【" + filename + "】;";
+    let txtpath = "Text/" + filename + ".atxt";
     loader = new XMLHttpRequest();
     loader.open('GET', txtpath + "?random=" + date.getTime(), true);
     loader.onload = ProcContent;
@@ -348,9 +352,6 @@ function SpoilerShift(e) {
 function ClickTag(a) {
     window.parent.document.ReloadIndex(new Array(a.innerText));
 }
-document.body.addEventListener("click", function () {
-    CloseIndex();
-});
 function LoadGitalk() {
     if (!content_ok) return;
     let x = document.getElementById('gitalk-container');
