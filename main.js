@@ -287,7 +287,7 @@ function EncodeAtxt(c) {
         [/\[link=(.*?)\](.*?)\[\/link\]/, "<a href=\"$1\"target=\"_blank\">$2</a>"],
         [/\[ASIN\](.*?)\[\/ASIN\]/, "ASIN:<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$1</a>"],
         [/\[ASIN=(.*?)\](.*?)\[\/ASIN\]/, "<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$2</a>"],
-        [/\[spoiler\]/, "<div class='spoiler'><div onclick='SpoilerShift(this)'>Spoiler</div>"],
+        [/\[spoiler\]/, "<div class='spoiler'><div onclick='SpoilerShift(this)' title='该块可能包含剧透内容'>Spoiler</div>"],
         [/\[\/spoiler\]/, "</div>"],
         [/\[quote\]/, "<div class='quote'>"],
         [/\[\/quote\]/, "</div>"],
@@ -350,7 +350,7 @@ function TryLoadEncrpyted(pw) {
 }
 function SpoilerShift(e) {
     if (e.parentNode.style.color == "antiquewhite") {
-        e.parentNode.style.color = "tranparent";
+        e.parentNode.style.color = "transparent";
     } else
         e.parentNode.style.color = "antiquewhite";
 }
