@@ -489,22 +489,33 @@
             let x = document.getElementById('gitalk-container');
             x.onclick = null;
             x.style.height = "0";
-            var gitalk = new Gitalk({
-                clientID: 'bdb84036d2da38be8d03',
-                clientSecret: '8f1edc27c5ede8c0ec4b8b44ca8b679e1365319c',
-                repo: 'Blog',
-                owner: 'Aeroblast',
-                admin: ['Aeroblast'],
-                id: n,
-                distractionFreeMode: false,
-                pagerDirection: 'first'
-            })
-            gitalk.render('gitalk-container')
-            let logbutton = x.getElementsByClassName('gt-btn-login');
-            if (log.length > 0) {
-                x.innerHTML = "<a>打开登录页</a>"
-            }
-            x.style.height = "auto";
+            let user = new XMLHttpRequest();
+            user.open('GET', "https://api.github.com/user", true);
+            user.onload = function () {
+                if (user.status == 200) {
+                    var gitalk = new Gitalk({
+                        clientID: 'bdb84036d2da38be8d03',
+                        clientSecret: '8f1edc27c5ede8c0ec4b8b44ca8b679e1365319c',
+                        repo: 'Blog',
+                        owner: 'Aeroblast',
+                        admin: ['Aeroblast'],
+                        id: n,
+                        distractionFreeMode: false,
+                        pagerDirection: 'first'
+                    })
+                    gitalk.render('gitalk-container')
+                } else if (user.status == 401) {
+                    x.innerHTML = "<a onclick=\"GoTo('https://github.com/login?client_id=bdb84036d2da38be8d03&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3Dbdb84036d2da38be8d03%26redirect_uri%3Dhttps%253A%252F%252Faeroblast.github.io%252FBlog%252F%253Fn="+n+"%26scope%3Dpublic_repo')\" style=''>去登录Gitalk</a>"
+                } else {
+                    console.log("Unknown Status Code:" + user.status);
+                }
+                x.style.height = "auto";
+            };
+            user.send(null);
+        }
+        function GoTo(url)
+        {
+            window.parent.document.GoTo(url);
         }
         //var current = window.location.href.match(/n=([0-9]*)/)[1];
         //var last = window.location.href.replace(/n=([0-9])*/, "n=" + (parseInt(current) - 1));
