@@ -61,7 +61,7 @@ function _LoadIndex() {
     raw_index.forEach(element => {
         s += ReadIndex(element);
     });
-    toc.innerHTML = s + "<div style='height:5%'></div>";
+    toc.innerHTML = s + "<div style='height:40%'></div>";
     let w = toc.offsetWidth;
     SetIndexAnimeCSS(w);
 }
