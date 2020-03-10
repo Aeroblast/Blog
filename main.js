@@ -190,7 +190,7 @@ function LoadBlog(i) {
     let i_n = parseInt(i);
     filename = index[i_n][0];
     title = index[i_n][1] || index[i_n][0];
-    PushState();
+    if (i) PushState();
     main_frame.innerHTML = main_template;
     log = document.getElementById("log");
     main = document.getElementById("main");
@@ -251,7 +251,7 @@ function RenderContent() {
         isMobile = iPhone || isAndroid;
     if (isMobile) {
         log.innerHTML += "Mobile;";
-        main.style.fontSize = "5vw";
+        main.style.fontSize = "4vw";
         main.style.width = "95%";
     }
     if (iPad) {
