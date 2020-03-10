@@ -8,6 +8,7 @@ var toc = document.getElementById('toc');
 var title;
 var filename;
 var query_n = GetQueryString("n");
+var query_code = GetQueryString("code");
 var raw_index;
 
 var query_tag_string = "&tags=" + GetQueryString("tags");
@@ -64,7 +65,6 @@ function _LoadIndex() {
     let w = toc.offsetWidth;
     SetIndexAnimeCSS(w);
 }
-document.ReloadIndex = ReloadIndex;
 var list_state = 0;
 function ListShift() {
     if (list_state == 0) {
@@ -353,6 +353,7 @@ function ClickTag(a) {
 }
 function LoadGitalk() {
     if (!content_ok) return;
+    history.pushState({}, title, location.pathname + "?code=" +code);
     let x = document.getElementById('gitalk-container');
     x.onclick = null;
     var gitalk = new Gitalk({
@@ -366,7 +367,7 @@ function LoadGitalk() {
         pagerDirection: 'first'
     })
     gitalk.render('gitalk-container')
-
+    history.back();
     x.style.height = "auto";
     x.style.cursor = "";
 }
