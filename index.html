@@ -1,0 +1,292 @@
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <META HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <META HTTP-EQUIV="expires" CONTENT="0">
+    <title>Floating Whirl Island</title>
+    <style>
+        body {
+            background: #101010;
+            color: antiquewhite;
+            text-align: center;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        .tag {
+            display: inline-block;
+            border: 1px solid brown;
+            border-radius: 3px;
+            padding: 0;
+        }
+
+        .toc_item:hover {
+            background: #303030;
+        }
+
+        .toc_item {
+            border-bottom: #660000 solid 2px;
+            white-space: nowrap;
+            overflow-x: scroll;
+            padding-top: 0.2em;
+            padding-bottom: 0.2em;
+            padding-right: 0.5em;
+            margin-left: 3em;
+            background: #101010;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .toc_item_selected {
+            color: white;
+        }
+
+        #toc>div::-webkit-scrollbar {
+            display: none;
+        }
+
+        #toc {
+            overflow: scroll;
+        }
+
+        #toc::-webkit-scrollbar {
+            display: none;
+        }
+
+        *[selected="false"] {
+            display: none;
+        }
+
+        .inline {
+            display: inline-block;
+            border-radius: 3px;
+            padding: 0;
+            margin: 0;
+        }
+
+        .button {
+            cursor: pointer;
+        }
+
+        @keyframes OpenIndex {}
+
+        @keyframes CloseIndex {}
+    </style>
+</head>
+
+<body>
+    <div id="mainwin_container" style="
+        -webkit-overflow-scrolling:touch; 
+        overflow-x:hidden;
+        display: inline-block;
+        width:90%;
+        height:98%;
+        ">
+        <iframe src="" id="mainwin" style="
+        width: 100%;
+        height: 100%;
+        border: 0 none;
+        overflow-x:hidden;
+        "></iframe>
+    </div>
+    <div id="toc" style="
+        position:fixed;
+        width: auto;
+        max-width: 100%;
+        right:100%;
+        top: 0;
+        height:100%;
+        border-right: 1px solid brown;
+        background:rgba(0,0,0,0.5);
+        ">
+        这里应该是目录……
+    </div>
+    <div id="list_shift_button" class="button" style="
+        position:fixed;
+        width: 3em;
+        left: 0;
+        height:100%;
+        bottom: 0;" onclick="ListShift()">
+    </div>
+    <script src="util.js"></script>
+    <script>
+
+        var mainwin = document.getElementById("mainwin");
+        var mainwin_container = document.getElementById("mainwin_container");
+        var list_shift_button = document.getElementById("list_shift_button");
+        var index = new Array();
+        var loader = new XMLHttpRequest();
+        var toc = document.getElementById('toc');
+        var title;
+        var filename;
+        var query_n = GetQueryString("n");
+        var raw_index;
+
+        var query_tag_string = "&tags=" + GetQueryString("tags");
+        var query_tags = GetQueryString("tags");
+        if (query_tags == null || query_tags == "") query_tag_string = ""; else query_tags = query_tags.split(",");
+
+        var query_pw = GetQueryString("pw");
+        if (query_pw) query_pw = "&pw=" + query_pw;
+        else query_pw = "";
+
+        PrepareIndexAnime();
+
+        loader.open('GET', "index.txt?" + RandomQuery(), true);
+        loader.onreadystatechange = LoadIndex;
+        loader.send(null);
+
+        /////////////Main//////////////
+        //LoadIndex()-LoadQuery()
+
+        function LoadIndex() {
+            if (loader.readyState == 4)
+                if (loader.status == 200) {
+                    raw_index = loader.responseText.split("\n");
+                    _LoadIndex();
+
+                    let hit = false;
+                    if (query_n && query_n.length > 1) {
+                        for (let i = 0; i < index.length; i++) {
+                            if (index[i][0] == query_n) { LoadBlog(i); hit = true; break; }
+                        }
+                    }
+                    if (!hit) {
+                        mainwin.src = "viewer.html?n=welcome";
+                    }
+                }
+        }
+        function ReloadIndex(tags_ = null) {
+            if (tags_) {
+                query_tags = tags_;
+                query_tag_string = "&tags=" + tags_;
+                PushState();
+            }
+            if (list_state == 0) ListShift();
+            _LoadIndex();
+        }
+        function _LoadIndex() {
+            var s = "";
+            if (query_tags) { s += "Tag Search<div class='inline button' onclick='ClearTags()'>❌</div>:<br>" + Tags2HTML(query_tags) + "<br><div class='toc_item' style='height:0'></div>"; }
+            raw_index.forEach(element => {
+                s += ReadIndex(element);
+            });
+            toc.innerHTML = s + "<div style='height:5%'></div>";
+            let w = toc.offsetWidth;
+            SetIndexAnimeCSS(w);
+        }
+        document.ReloadIndex = ReloadIndex;
+        var list_state = 0;
+        function ListShift() {
+            if (list_state == 0) {
+                list_state = 1;
+                toc.style.animation = "OpenIndex 0.3s";
+                toc.style.animationFillMode = "forwards";
+                mainwin_container.style.animation = "OpenIndex 0.3s";
+                mainwin_container.style.animationFillMode = "forwards";
+                //list_shift_button.style.animation = "OpenIndex 0.3s";
+                //list_shift_button.style.animationFillMode="forwards";
+            } else if (list_state == 1) {
+                list_state = 0;
+                toc.style.animation = "CloseIndex 0.3s";
+                toc.style.animationFillMode = "forwards";
+                mainwin_container.style.animation = "CloseIndex 0.3s";
+                mainwin_container.style.animationFillMode = "forwards";
+                //list_shift_button.style.animation = "CloseIndex 0.3s";
+                //list_shift_button.style.animationFillMode="forwards";
+            }
+        }
+        document.CloseIndex = function(){if(list_state==1)ListShift();};
+        function ClearTags() {
+            query_tags = null;
+            query_tag_string = "";
+            ReloadIndex();
+            PushState();
+
+        }
+        ////////////////helpers/////////////
+        function ViewerURL(n) { return "viewer.html?n=" + filename + "&" + RandomQuery() + query_pw; }
+        function PushState() {
+            history.pushState({}, title, location.pathname + "?n=" + filename + query_tag_string + query_pw);
+            query_n = GetQueryString("n");
+        }
+        function Tags2HTML(a) {
+            let s = "";
+            for (let i = 0; i < a.length; i++)s += "<div class='tag'>" + a[i] + "</div>";
+            return s;
+        }
+        function Index2HTML(a) {
+            let s = "";
+            if (a.length > 1)
+                s += "Title:<span class='title'>" + a[1] + "</span><br>Tags:";
+            for (let i = 2; i < a.length; i++)if (a[i]) s += "<div class='tag' onclick='ClickTag(this);event.stopPropagation();'>" + a[i] + "</div>";
+            return s;
+        }
+        var openindex_css;
+        var closeindex_css;
+        function PrepareIndexAnime() {
+            let classes = document.styleSheets[0].rules || document.styleSheets[0].cssRules;
+            for (let x = 0; x < classes.length; x++) {
+                if (classes[x].name == "OpenIndex") {
+                    openindex_css = classes[x];
+                }
+                if (classes[x].name == "CloseIndex") {
+                    closeindex_css = classes[x];
+                }
+            }
+        }
+        function SetIndexAnimeCSS(px) {
+            openindex_css.appendRule("from{transform:none}");
+            openindex_css.appendRule("to{transform:translate(" + px + "px,0)}");
+            closeindex_css.appendRule("to{transform:none}");
+            closeindex_css.appendRule("from{transform:translate(" + px + "px,0)}");
+        }
+        function LoadBlog(i) {
+            if (list_state == 1) ListShift();
+            let i_n = parseInt(i);
+            filename = index[i_n][0];
+            title = index[i_n][1] || index[i_n][0];
+            mainwin.onload = function () { mainwin.contentDocument.getElementById("info").innerHTML = Index2HTML(index[i_n]); }
+            mainwin.src = ViewerURL(name);
+            PushState();
+        }
+        function IsInQueryTags(s) {
+            if (s == "") return false;
+            for (let i = 0; i < query_tags.length; i++) {
+                if (query_tags[i] != "" && query_tags[i] == s) return true;
+            }
+            return false;
+        }
+        function ReadIndex(element) {
+            let es = element.split(',');
+            let r = "";
+            let select = "false";
+            let classstr = "toc_item";
+            if (query_tags)
+                for (let i = 2; i < es.length; i++) {//Tags check
+                    if (IsInQueryTags(es[i])) {
+                        select = "true";
+                    }
+                }
+            else { select = "noselect"; }
+            select = " selected=\"" + select + "\"";
+            if (es[0] == query_n) {
+                classstr += " toc_item_selected";
+            }
+            if (es.length > 1 && es[1].length > 0) {
+                r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + ">" + es[1] + "</div>"
+            }
+            else {
+                r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + ">" + es[0] + "</div>"
+            }
+            index.push(es);
+            return r;
+        }
+    </script>
+</body>
+
+</html>
