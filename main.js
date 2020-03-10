@@ -360,7 +360,7 @@ function LoadGitalk() {
         repo: 'Blog',
         owner: 'Aeroblast',
         admin: ['Aeroblast'],
-        id: n,
+        id: filename,
         distractionFreeMode: false,
         pagerDirection: 'first'
     })

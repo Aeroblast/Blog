@@ -15,13 +15,15 @@
             text-align: center;
             overflow-x: hidden;
             font-size: 16px;
+            margin-top: 0;
+            margin-bottom: 0;
         }
 
         @keyframes OpenIndex {}
 
         @keyframes CloseIndex {}
     </style>
-    <link href="main.css?v=100" rel="stylesheet" type="text/css">
+    <link href="main.css?v=101" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -30,7 +32,7 @@
         overflow-x:hidden;
         display: inline-block;
         width:90%;
-        height:98%;
+        height:100%;
         ">
         <div id="main_frame" style="
         width: 100%;
@@ -62,14 +64,14 @@
     </div>
     <script>
         function RandomQuery() {
-            return "v=100";
+            return "v=101";
             //return "random=" + (new Date()).getTime();
         }
     </script>
-    <script src="util.js?v=100"></script>
+    <script src="util.js?v=101"></script>
     <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script src="aes.js?v=100"></script>
-    <script src="main.js?v=100"></script>
+    <script src="aes.js?v=101"></script>
+    <script src="main.js?v=101"></script>
 </body>
 
 </html>
