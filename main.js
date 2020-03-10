@@ -186,7 +186,7 @@ var main_template = '\
         <div id="info"></div>\
         <p id="pw_zone">加密内容：<input id="pw_input" type="text" /></p>\
     </div>\
-    <div id="main" class="main_width"></div>\
+    <div id="main" class="main_width">加载中……</div>\
     <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>';
 function LoadContent() {
     content_ok = false;

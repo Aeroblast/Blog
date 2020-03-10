@@ -17,65 +17,11 @@
             font-size: 16px;
         }
 
-        .tag {
-            display: inline-block;
-            border: 1px solid brown;
-            border-radius: 3px;
-            padding: 0;
-        }
-
-        .toc_item:hover {
-            background: #303030;
-        }
-
-        .toc_item {
-            border-bottom: #660000 solid 2px;
-            white-space: nowrap;
-            overflow-x: scroll;
-            padding-top: 0.2em;
-            padding-bottom: 0.2em;
-            padding-right: 0.5em;
-            margin-left: 3em;
-            background: #101010;
-            cursor: pointer;
-            text-align: left;
-        }
-
-        .toc_item_selected {
-            color: white;
-        }
-
-        #toc>div::-webkit-scrollbar {
-            display: none;
-        }
-
-        #toc {
-            overflow: scroll;
-        }
-
-        #toc::-webkit-scrollbar {
-            display: none;
-        }
-
-        *[selected="false"] {
-            display: none;
-        }
-
-        .inline {
-            display: inline-block;
-            border-radius: 3px;
-            padding: 0;
-            margin: 0;
-        }
-
-        .button {
-            cursor: pointer;
-        }
-
         @keyframes OpenIndex {}
 
         @keyframes CloseIndex {}
     </style>
+    <link href="main.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -91,7 +37,8 @@
         height: 100%;
         border: 0 none;
         overflow-x:hidden;
-        "></div>
+        text-align: left;
+        ">加载中……</div>
     </div>
     <div id="toc" style="
         position:fixed;
@@ -113,7 +60,7 @@
         bottom: 0;" onclick="ListShift()">
     </div>
     <script>
-        var version="12345";
+        var version = "12345";
     </script>
     <script src="util.js"></script>
     <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>

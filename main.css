@@ -1,0 +1,246 @@
+a:link {
+    color: pink;
+}
+
+a:visited {
+    color: palevioletred
+}
+
+#info_container {
+    line-height: 1.5;
+    margin-top: 0;
+    margin-bottom: 0.2em;
+    padding: 0;
+}
+
+#main {
+    line-height: 1.5;
+    padding: 2%;
+    font-size: 20px;
+    font-family: "宋体";
+    border: 1px solid brown;
+
+}
+
+#gitalk-container {
+    height: 10%;
+    cursor: pointer;
+}
+
+.main_width {
+    width: 110vh;
+    max-width: 96%;
+    margin: auto;
+}
+
+#main p {
+    margin: 0;
+    text-indent: 2em;
+    text-align: justify;
+}
+
+#main .drawout {
+    margin: 0;
+    text-indent: 1.5em;
+}
+
+.note {
+    color: cornflowerblue;
+}
+
+#main .aligned {
+    text-indent: 0;
+}
+
+.aimg {
+    max-height: 80vh;
+    max-width: 100%;
+    text-align: center;
+}
+
+.emph {
+    text-emphasis: dot;
+    text-emphasis-position: under;
+    -webkit-text-emphasis: dot;
+    -webkit-text-emphasis-position: under;
+    font-weight: bold;
+}
+
+.spoiler {
+    width: 95%;
+    overflow: hidden;
+    height: 1.3em;
+    padding: 0;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    border: 1px solid chocolate;
+}
+
+.spoiler>div {
+    cursor: pointer;
+    color: goldenrod;
+}
+
+.spoiler>div:hover {
+    color: cornsilk;
+}
+
+.tag {
+    display: inline-block;
+    border: 1px solid brown;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.mask {
+    color: transparent;
+}
+
+.mask:hover {
+    color: inherit;
+}
+
+#main .title0 {
+    font-size: 1.5em;
+    text-indent: 0;
+    text-align: center !important;
+    font-weight: bold;
+}
+
+#main .time {
+    margin-top: 1em;
+    text-align: right;
+    font-size: 0.7em;
+    text-indent: 0;
+}
+
+#menu_trigger {
+    background: transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 90%;
+    margin: auto;
+    height: 10vh;
+    z-index: 10;
+    cursor: pointer;
+}
+
+#menu_trigger:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+#menu {
+    position: fixed;
+    top: 10vh;
+    z-index: 5;
+    display: none;
+    left: 0;
+    width: 30%;
+
+}
+
+.menu_item {
+    width: 100%;
+    margin: auto;
+    padding: 2%;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid red;
+    cursor: pointer;
+    font-weight: bold;
+    color: black;
+}
+
+.button {
+    width: 80vh;
+    max-width: 96%;
+    margin: auto;
+    padding: 2%;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid red;
+    cursor: pointer;
+    font-weight: bold;
+    color: black;
+}
+
+.button:hover {
+    background: rgba(255, 255, 255, 0.9);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#pw_zone {
+    display: none;
+}
+
+#pw_input {
+    font-size: 16px;
+}
+
+.quote {
+    padding-left: 0.5em;
+    border-left: 3px solid dimgray;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgb(255, 228, 192);
+}
+
+/*                 */
+
+.tag {
+    display: inline-block;
+    border: 1px solid brown;
+    border-radius: 3px;
+    padding: 0;
+}
+
+.toc_item:hover {
+    background: #303030;
+}
+
+.toc_item {
+    border-bottom: #660000 solid 2px;
+    white-space: nowrap;
+    overflow-x: scroll;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-right: 0.5em;
+    margin-left: 3em;
+    background: #101010;
+    cursor: pointer;
+    text-align: left;
+}
+
+.toc_item_selected {
+    color: white;
+}
+
+#toc>div::-webkit-scrollbar {
+    display: none;
+}
+
+#toc {
+    overflow: scroll;
+}
+
+#toc::-webkit-scrollbar {
+    display: none;
+}
+
+*[selected="false"] {
+    display: none;
+}
+
+.inline {
+    display: inline-block;
+    border-radius: 3px;
+    padding: 0;
+    margin: 0;
+}
+
+.button {
+    cursor: pointer;
+}
