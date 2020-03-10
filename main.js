@@ -373,6 +373,7 @@ function LoadGitalk() {
         admin: ['Aeroblast'],
         createIssueManually:true,
         id: filename,
+        title:'Comment',
         distractionFreeMode: false,
         pagerDirection: 'first'
     })
