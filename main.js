@@ -258,7 +258,9 @@ function RenderContent() {
         main.style.width = "95%";
     }
     content_ok = true;
-
+    if (query_code) {
+        LoadGitalk();
+    }
 }
 
 function EncodeAtxt(c) {
