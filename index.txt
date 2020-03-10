@@ -1,4 +1,5 @@
-﻿Tag-NovelReadOverRecord,TAG【小说读了记录】
+﻿welcome
+Tag-NovelReadOverRecord,TAG【小说读了记录】
 20190910_0000,最初的Post
 20190910_1337,,Test
 20190911_1235,一些关于获取漫画的想法

@@ -42,7 +42,7 @@ function LoadIndex() {
             }
             if (!hit) {
                 filename = "welcome";
-                LoadContent();
+                LoadBlog(0);
             }
         }
 }
@@ -182,7 +182,6 @@ var main_template = '\
     </div>\
     <div id="main" class="main_width">加载中……</div>\
     <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>';
-//LoadBlog-(callback)->ProcContent->RenderContent
 function LoadBlog(i) {
     if (list_state == 1) ListShift();
     let i_n = parseInt(i);
@@ -194,15 +193,14 @@ function LoadBlog(i) {
     main = document.getElementById("main");
     info = document.getElementById("info");
     log.innerHTML += "文档【" + filename + "】;";
-    info.innerHTML(Index2HTML(index[i_n]));
-    let txtpath = "Text/" + filename + ".atxt";
+    info.innerHTML = Index2HTML(index[i_n]);
     content_ok = false;
+    let txtpath = "Text/" + filename + ".atxt";
     loader = new XMLHttpRequest();
     loader.open('GET', txtpath + "?" + RandomQuery(), true);
     loader.onload = ProcContent;
     loader.send(null);
 }
-
 function ProcContent() {
     if (loader.status == 200) {
         txtcontent = loader.responseText.split("\n");
