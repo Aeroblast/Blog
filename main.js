@@ -175,7 +175,6 @@ mainwin_container.addEventListener("click", function () {
     CloseIndex();
 });
 var content_ok;
-var date = new Date();
 var log;
 var main;
 var loader;
@@ -197,7 +196,7 @@ function LoadContent() {
     log.innerHTML += "文档【" + filename + "】;";
     let txtpath = "Text/" + filename + ".atxt";
     loader = new XMLHttpRequest();
-    loader.open('GET', txtpath + "?random=" + date.getTime(), true);
+    loader.open('GET', txtpath + "?"+RandomQuery(), true);
     loader.onload = ProcContent;
     loader.send(null);
 }
