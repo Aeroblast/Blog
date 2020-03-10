@@ -258,35 +258,35 @@ function RenderContent() {
 }
 
 function EncodeAtxt(c) {
-    var reg = new Array(
-        [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"]
-        [/\[note\]/, ""]
-        [/\[note=(.*?)\]/, ""]
-        [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='Images/$1'>"]
-        [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='Images/$3'>"]
-        [/\[b\](.*?)\[\/b\]/, "<b>$1</b>"]
-        [/\[title\](.*?)\[\/title\]/, "<p class='title0'>$1</p>"]
-        [/\[ruby=(.*?)\](.*?)\[\/ruby\]/, "<ruby>$2<rt>$1</rt></ruby>"]
-        [/(\/\*.*?\*\/)/, ""]
-        [/\/\/\/.*/, ""]
-        [/\[emphasis\](.*?)\[\/emphasis\]/, "<span class=\"emph\">$1</span>"]
-        [/\[s\](.*?)\[\/s\]/, "<s>$1</s>"]
-        [/\[time\](.*?)\[\/time\]/, "<p class='time'>$1</p>"]
-        [/\[h1\](.*?)\[\/h1\]/, "<h1>$1</h1>"]
-        [/\[h2\](.*?)\[\/h2\]/, "<h2>$1</h2>"]
-        [/\[h3\](.*?)\[\/h3\]/, "<h3>$1</h3>"]
-        [/\[h4\](.*?)\[\/h4\]/, "<h4>$1</h4>"]
-        [/\[h5\](.*?)\[\/h5\]/, "<h5>$1</h5>"]
-        [/\[size=(.*?)\](.*?)\[\/size\]/, "<span style=\"font-size:$1em\">$2</span>"]
-        [/\[link=(.*?)\](.*?)\[\/link\]/, "<a href=\"$1\"target=\"_blank\">$2</a>"]
-        [/\[ASIN\](.*?)\[\/ASIN\]/, "ASIN:<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$1</a>"]
-        [/\[ASIN=(.*?)\](.*?)\[\/ASIN\]/, "<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$2</a>"]
-        [/\[spoiler\]/, "<div class='spoiler'><div onclick='SpoilerShift(this)'>Spoiler</div>"]
-        [/\[\/spoiler\]/, "</div>"]
-        [/\[quote\]/, "<div class='quote'>"]
-        [/\[\/quote\]/, "</div>"]
+    var reg = [
+        [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"],
+        [/\[note\]/, ""],
+        [/\[note=(.*?)\]/, ""],
+        [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='Images/$1'>"],
+        [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='Images/$3'>"],
+        [/\[b\](.*?)\[\/b\]/, "<b>$1</b>"],
+        [/\[title\](.*?)\[\/title\]/, "<p class='title0'>$1</p>"],
+        [/\[ruby=(.*?)\](.*?)\[\/ruby\]/, "<ruby>$2<rt>$1</rt></ruby>"],
+        [/(\/\*.*?\*\/)/, ""],
+        [/\/\/\/.*/, ""],
+        [/\[emphasis\](.*?)\[\/emphasis\]/, "<span class=\"emph\">$1</span>"],
+        [/\[s\](.*?)\[\/s\]/, "<s>$1</s>"],
+        [/\[time\](.*?)\[\/time\]/, "<p class='time'>$1</p>"],
+        [/\[h1\](.*?)\[\/h1\]/, "<h1>$1</h1>"],
+        [/\[h2\](.*?)\[\/h2\]/, "<h2>$1</h2>"],
+        [/\[h3\](.*?)\[\/h3\]/, "<h3>$1</h3>"],
+        [/\[h4\](.*?)\[\/h4\]/, "<h4>$1</h4>"],
+        [/\[h5\](.*?)\[\/h5\]/, "<h5>$1</h5>"],
+        [/\[size=(.*?)\](.*?)\[\/size\]/, "<span style=\"font-size:$1em\">$2</span>"],
+        [/\[link=(.*?)\](.*?)\[\/link\]/, "<a href=\"$1\"target=\"_blank\">$2</a>"],
+        [/\[ASIN\](.*?)\[\/ASIN\]/, "ASIN:<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$1</a>"],
+        [/\[ASIN=(.*?)\](.*?)\[\/ASIN\]/, "<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$2</a>"],
+        [/\[spoiler\]/, "<div class='spoiler'><div onclick='SpoilerShift(this)'>Spoiler</div>"],
+        [/\[\/spoiler\]/, "</div>"],
+        [/\[quote\]/, "<div class='quote'>"],
+        [/\[\/quote\]/, "</div>"],
         [/\[mask\](.*?)\[\/mask\]/, "<span class=\"mask\" title=\"你知道的太多了\">$1</span>"]
-    );
+    ];
     var r = c;
     var matched = true;
     var imgpath;
