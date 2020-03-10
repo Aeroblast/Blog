@@ -84,8 +84,7 @@ function ListShift() {
         //list_shift_button.style.animationFillMode="forwards";
     }
 }
-document.CloseIndex = function () { if (list_state == 1) ListShift(); };
-document.GoTo = function (url) { window.location.href = url; };
+function CloseIndex() { if (list_state == 1) ListShift(); };
 function ClearTags() {
     query_tags = null;
     query_tag_string = "";
