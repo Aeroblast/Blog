@@ -288,7 +288,6 @@ function EncodeAtxt(c) {
     ];
     var r = c;
     var matched = true;
-    var imgpath;
     while (matched) {
         matched = false;
         for (var i = 0; i < reg.length; i++) {
@@ -299,14 +298,14 @@ function EncodeAtxt(c) {
                     case 1://[note]
                         rep = "<a class='note' onclick='Footnote(" + note_count + ")'><sup>注</sup></a>";
                         note_count++;
-                        r = r.replace(reg[i], rep);
+                        r = r.replace(reg[i][0], rep);
                         break;
                     case 2://[note=...]
                         notes.push(match[1]);
-                        r = r.replace(reg[i], rep);
+                        r = r.replace(reg[i][0], rep);
                         break;
                     default:
-                        r = r.replace(reg[i], rep);
+                        r = r.replace(reg[i][0], rep);
                         break;
                 }
                 matched = true;
