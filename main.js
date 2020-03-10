@@ -154,6 +154,9 @@ function ReadIndex(element) {
     if (es[0] == query_n) {
         classstr += " toc_item_selected";
     }
+    if (!isNum(es[0][0])) {
+        classstr += " toc_item_sp";
+    }
     if (es.length > 1 && es[1].length > 0) {
         r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + ">" + es[1] + "</div>"
     }
@@ -354,7 +357,9 @@ function ClickTag(a) {
 }
 function LoadGitalk() {
     if (!content_ok) return;
-    history.pushState({}, title, location.pathname + "?code=" + query_code);
+    if (query_code)
+        history.pushState({}, title, location.pathname + "?code=" + query_code);
+
     let x = document.getElementById('gitalk-container');
     x.onclick = null;
     var gitalk = new Gitalk({
@@ -367,8 +372,9 @@ function LoadGitalk() {
         distractionFreeMode: false,
         pagerDirection: 'first'
     })
-    gitalk.render('gitalk-container')
-    history.back();
+    gitalk.render('gitalk-container');
+    if (query_code)
+        history.back();
     x.style.height = "auto";
     x.style.cursor = "";
 }
