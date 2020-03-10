@@ -2,4 +2,4 @@
 [img=10em,10em]Tag-NovelReadOverRecord.jpg[/img]
 [align=left]啃完的小说叨叨几句 (总是半夜捧着墨水屏啃……[/align]
 [align=left]Tag↓[/align]
-<div class="tag" onclick="ClickTag(this)">小说读了记录</div>
+<div class="tag" onclick="ClickTag(this,event)">小说读了记录</div>

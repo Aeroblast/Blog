@@ -108,7 +108,7 @@ function Index2HTML(a) {
     let s = "";
     if (a.length > 1)
         s += "Title:<span class='title'>" + a[1] + "</span><br>Tags:";
-    for (let i = 2; i < a.length; i++)if (a[i]) s += "<div class='tag' onclick='ClickTag(this);event.stopPropagation();'>" + a[i] + "</div>";
+    for (let i = 2; i < a.length; i++)if (a[i]) s += "<div class='tag' onclick='ClickTag(this,event);'>" + a[i] + "</div>";
     return s;
 }
 var openindex_css;
@@ -354,8 +354,9 @@ function SpoilerShift(e) {
     } else
         e.parentNode.style.height = "auto";
 }
-function ClickTag(a) {
+function ClickTag(a, event) {
     ReloadIndex(new Array(a.innerText));
+    event.stopPropagation();
 }
 function LoadGitalk() {
     if (!content_ok) return;
