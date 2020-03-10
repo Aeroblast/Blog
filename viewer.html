@@ -491,6 +491,8 @@
             x.style.height = "0";
             let user = new XMLHttpRequest();
             user.open('GET', "https://api.github.com/user", true);
+            let token = window.localStorage.getItem(GT_ACCESS_TOKEN);
+            user.setRequestHeader("Authorization", "token " + token);
             user.onload = function () {
                 if (user.status == 200) {
                     var gitalk = new Gitalk({
@@ -505,7 +507,7 @@
                     })
                     gitalk.render('gitalk-container')
                 } else if (user.status == 401) {
-                    x.innerHTML = "<a onclick=\"GoTo('https://github.com/login?client_id=bdb84036d2da38be8d03&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3Dbdb84036d2da38be8d03%26redirect_uri%3Dhttps%253A%252F%252Faeroblast.github.io%252FBlog%252F%253Fn="+n+"%26scope%3Dpublic_repo')\" style=''>去登录Gitalk</a>"
+                    x.innerHTML = "<p style='text-align:center' onclick=\"GoTo('https://github.com/login?client_id=bdb84036d2da38be8d03&return_to=%2Flogin%2Foauth%2Fauthorize%3Fclient_id%3Dbdb84036d2da38be8d03%26redirect_uri%3Dhttps%253A%252F%252Faeroblast.github.io%252FBlog%252F%253Fn=" + n + "%26scope%3Dpublic_repo')\" style=''>去登录Gitalk</p>"
                 } else {
                     console.log("Unknown Status Code:" + user.status);
                 }
@@ -513,8 +515,7 @@
             };
             user.send(null);
         }
-        function GoTo(url)
-        {
+        function GoTo(url) {
             window.parent.document.GoTo(url);
         }
         //var current = window.location.href.match(/n=([0-9]*)/)[1];
