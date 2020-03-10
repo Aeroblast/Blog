@@ -192,8 +192,8 @@ var main_template = '\
 function LoadContent() {
     content_ok = false;
     main_frame.innerHTML = main_template;
-    log = main_frame.getElementById("log");
-    main = main_frame.getElementById("main");
+    log = document.getElementById("log");
+    main = document.getElementById("main");
     log.innerHTML += "文档【" + filename + "】;";
     let txtpath = "Text/" + filename + ".atxt";
     loader = new XMLHttpRequest();
@@ -205,8 +205,8 @@ function ProcContent() {
     if (loader.status == 200) {
         txtcontent = loader.responseText.split("\n");
         if (txtcontent[0] == "ENCRYPTED") {
-            main_frame.getElementById("pw_zone").style.display = "block";
-            var pw = main_frame.getElementById("pw_input");
+            document.getElementById("pw_zone").style.display = "block";
+            var pw = document.getElementById("pw_input");
             pw.onkeydown = function (e) {
                 if (e.key == 'Enter') { pw.blur(); TryLoadEncrpyted(pw.value); }
             }
