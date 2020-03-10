@@ -86,12 +86,12 @@
         width:90%;
         height:98%;
         ">
-        <iframe src="" id="mainwin" style="
+        <div id="mainwin" style="
         width: 100%;
         height: 100%;
         border: 0 none;
         overflow-x:hidden;
-        "></iframe>
+        "></div>
     </div>
     <div id="toc" style="
         position:fixed;
@@ -113,6 +113,8 @@
         bottom: 0;" onclick="ListShift()">
     </div>
     <script src="util.js"></script>
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script src="aes.js"></script>
     <script>
 
         var mainwin = document.getElementById("mainwin");
@@ -251,9 +253,8 @@
             let i_n = parseInt(i);
             filename = index[i_n][0];
             title = index[i_n][1] || index[i_n][0];
-            mainwin.onload = function () { mainwin.contentDocument.getElementById("info").innerHTML = Index2HTML(index[i_n]); }
-            mainwin.src = ViewerURL(name);
             PushState();
+            LoadContent();
         }
         function IsInQueryTags(s) {
             if (s == "") return false;
@@ -285,6 +286,154 @@
                 r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + ">" + es[0] + "</div>"
             }
             index.push(es);
+            return r;
+        }
+        //////////Viewer//////////
+        var content_ok;
+        var date = new Date();
+        var log;
+        var main;
+        var loader;
+        var txtpath = "Text/" + n + ".atxt";
+        var txtcontent;
+        var main_frame = document.getElementById("main_frame");
+        var main_template = '\
+    <div id="info_container" class="main_width">\
+        <p id="log"></p>\
+        <div id="info"></div>\
+        <p id="pw_zone">加密内容：<input id="pw_input" type="text" /></p>\
+    </div>\
+    <div id="main" class="main_width"></div>\
+    <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>';
+        function LoadContent() {
+            content_ok=false;
+            main_frame.innerHTML = main_template;
+            log = main_frame.getElementById("log");
+            main = main_frame.getElementById("main");
+            log.innerHTML += "文档【" + query_n + "】;";
+            let txtpath = "Text/" + query_n + ".atxt";
+            loader = new XMLHttpRequest();
+            loader.open('GET', txtpath + "?random=" + date.getTime(), true);
+            loader.onload = ProcContent;
+            loader.send(null);
+        }
+        function ProcContent() {
+            if (loader.status == 200) {
+                txtcontent = loader.responseText.split("\n");
+                if (txtcontent[0] == "ENCRYPTED") {
+                    main_frame.getElementById("pw_zone").style.display = "block";
+                    var pw = main_frame.getElementById("pw_input");
+                    pw.onkeydown = function (e) {
+                        if (e.key == 'Enter') { pw.blur(); TryLoadEncrpyted(pw.value); }
+                    }
+                    let q_pw = GetQueryString("pw");
+                    if (q_pw) { TryLoadEncrpyted(q_pw); }
+                    return;
+                }
+                RenderContent();
+            }
+            else if (loader.status == 404) {
+                log.innerHTML += "【404】似乎不存在这个文档呢……:" + n;
+            }
+        }
+        var note_count;
+        var notes;
+        function RenderContent() {
+            note_count = 0;
+            notes = new Array();
+            var code = "";
+            var line = 0;
+            txtcontent.forEach(ele => {
+                var c = ele.replace('\r', '');
+                c = EncodeAtxt(c);
+                var cla = "";
+                if (c.length == 0) c = "<br>";
+                if (c[0] == "「" || c[0] == "『" || c[0] == "（") cla += " drawout";
+                if (c.startsWith("<div") || c.startsWith("</div"))
+                    code += c;
+                else
+                    code += "<p id='line" + line + "' class='" + cla + "'>" + c + "</p>";
+                line++;
+            });
+            main.innerHTML = code;
+            var ua = navigator.userAgent;
+            var iPad = ua.match(/(iPad).*OS\s([\d_]+)/),
+                iPhone = !iPad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
+                isAndroid = ua.match(/(Android)\s+([\d.]+)/),
+                isMobile = iPhone || isAndroid;
+            if (isMobile) {
+                log.innerHTML += "Mobile;";
+                main.style.fontSize = "5vw";
+                main.style.width = "95%";
+            }
+            if (iPad) {
+                main.style.width = "95%";
+            }
+            ok = true;
+
+        }
+
+        function EncodeAtxt(c) {
+            var reg = new Array(
+                [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"]
+                [/\[note\]/, ""]
+                [/\[note=(.*?)\]/, ""]
+                [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='Images/$1'>"]
+                [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='Images/$3'>"]
+                [/\[b\](.*?)\[\/b\]/, "<b>$1</b>"]
+                [/\[title\](.*?)\[\/title\]/, "<p class='title0'>$1</p>"]
+                [/\[ruby=(.*?)\](.*?)\[\/ruby\]/, "<ruby>$2<rt>$1</rt></ruby>"]
+                [/(\/\*.*?\*\/)/, ""]
+                [/\/\/\/.*/, ""]
+                [/\[emphasis\](.*?)\[\/emphasis\]/, "<span class=\"emph\">$1</span>"]
+                [/\[s\](.*?)\[\/s\]/, "<s>$1</s>"]
+                [/\[time\](.*?)\[\/time\]/, "<p class='time'>$1</p>"]
+                [/\[h1\](.*?)\[\/h1\]/, "<h1>$1</h1>"]
+                [/\[h2\](.*?)\[\/h2\]/, "<h2>$1</h2>"]
+                [/\[h3\](.*?)\[\/h3\]/, "<h3>$1</h3>"]
+                [/\[h4\](.*?)\[\/h4\]/, "<h4>$1</h4>"]
+                [/\[h5\](.*?)\[\/h5\]/, "<h5>$1</h5>"]
+                [/\[size=(.*?)\](.*?)\[\/size\]/, "<span style=\"font-size:$1em\">$2</span>"]
+                [/\[link=(.*?)\](.*?)\[\/link\]/, "<a href=\"$1\"target=\"_blank\">$2</a>"]
+                [/\[ASIN\](.*?)\[\/ASIN\]/, "ASIN:<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$1</a>"]
+                [/\[ASIN=(.*?)\](.*?)\[\/ASIN\]/, "<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$2</a>"]
+                [/\[spoiler\]/, "<div class='spoiler'><div onclick='SpoilerShift(this)'>Spoiler</div>"]
+                [/\[\/spoiler\]/, "</div>"]
+                [/\[quote\]/, "<div class='quote'>"]
+                [/\[\/quote\]/, "</div>"]
+                [/\[mask\](.*?)\[\/mask\]/, "<span class=\"mask\" title=\"你知道的太多了\">$1</span>"]
+            );
+            var r = c;
+            var matched = true;
+            var imgpath;
+            while (matched) {
+                matched = false;
+                for (var i = 0; i < reg.length; i++) {
+                    var match = reg[i][0].exec(r);
+                    if (match != null) {
+                        var rep = reg[i][1];
+                        switch (i) {
+                            case 1://[note]
+                                rep = "<a class='note' onclick='Footnote(" + note_count + ")'><sup>注</sup></a>";
+                                note_count++;
+                                r = r.replace(reg[i], rep);
+                                break;
+                            case 2://[note=...]
+                                notes.push(match[1]);
+                                r = r.replace(reg[i], rep);
+                                break;
+                            default:
+                                r = r.replace(reg[i], rep);
+                                break;
+                        }
+                        matched = true;
+
+                        break;
+                    }
+                }
+
+
+            }
             return r;
         }
     </script>
