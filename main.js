@@ -353,7 +353,7 @@ function ClickTag(a) {
 }
 function LoadGitalk() {
     if (!content_ok) return;
-    history.pushState({}, title, location.pathname + "?code=" +code);
+    history.pushState({}, title, location.pathname + "?code=" +query_code);
     let x = document.getElementById('gitalk-container');
     x.onclick = null;
     var gitalk = new Gitalk({
