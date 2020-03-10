@@ -204,6 +204,7 @@ function ProcContent() {
     if (loader.status == 200) {
         txtcontent = loader.responseText.split("\n");
         if (txtcontent[0] == "ENCRYPTED") {
+            main.innerHTML="等待输入密码……";
             document.getElementById("pw_zone").style.display = "block";
             var pw = document.getElementById("pw_input");
             pw.onkeydown = function (e) {
