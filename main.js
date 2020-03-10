@@ -363,7 +363,7 @@ function LoadGitalk() {
         history.pushState({}, title, location.pathname + "?code=" + query_code);
 
     let x = document.getElementById('gitalk-container');
-    x.onclick = null;
+    x.onclick = "";
     var gitalk = new Gitalk({
         clientID: 'bdb84036d2da38be8d03',
         clientSecret: '8f1edc27c5ede8c0ec4b8b44ca8b679e1365319c',
