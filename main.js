@@ -176,7 +176,6 @@ var date = new Date();
 var log;
 var main;
 var loader;
-var txtpath = "Text/" + n + ".atxt";
 var txtcontent;
 var main_frame = document.getElementById("main_frame");
 var main_template = '\
