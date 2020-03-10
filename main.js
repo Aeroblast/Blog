@@ -130,14 +130,7 @@ function SetIndexAnimeCSS(px) {
     closeindex_css.appendRule("to{transform:none}");
     closeindex_css.appendRule("from{transform:translate(" + px + "px,0)}");
 }
-function LoadBlog(i) {
-    if (list_state == 1) ListShift();
-    let i_n = parseInt(i);
-    filename = index[i_n][0];
-    title = index[i_n][1] || index[i_n][0];
-    PushState();
-    LoadContent();
-}
+
 function IsInQueryTags(s) {
     if (s == "") return false;
     for (let i = 0; i < query_tags.length; i++) {
@@ -177,6 +170,7 @@ mainwin_container.addEventListener("click", function () {
 var content_ok;
 var log;
 var main;
+var info;
 var loader;
 var txtcontent;
 var main_frame = document.getElementById("main_frame");
@@ -188,23 +182,32 @@ var main_template = '\
     </div>\
     <div id="main" class="main_width">加载中……</div>\
     <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>';
-function LoadContent() {
-    content_ok = false;
+//LoadBlog-(callback)->ProcContent->RenderContent
+function LoadBlog(i) {
+    if (list_state == 1) ListShift();
+    let i_n = parseInt(i);
+    filename = index[i_n][0];
+    title = index[i_n][1] || index[i_n][0];
+    PushState();
     main_frame.innerHTML = main_template;
     log = document.getElementById("log");
     main = document.getElementById("main");
+    info = document.getElementById("info");
     log.innerHTML += "文档【" + filename + "】;";
+    info.innerHTML(Index2HTML(index[i_n]));
     let txtpath = "Text/" + filename + ".atxt";
+    content_ok = false;
     loader = new XMLHttpRequest();
-    loader.open('GET', txtpath + "?"+RandomQuery(), true);
+    loader.open('GET', txtpath + "?" + RandomQuery(), true);
     loader.onload = ProcContent;
     loader.send(null);
 }
+
 function ProcContent() {
     if (loader.status == 200) {
         txtcontent = loader.responseText.split("\n");
         if (txtcontent[0] == "ENCRYPTED") {
-            main.innerHTML="等待输入密码……";
+            main.innerHTML = "等待输入密码……";
             document.getElementById("pw_zone").style.display = "block";
             var pw = document.getElementById("pw_input");
             pw.onkeydown = function (e) {
@@ -349,11 +352,11 @@ function SpoilerShift(e) {
         e.parentNode.style.height = "auto";
 }
 function ClickTag(a) {
-    window.parent.document.ReloadIndex(new Array(a.innerText));
+    ReloadIndex(new Array(a.innerText));
 }
 function LoadGitalk() {
     if (!content_ok) return;
-    history.pushState({}, title, location.pathname + "?code=" +query_code);
+    history.pushState({}, title, location.pathname + "?code=" + query_code);
     let x = document.getElementById('gitalk-container');
     x.onclick = null;
     var gitalk = new Gitalk({
