@@ -491,7 +491,7 @@
             x.style.height = "0";
             let user = new XMLHttpRequest();
             user.open('GET', "https://api.github.com/user", true);
-            let token = window.localStorage.getItem(GT_ACCESS_TOKEN);
+            let token = window.localStorage.getItem('GT_ACCESS_TOKEN');
             user.setRequestHeader("Authorization", "token " + token);
             user.onload = function () {
                 if (user.status == 200) {
