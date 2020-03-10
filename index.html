@@ -21,7 +21,7 @@
 
         @keyframes CloseIndex {}
     </style>
-    <link href="main.css" rel="stylesheet" type="text/css">
+    <link href="main.css?v=100" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -57,15 +57,19 @@
         width: 3em;
         left: 0;
         height:100%;
+        margin: 0;
         bottom: 0;" onclick="ListShift()">
     </div>
     <script>
-        var version = "12345";
+        function RandomQuery() {
+            return "v=100";
+            //return "random=" + (new Date()).getTime();
+        }
     </script>
-    <script src="util.js"></script>
+    <script src="util.js?v=100"></script>
     <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script src="aes.js"></script>
-    <script src="main.js"></script>
+    <script src="aes.js?v=100"></script>
+    <script src="main.js?v=100"></script>
 </body>
 
 </html>
