@@ -195,3 +195,18 @@ a:visited {
 .button {
     cursor: pointer;
 }
+
+
+/*Overide Gitalk*/
+.gt-comment-content
+{
+   background:  #586069;
+   color:#f3f3e5;
+}
+.gt-header-textarea {
+    background:  #586069;
+    color:#f3f3e5;
+}
+.gt-btn-preview{
+    background:#f3f3e5;
+}
