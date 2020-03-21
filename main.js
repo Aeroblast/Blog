@@ -366,7 +366,7 @@ function AmazonImage(a) {
     x.className = "amazonimage";
     a.appendChild(x);
     let r = new XMLHttpRequest();
-    r.open('GET', a.src, true);
+    r.open('GET', a.href, true);
     r.onload = function () {
         let reg = /ebooks-img-canvas[/s/S]*?src="(.*?)"/;
         let match = reg.exec(a.responseText);
