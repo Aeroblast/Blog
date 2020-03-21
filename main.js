@@ -285,8 +285,8 @@ function EncodeAtxt(c) {
         [/\[h5\](.*?)\[\/h5\]/, "<h5>$1</h5>"],
         [/\[size=(.*?)\](.*?)\[\/size\]/, "<span style=\"font-size:$1em\">$2</span>"],
         [/\[link=(.*?)\](.*?)\[\/link\]/, "<a href=\"$1\"target=\"_blank\">$2</a>"],
-        [/\[ASIN\](.*?)\[\/ASIN\]/, "ASIN:<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$1</a>"],
-        [/\[ASIN=(.*?)\](.*?)\[\/ASIN\]/, "<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$2</a>"],
+        [/\[ASIN\](.*?)\[\/ASIN\]/, "ASIN:<a href=\"https://www.amazon.co.jp/gp/product/$1\" target=\"_blank\" onmouseover=\"AmazonImage(this)\" onmouseout=\"AmazonImageClose(this)\">$1</a>"],
+        [/\[ASIN=(.*?)\](.*?)\[\/ASIN\]/, "<a href=\"https://www.amazon.co.jp/gp/product/$1\" target=\"_blank\" onmouseover=\"AmazonImage(this)\" onmouseout=\"AmazonImageClose(this)>$2</a>"],
         [/\[spoiler\]/, "<div class='spoiler'><div onclick='SpoilerShift(this)' title='该块可能包含剧透内容'>Spoiler</div>"],
         [/\[\/spoiler\]/, "</div>"],
         [/\[quote\]/, "<div class='quote'>"],
@@ -358,6 +358,29 @@ function ClickTag(a, event) {
     ReloadIndex(new Array(a.innerText));
     event.stopPropagation();
 }
+
+function AmazonImage(a) {
+    let img = a.getElementsByClassName("amazonimage");
+    if (img) { img[0].style.display = "block"; return; }
+    let x = document.createElement("div");
+    x.className = "amazonimage";
+    a.appendChild(x);
+    let r = new XMLHttpRequest();
+    r.open('GET', a.src, true);
+    r.onload = function () {
+        let reg = /ebooks-img-canvas[/s/S]*?src="(.*?)"/;
+        let match = reg.exec(a.responseText);
+        let imgurl = match[1];
+        x.innerHTML = "<img src='" + imgurl + "'>";
+    };
+    r.send(null);
+
+}
+function AmazonImageClose(a) {
+    let img = a.getElementsByClassName("amazonimage");
+    if (img) { img[0].style.display = "none"; return; }
+}
+
 function LoadGitalk() {
     if (!content_ok) return;
     if (query_code)
@@ -371,9 +394,9 @@ function LoadGitalk() {
         repo: 'Blog',
         owner: 'Aeroblast',
         admin: ['Aeroblast'],
-        createIssueManually:true,
+        createIssueManually: true,
         id: filename,
-        title:'Comment',
+        title: 'Comment',
         distractionFreeMode: false,
         pagerDirection: 'first'
     })
