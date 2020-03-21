@@ -361,7 +361,7 @@ function ClickTag(a, event) {
 
 function AmazonImage(a) {
     let img = a.getElementsByClassName("amazonimage");
-    if (img) { img[0].style.display = "block"; return; }
+    if (img.length > 0) { img[0].style.display = "block"; return; }
     let x = document.createElement("div");
     x.className = "amazonimage";
     a.appendChild(x);
@@ -378,7 +378,7 @@ function AmazonImage(a) {
 }
 function AmazonImageClose(a) {
     let img = a.getElementsByClassName("amazonimage");
-    if (img) { img[0].style.display = "none"; return; }
+    if (img.length > 0) { img[0].style.display = "none"; return; }
 }
 
 function LoadGitalk() {
