@@ -59,7 +59,7 @@ function _LoadIndex() {
     var s = "";
     if (query_tags) { s += "Tag Search<div class='inline button' onclick='ClearTags()'>❌</div>:<br>" + Tags2HTML(query_tags) + "<br><div class='toc_item' style='height:0'></div>"; }
     raw_index.forEach(element => {
-        s += ReadIndex(element);
+        s = ReadIndex(element) + s;
     });
     toc.innerHTML = s + "<div style='height:40%'></div>";
     let w = toc.offsetWidth;
@@ -157,12 +157,15 @@ function ReadIndex(element) {
     if (!isNum(es[0][0])) {
         classstr += " toc_item_sp";
     }
+    let display_title;
     if (es.length > 1 && es[1].length > 0) {
-        r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + ">" + es[1] + "</div>"
+        display_title = es[1];
     }
     else {
-        r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + ">" + es[0] + "</div>"
+        display_title = es[0];
     }
+    r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + " title='"+es[0]+"'>" + display_title + "</div>"
+
     index.push(es);
     return r;
 }
@@ -371,9 +374,9 @@ function LoadGitalk() {
         repo: 'Blog',
         owner: 'Aeroblast',
         admin: ['Aeroblast'],
-        createIssueManually:true,
+        createIssueManually: true,
         id: filename,
-        title:'Comment',
+        title: 'Comment',
         distractionFreeMode: false,
         pagerDirection: 'first'
     })
