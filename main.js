@@ -7,44 +7,51 @@ var loader = new XMLHttpRequest();
 var toc = document.getElementById('toc');
 var title;
 var filename;
-var query_n = GetQueryString("n");
-var query_code = GetQueryString("code");
 var raw_index;
 
-var query_tag_string = "&tags=" + GetQueryString("tags");
-var query_tags = GetQueryString("tags");
-if (query_tags == null || query_tags == "") query_tag_string = ""; else query_tags = query_tags.split(",");
-
-var query_pw = GetQueryString("pw");
-if (query_pw) query_pw = "&pw=" + query_pw;
-else query_pw = "";
-
+var query_n;
+var query_code;
+var query_tag_string;
+var query_tags;
+var query_pw;
+ReadQuery();
 PrepareIndexAnime();
 
 loader.open('GET', "index.txt?" + RandomQuery(), true);
-loader.onreadystatechange = LoadIndex;
+loader.onload = LoadIndex;
 loader.send(null);
 
 /////////////Main//////////////
 //LoadIndex()-LoadQuery()
+function ReadQuery() {
+    query_n = GetQueryString("n");
+    query_code = GetQueryString("code");
 
+
+    query_tag_string = "&tags=" + GetQueryString("tags");
+    query_tags = GetQueryString("tags");
+    if (query_tags == null || query_tags == "") query_tag_string = ""; else query_tags = query_tags.split(",");
+
+    query_pw = GetQueryString("pw");
+    if (query_pw) query_pw = "&pw=" + query_pw;
+    else query_pw = "";
+}
 function LoadIndex() {
-    if (loader.readyState == 4)
-        if (loader.status == 200) {
-            raw_index = loader.responseText.split("\n");
-            _LoadIndex();
-
-            let hit = false;
-            if (query_n && query_n.length > 1) {
-                for (let i = 0; i < index.length; i++) {
-                    if (index[i][0] == query_n) { LoadBlog(i); hit = true; break; }
-                }
-            }
-            if (!hit) {
-                filename = "welcome";
-                LoadBlog(0);
-            }
+    raw_index = loader.responseText.split("\n");
+    _LoadIndex();
+    LoadBlogByQuery();
+}
+function LoadBlogByQuery() {
+    let hit = false;
+    if (query_n && query_n.length > 1) {
+        for (let i = 0; i < index.length; i++) {
+            if (index[i][0] == query_n) { LoadBlog(i); hit = true; break; }
         }
+    }
+    if (!hit) {
+        filename = "welcome";
+        LoadBlog(0);
+    }
 }
 function ReloadIndex(tags_ = null) {
     if (tags_) {
@@ -57,10 +64,14 @@ function ReloadIndex(tags_ = null) {
 }
 function _LoadIndex() {
     var s = "";
-    if (query_tags) { s += "Tag Search<div class='inline button' onclick='ClearTags()'>❌</div>:<br>" + Tags2HTML(query_tags) + "<br><div class='toc_item' style='height:0'></div>"; }
     raw_index.forEach(element => {
         s = ReadIndex(element) + s;
     });
+    if (query_tags) {
+        s = "Tag Search<div class='inline button' onclick='ClearTags()'>❌</div>:<br>"
+            + Tags2HTML(query_tags)
+            + "<br><div class='toc_item' style='height:0'></div>" + s;
+    }
     toc.innerHTML = s + "<div style='height:40%'></div>";
     let w = toc.offsetWidth;
     SetIndexAnimeCSS(w);
@@ -164,7 +175,7 @@ function ReadIndex(element) {
     else {
         display_title = es[0];
     }
-    r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + " title='"+es[0]+"'>" + display_title + "</div>"
+    r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + " title='" + es[0] + "'>" + display_title + "</div>"
 
     index.push(es);
     return r;
@@ -331,13 +342,6 @@ function EncodeAtxt(c) {
 function Footnote(a) {
     alert(notes[a]);
 }
-function OnCopy(oEvent)//不要给每个p都加空行啦！于是有了这个函数
-{
-    oEvent.preventDefault();
-    let s = window.getSelection().toString();
-    let str = s.replace(/\n\n/g, '\n');
-    oEvent.clipboardData.setData("text", str);
-}
 function TryLoadEncrpyted(pw) {
     console.log(pw);
     let r = CryptoJS.AES.decrypt(txtcontent[1], pw).toString(CryptoJS.enc.Utf8);
@@ -386,3 +390,17 @@ function LoadGitalk() {
     x.style.height = "auto";
     x.style.cursor = "";
 }
+
+//////////////Event//////////
+mainwin.oncopy = OnCopy;
+function OnCopy(oEvent)//不要给每个p都加空行啦！于是有了这个函数
+{
+    oEvent.preventDefault();
+    let s = window.getSelection().toString();
+    let str = s.replace(/\n\n/g, '\n');
+    oEvent.clipboardData.setData("text", str);
+}
+window.onpopstate = function (event) {
+    ReadQuery();
+    LoadBlogByQuery();
+};
