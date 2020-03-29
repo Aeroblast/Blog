@@ -45,20 +45,20 @@ function LoadBlogByQuery() {
     let hit = false;
     if (query_n && query_n.length > 1) {
         for (let i = 0; i < index.length; i++) {
-            if (index[i][0] == query_n) { LoadBlog(i); hit = true; break; }
+            if (index[i][0] == query_n) { _LoadBlog(i); hit = true; break; }
         }
     }
     if (!hit) {
         filename = "welcome";
-        LoadBlog(0);
+        _LoadBlog(0);
     }
 }
 function ReloadIndex(tags_ = null) {
     if (tags_) {
         query_tags = tags_;
         query_tag_string = "&tags=" + tags_;
-        PushState();
     }
+    PushState();
     if (list_state == 0) ListShift();
     _LoadIndex();
 }
@@ -101,8 +101,6 @@ function ClearTags() {
     query_tags = null;
     query_tag_string = "";
     ReloadIndex();
-    PushState();
-
 }
 ////////////////helpers/////////////
 function ViewerURL(n) { return "viewer.html?n=" + filename + "&" + RandomQuery() + query_pw; }
@@ -175,7 +173,7 @@ function ReadIndex(element) {
     else {
         display_title = es[0];
     }
-    r = "<div class='" + classstr + "' onclick=\"LoadBlog('" + index.length + "');_LoadIndex();\"" + select + " title='" + es[0] + "'>" + display_title + "</div>"
+    r = "<div class='" + classstr + "' onclick=\"ClickLoadBlog('" + index.length + "');\"" + select + " title='" + es[0] + "'>" + display_title + "</div>"
 
     index.push(es);
     return r;
@@ -199,12 +197,16 @@ var main_template = '\
     </div>\
     <div id="main" class="main_width">加载中……</div>\
     <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>';
-function LoadBlog(i) {
+function ClickLoadBlog() {
+    _LoadBlog(i);
+    PushState();
+    _LoadIndex();
+}
+function _LoadBlog(i) {
     if (list_state == 1) ListShift();
     let i_n = parseInt(i);
     filename = index[i_n][0];
     title = index[i_n][1] || index[i_n][0];
-    if (i) PushState();
     main_frame.innerHTML = main_template;
     log = document.getElementById("log");
     main = document.getElementById("main");
