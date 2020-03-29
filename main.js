@@ -405,4 +405,5 @@ function OnCopy(oEvent)//不要给每个p都加空行啦！于是有了这个函
 window.onpopstate = function (event) {
     ReadQuery();
     LoadBlogByQuery();
+    _LoadIndex();
 };
