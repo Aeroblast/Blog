@@ -392,7 +392,7 @@ function LoadGitalk() {
 }
 
 //////////////Event//////////
-mainwin.oncopy = OnCopy;
+main_frame.oncopy = OnCopy;
 function OnCopy(oEvent)//不要给每个p都加空行啦！于是有了这个函数
 {
     oEvent.preventDefault();
