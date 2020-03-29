@@ -197,7 +197,7 @@ var main_template = '\
     </div>\
     <div id="main" class="main_width">加载中……</div>\
     <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>';
-function ClickLoadBlog() {
+function ClickLoadBlog(i) {
     _LoadBlog(i);
     PushState();
     _LoadIndex();
