@@ -73,6 +73,12 @@ function _LoadIndex() {
             + "<br><div class='toc_item' style='height:0'></div>" + s;
     }
     toc.innerHTML = s + "<div style='height:40%'></div>";
+    [].forEach.call(toc.getElementsByClassName("toc_item"), e => {
+        if (e.getAttribute("filename")) {
+            e.onmouseover = function () { IndexInfoOn(e); }
+            e.onmouseout = function () { IndexInfoOff(e); }
+        }
+    });
     let w = toc.offsetWidth;
     SetIndexAnimeCSS(w);
 }
@@ -139,7 +145,12 @@ function SetIndexAnimeCSS(px) {
     closeindex_css.appendRule("to{transform:none}");
     closeindex_css.appendRule("from{transform:translate(" + px + "px,0)}");
 }
+function IndexInfoOn(div) {
 
+}
+function IndexInfoOff(div) {
+
+}
 function IsInQueryTags(s) {
     if (s == "") return false;
     for (let i = 0; i < query_tags.length; i++) {
@@ -167,13 +178,18 @@ function ReadIndex(element) {
         classstr += " toc_item_sp";
     }
     let display_title;
-    if (es.length > 1 && es[1].length > 0) {
-        display_title = es[1];
+    if (es.length > 1 && es[2].length > 0) {
+        display_title = es[2];
     }
     else {
         display_title = es[0];
     }
-    r = "<div class='" + classstr + "' onclick=\"ClickLoadBlog('" + index.length + "');\"" + select + " title='" + es[0] + "'>" + display_title + "</div>"
+    r = "<div class='" + classstr + "'"
+        + " onclick=\"ClickLoadBlog('" + index.length + "');\""
+        + select
+        + " filename='" + es[0] + "'"
+        + " len='" + es[1] + "'"
+        + ">" + display_title + "</div>"
 
     index.push(es);
     return r;
