@@ -178,7 +178,7 @@ function ReadIndex(element) {
         classstr += " toc_item_sp";
     }
     let display_title;
-    if (es.length > 1 && es[2].length > 0) {
+    if (es.length > 2 && es[2].length > 0) {
         display_title = es[2];
     }
     else {
