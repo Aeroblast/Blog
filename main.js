@@ -121,7 +121,7 @@ function Tags2HTML(a) {
 }
 function Index2HTML(a) {
     let s = "";
-    if (a.length > 1)
+    if (a.length > 2)
         s += "Title:<span class='title'>" + a[2] + "</span><br>Tags:";
     for (let i = 3; i < a.length; i++)if (a[i]) s += "<div class='tag' onclick='ClickTag(this,event);'>" + a[i] + "</div>";
     return s;
