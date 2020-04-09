@@ -108,56 +108,6 @@ function ClearTags() {
     query_tag_string = "";
     ReloadIndex();
 }
-////////////////helpers/////////////
-function ViewerURL(n) { return "viewer.html?n=" + filename + "&" + RandomQuery() + query_pw; }
-function PushState() {
-    history.pushState({}, title, location.pathname + "?n=" + filename + query_tag_string + query_pw);
-    query_n = GetQueryString("n");
-}
-function Tags2HTML(a) {
-    let s = "";
-    for (let i = 0; i < a.length; i++)s += "<div class='tag'>" + a[i] + "</div>";
-    return s;
-}
-function Index2HTML(a) {
-    let s = "";
-    if (a.length > 2)
-        s += "Title:<span class='title'>" + a[2] + "</span><br>Tags:";
-    for (let i = 3; i < a.length; i++)if (a[i]) s += "<div class='tag' onclick='ClickTag(this,event);'>" + a[i] + "</div>";
-    return s;
-}
-var openindex_css;
-var closeindex_css;
-function PrepareIndexAnime() {
-    let classes = document.styleSheets[0].rules || document.styleSheets[0].cssRules;
-    for (let x = 0; x < classes.length; x++) {
-        if (classes[x].name == "OpenIndex") {
-            openindex_css = classes[x];
-        }
-        if (classes[x].name == "CloseIndex") {
-            closeindex_css = classes[x];
-        }
-    }
-}
-function SetIndexAnimeCSS(px) {
-    openindex_css.appendRule("from{transform:none}");
-    openindex_css.appendRule("to{transform:translate(" + px + "px,0)}");
-    closeindex_css.appendRule("to{transform:none}");
-    closeindex_css.appendRule("from{transform:translate(" + px + "px,0)}");
-}
-function IndexInfoOn(div) {
-
-}
-function IndexInfoOff(div) {
-
-}
-function IsInQueryTags(s) {
-    if (s == "") return false;
-    for (let i = 0; i < query_tags.length; i++) {
-        if (query_tags[i] != "" && query_tags[i] == s) return true;
-    }
-    return false;
-}
 function ReadIndex(element) {
     let es = element.split(',');
     let r = "";
@@ -193,6 +143,57 @@ function ReadIndex(element) {
 
     index.push(es);
     return r;
+}
+////////////////helpers/////////////
+function ViewerURL(n) { return "viewer.html?n=" + filename + "&" + RandomQuery() + query_pw; }
+function PushState() {
+    history.pushState({}, title, location.pathname + "?n=" + filename + query_tag_string + query_pw);
+    query_n = GetQueryString("n");
+}
+function Tags2HTML(a) {
+    let s = "";
+    for (let i = 0; i < a.length; i++)s += "<div class='tag'>" + a[i] + "</div>";
+    return s;
+}
+function Index2HTML(a) {
+    let s = "";
+    if (a.length > 2)
+        s += "Title:<span class='title'>" + a[2] + "</span><br>Tags:";
+    for (let i = 3; i < a.length; i++)if (a[i]) s += "<div class='tag' onclick='ClickTag(this,event);'>" + a[i] + "</div>";
+    return s;
+}
+//////////Anime////////
+var openindex_css;
+var closeindex_css;
+function PrepareIndexAnime() {
+    let classes = document.styleSheets[0].rules || document.styleSheets[0].cssRules;
+    for (let x = 0; x < classes.length; x++) {
+        if (classes[x].name == "OpenIndex") {
+            openindex_css = classes[x];
+        }
+        if (classes[x].name == "CloseIndex") {
+            closeindex_css = classes[x];
+        }
+    }
+}
+function SetIndexAnimeCSS(px) {
+    openindex_css.appendRule("from{transform:none}");
+    openindex_css.appendRule("to{transform:translate(" + px + "px,0)}");
+    closeindex_css.appendRule("to{transform:none}");
+    closeindex_css.appendRule("from{transform:translate(" + px + "px,0)}");
+}
+function IndexInfoOn(div) {
+
+}
+function IndexInfoOff(div) {
+
+}
+function IsInQueryTags(s) {
+    if (s == "") return false;
+    for (let i = 0; i < query_tags.length; i++) {
+        if (query_tags[i] != "" && query_tags[i] == s) return true;
+    }
+    return false;
 }
 //////////Viewer//////////
 mainwin_container.addEventListener("click", function () {
