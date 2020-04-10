@@ -95,10 +95,12 @@ a:visited {
     cursor: pointer;
 }
 
-.mask,.mask:link,.mask:visited{
+.mask{
     color: transparent;
 }
-
+.mask a:link{
+    color: transparent;
+}
 .mask:hover {
     color: inherit;
 }
