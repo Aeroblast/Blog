@@ -63,22 +63,39 @@ function ReloadIndex(tags_ = null) {
     _LoadIndex();
 }
 function _LoadIndex() {
-    var s = "";
-    raw_index.forEach(element => {
-        s = ReadIndex(element) + s;
-    });
+    index = new Array();
+
+    let starter = ""
     if (query_tags) {
-        s = "Tag Search<div class='inline button' onclick='ClearTags()'>❌</div>:<br>"
+        starter = "Tag Search<div class='inline button' onclick='ClearTags()'>❌</div>:<br>"
             + Tags2HTML(query_tags)
-            + "<br><div class='toc_item' style='height:0'></div>" + s;
+            + "<br><div class='toc_item' style='height:0'></div>";
     }
-    toc.innerHTML = s + "<div style='height:40%'></div>";
-    [].forEach.call(toc.getElementsByClassName("toc_item"), e => {
-        if (e.getAttribute("filename")) {
-            e.onmouseover = function () { IndexInfoOn(e); }
-            e.onmouseout = function () { IndexInfoOff(e); }
+    toc.innerHTML = starter;
+
+    let refnode = null;
+    raw_index.forEach(element => {
+        let ele = ReadIndex(element);
+        let fn = ele.getAttribute("filename");
+        if (fn) {
+            ele.onmouseover = function () { IndexInfoOn(ele); }
+            ele.onmouseout = function () { IndexInfoOff(ele); }
+            if (query_tags && fn.startsWith("Tag")) {
+                if (ele.getAttribute("selected") == "true") {
+                    ele.style.display = "block";
+                    toc.insertBefore(ele, refnode);
+                    return;
+                }
+            }
         }
+        toc.insertBefore(ele, refnode);
+        refnode = ele;//删去则是正序
     });
+
+    let place = document.createElement('div');
+    place.style.height = "40%";
+    toc.appendChild(place);
+
     let w = toc.offsetWidth;
     SetIndexAnimeCSS(w);
 }
@@ -110,7 +127,6 @@ function ClearTags() {
 }
 function ReadIndex(element) {
     let es = element.split(',');
-    let r = "";
     let select = "false";
     let classstr = "toc_item";
     if (query_tags)
@@ -120,7 +136,6 @@ function ReadIndex(element) {
             }
         }
     else { select = "noselect"; }
-    select = " selected=\"" + select + "\"";
     if (es[0] == query_n) {
         classstr += " toc_item_selected";
     }
@@ -134,13 +149,14 @@ function ReadIndex(element) {
     else {
         display_title = es[0];
     }
-    r = "<div class='" + classstr + "'"
-        + " onclick=\"ClickLoadBlog('" + index.length + "');\""
-        + select
-        + " filename='" + es[0] + "'"
-        + " len='" + es[1] + "'"
-        + ">" + display_title + "</div>"
-
+    let r = document.createElement("div");
+    r.className = classstr;
+    let t = index.length;
+    r.onclick = function () { ClickLoadBlog(t); }
+    r.setAttribute("selected", select);
+    r.setAttribute("filename", es[0]);
+    r.setAttribute("len", es[1]);
+    r.innerText = display_title;
     index.push(es);
     return r;
 }
