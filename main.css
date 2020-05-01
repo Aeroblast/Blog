@@ -227,5 +227,5 @@ a:visited {
         height: 1em;
     }
     50%{width: 10em;}
-    100%{height: auto;}
+    100%{height: auto;width: 10em;}
 }
