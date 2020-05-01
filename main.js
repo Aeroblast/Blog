@@ -221,15 +221,15 @@ function IndexInfoOn(div) {
     if (infoBoxState == 0) {
         infoBox.style.display = "block";
         infoBox.style.left = div.offsetWidth + div.offsetLeft + "px";
-        infoBox.style.top = div.offsetTop + "px";
+        infoBox.style.top = div.offsetTop - toc.scrollTop + "px";
         infoBox.style.animation = "OpenInfoBox 0.3s";
         infoBox.style.animationFillMode = "forwards";
     } else {
         infoBox.style.color = "#586069";
         infoBox.style.width = "10em";
         infoBox.style.height = infoBox.offsetHeight + "px";
-        infoBox.style.top = infoBox.offsetTop - toc.scrollTop + "px";
-        moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
+        infoBox.style.top = infoBox.offsetTop + "px";
+        moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop - toc.scrollTop);
         infoBox.style.animation = "none";
         setTimeout(function () {
             infoBox.style.animation = "MoveInfoBox 0.3s";
@@ -245,7 +245,7 @@ function IndexInfoOff(div) {
         if (infoBoxState == 2) {
             infoBox.style.width = "0";
             infoBox.style.height = "0";
-            infoBox.style.top = infoBox.offsetTop - toc.scrollTop + "px";
+            infoBox.style.top = infoBox.offsetTop + "px";
             infoBox.style.color = getComputedStyle(infoBox).color;
             infoBox.style.animation = "CloseInfoBox 0.3s";
             infoBox.style.animationFillMode = "forwards";
