@@ -149,7 +149,7 @@ function ReadIndex(element) {
     else {
         display_title = es[0];
     }
-    let r = document.createElement("div");
+    let r = document.createElement("a");
     r.className = classstr;
     let t = index.length;
     r.onclick = function () { ClickLoadBlog(t);return false;}
