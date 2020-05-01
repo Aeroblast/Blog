@@ -212,9 +212,11 @@ function IndexInfoOn(div) {
         infoBox.style.left = div.offsetWidth + div.offsetLeft + "px";
         infoBox.style.top = div.offsetTop + "px";
         infoBox.style.animation = "OpenInfoBox 0.5s";
+        infoBox.style.animationFillMode="forwards";
     } else {
         moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
         infoBox.style.animation = "MoveInfoBox 0.5s";
+        infoBox.style.animationFillMode="forwards";
     }
     infoBoxState = 1;
 }
