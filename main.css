@@ -225,7 +225,15 @@ a:visited {
     0%{
         width: 0;
         height: 1em;
+        color:#586069;
     }
     50%{width: 10em;}
-    100%{height: auto;width: 10em;}
+    75%{
+        color:#586069;
+    }
+    100%{
+        height: auto;
+        width: 10em;
+        color:inherit;
+    }
 }

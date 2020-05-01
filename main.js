@@ -205,7 +205,11 @@ var infoBoxState = 0;
 var moveInfoBox_keyframes = document.createElement("style");
 moveInfoBox_keyframes.type = 'text/css';
 document.head.appendChild(moveInfoBox_keyframes);
-const moveInfoBox_template = "@keyframes MoveInfoBox{to{top:[2]px}}";
+const moveInfoBox_template = "\
+@keyframes MoveInfoBox{\
+    25%{color:#586069;height:0.5em;}\
+    75%{color:#586069;height:0.5em;}\
+    100%{top:[2]px;color:inherit;height:auto;}}";
 const infoBox_content_template = "<div>[1]<br>长度：[2]</div>";
 function IndexInfoOn(div) {
     let d = TryGetDate(div.getAttribute("filename"));
