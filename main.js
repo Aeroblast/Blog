@@ -5,7 +5,6 @@ var list_shift_button = document.getElementById("list_shift_button");
 var index = new Array();
 var loader = new XMLHttpRequest();
 var toc = document.getElementById('toc');
-var index_area = document.getElementById('index_area');
 var title;
 var filename;
 var raw_index;
@@ -104,16 +103,16 @@ var list_state = 0;
 function ListShift() {
     if (list_state == 0) {
         list_state = 1;
-        index_area.style.animation = "OpenIndex 0.3s";
-        index_area.style.animationFillMode = "forwards";
+        toc.style.animation = "OpenIndex 0.3s";
+        toc.style.animationFillMode = "forwards";
         mainwin_container.style.animation = "OpenIndex 0.3s";
         mainwin_container.style.animationFillMode = "forwards";
         //list_shift_button.style.animation = "OpenIndex 0.3s";
         //list_shift_button.style.animationFillMode="forwards";
     } else if (list_state == 1) {
         list_state = 0;
-        index_area.style.animation = "CloseIndex 0.3s";
-        index_area.style.animationFillMode = "forwards";
+        toc.style.animation = "CloseIndex 0.3s";
+        toc.style.animationFillMode = "forwards";
         mainwin_container.style.animation = "CloseIndex 0.3s";
         mainwin_container.style.animationFillMode = "forwards";
         //list_shift_button.style.animation = "CloseIndex 0.3s";
