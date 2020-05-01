@@ -161,9 +161,15 @@ a:visited {
     cursor: pointer;
     text-align: left;
 }
+.toc_item:link {
+    color:inherit;
+ }
+.toc_item:visited {
+    color:inherit;
+}
 
 .toc_item_selected {
-    color: white;
+    color: white!important;
 }
 
 .toc_item_sp {
