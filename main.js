@@ -220,10 +220,14 @@ function IndexInfoOn(div) {
     } else {
         infoBox.style.width = "10em";
         infoBox.style.height = "auto";
+        infoBox.style.top=infoBox.offsetTop+"px";
         moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
-        infoBox.style.animation="";
-        infoBox.style.animation = "MoveInfoBox 0.3s";
-        infoBox.style.animationFillMode = "forwards";
+        infoBox.style.animation="none";
+        setTimeout(function () {
+            infoBox.style.animation = "MoveInfoBox 0.3s";
+            infoBox.style.animationFillMode = "forwards";
+        }, 10);
+
     }
     infoBoxState = 1;
 }
