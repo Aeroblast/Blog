@@ -206,7 +206,7 @@ var moveInfoBox_keyframes = document.createElement("style");
 moveInfoBox_keyframes.type = 'text/css';
 document.head.appendChild(moveInfoBox_keyframes);
 const moveInfoBox_template = "@keyframes MoveInfoBox{to{top:[2]px}}";
-const infoBox_content_template = "[1]<br>长度：[2]";
+const infoBox_content_template = "<div>[1]<br>长度：[2]</div>";
 function IndexInfoOn(div) {
     let d = TryGetDate(div.getAttribute("filename"));
     if (d) d = new Intl.DateTimeFormat('zh-CN-u-hc-h24', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d);
