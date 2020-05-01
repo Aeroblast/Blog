@@ -241,6 +241,7 @@ function IndexInfoOff(div) {
         if (infoBoxState == 2) {
             infoBox.style.width = "0";
             infoBox.style.height = "0";
+            infoBox.style.display="none";
             infoBox.style.top = div.offsetTop + "px";
             infoBox.style.animation = "CloseInfoBox 0.3s";
             infoBoxState = 0;
