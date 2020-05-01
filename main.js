@@ -207,7 +207,7 @@ moveInfoBox_keyframes.type = 'text/css';
 document.head.appendChild(moveInfoBox_keyframes);
 const moveInfoBox_template = "\
 @keyframes MoveInfoBox{\
-    50%{color:#586069;height:0.5em;}\
+    50%{height:0.5em;}\
     100%{top:[2]px;color:inherit;height:auto;}}";
 const infoBox_content_template = "<div>[1]<br>长度：[2]</div>";
 function IndexInfoOn(div) {
@@ -221,6 +221,7 @@ function IndexInfoOn(div) {
         infoBox.style.animation = "OpenInfoBox 0.3s";
         infoBox.style.animationFillMode = "forwards";
     } else {
+        infoBox.style.color="#586069";
         infoBox.style.width = "10em";
         infoBox.style.height = infoBox.offsetHeight+"px";
         infoBox.style.top=infoBox.offsetTop+"px";
