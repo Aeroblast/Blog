@@ -214,7 +214,7 @@ function IndexInfoOn(div) {
         infoBox.style.animation = "OpenInfoBox 0.5s";
         infoBox.style.animationFillMode="forwards";
     } else {
-        infoBox.style.width=infoBox.offsetHeight+"px";
+        infoBox.style.width=infoBox.offsetWidth+"px";
         infoBox.style.height="auto";
         moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
         infoBox.style.animation = "MoveInfoBox 0.5s";
