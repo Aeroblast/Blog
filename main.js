@@ -119,7 +119,10 @@ function ListShift() {
         //list_shift_button.style.animationFillMode="forwards";
     }
 }
-function CloseIndex() { if (list_state == 1) ListShift(); };
+function CloseIndex() {
+    if (list_state == 1) ListShift();
+    infoBox.style.display = "none";
+};
 function ClearTags() {
     query_tags = null;
     query_tag_string = "";
@@ -214,20 +217,20 @@ function IndexInfoOn(div) {
     let d = TryGetDate(div.getAttribute("filename"));
     if (d) d = new Intl.DateTimeFormat('zh-CN-u-hc-h24', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d);
     else d = "";
-    infoBox.innerHTML = infoBox_content_template.replace("[1]",d).replace("[2]", div.getAttribute("len"));
+    infoBox.innerHTML = infoBox_content_template.replace("[1]", d).replace("[2]", div.getAttribute("len"));
     if (infoBoxState == 0) {
-        infoBox.style.display="block";
+        infoBox.style.display = "block";
         infoBox.style.left = div.offsetWidth + div.offsetLeft + "px";
         infoBox.style.top = div.offsetTop + "px";
         infoBox.style.animation = "OpenInfoBox 0.3s";
         infoBox.style.animationFillMode = "forwards";
     } else {
-        infoBox.style.color="#586069";
+        infoBox.style.color = "#586069";
         infoBox.style.width = "10em";
-        infoBox.style.height = infoBox.offsetHeight+"px";
-        infoBox.style.top=infoBox.offsetTop+"px";
+        infoBox.style.height = infoBox.offsetHeight + "px";
+        infoBox.style.top = infoBox.offsetTop + "px";
         moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
-        infoBox.style.animation="none";
+        infoBox.style.animation = "none";
         setTimeout(function () {
             infoBox.style.animation = "MoveInfoBox 0.3s";
             infoBox.style.animationFillMode = "forwards";
