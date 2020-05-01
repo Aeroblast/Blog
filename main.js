@@ -284,7 +284,7 @@ function ClickLoadBlog(i) {
     _LoadIndex();
 }
 function _LoadBlog(i) {
-    if (list_state == 1) ListShift();
+    CloseIndex();
     let i_n = parseInt(i);
     filename = index[i_n][0];
     title = index[i_n][1] || index[i_n][0];
