@@ -23,7 +23,7 @@ function TryGetDate(str)
             if(d==8){date.setDate(parseInt(temp));temp="";}
             if(d==10){date.setHours(parseInt(temp));temp="";}
             if(d==12){date.setMinutes(parseInt(temp));temp="";}
-            if(d==10){date.setSeconds(parseInt(temp));temp="";}
+            if(d==14){date.setSeconds(parseInt(temp));temp="";}
         }
         p++;
     }
