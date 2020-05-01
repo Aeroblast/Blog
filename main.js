@@ -207,8 +207,7 @@ moveInfoBox_keyframes.type = 'text/css';
 document.head.appendChild(moveInfoBox_keyframes);
 const moveInfoBox_template = "\
 @keyframes MoveInfoBox{\
-    25%{color:#586069;height:0.5em;}\
-    75%{color:#586069;height:0.5em;}\
+    50%{color:#586069;height:0.5em;}\
     100%{top:[2]px;color:inherit;height:auto;}}";
 const infoBox_content_template = "<div>[1]<br>长度：[2]</div>";
 function IndexInfoOn(div) {
@@ -223,7 +222,7 @@ function IndexInfoOn(div) {
         infoBox.style.animationFillMode = "forwards";
     } else {
         infoBox.style.width = "10em";
-        infoBox.style.height = "auto";
+        infoBox.style.height = infoBox.offsetHeight+"px";
         infoBox.style.top=infoBox.offsetTop+"px";
         moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
         infoBox.style.animation="none";
@@ -241,7 +240,7 @@ function IndexInfoOff(div) {
         if (infoBoxState == 2) {
             infoBox.style.width = "0";
             infoBox.style.height = "0";
-            infoBox.style.animation = "none";
+            infoBox.style.animation = "CloseInfoBox 0.3s";
             infoBoxState = 0;
         }
     }, 100);

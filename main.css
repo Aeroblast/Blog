@@ -237,3 +237,14 @@ a:visited {
         color:inherit;
     }
 }
+@keyframes CloseInfoBox{
+    0%{
+        height: auto;
+        width: 10em;
+        color:inherit;
+    }
+    100%{
+        width: 0;
+        color:#586069;
+    }
+}
