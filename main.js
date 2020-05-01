@@ -228,7 +228,7 @@ function IndexInfoOn(div) {
         infoBox.style.color = "#586069";
         infoBox.style.width = "10em";
         infoBox.style.height = infoBox.offsetHeight + "px";
-        infoBox.style.top = infoBox.offsetTop + "px";
+        infoBox.style.top = infoBox.offsetTop + toc.offsetTop + "px";
         moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
         infoBox.style.animation = "none";
         setTimeout(function () {
@@ -245,8 +245,8 @@ function IndexInfoOff(div) {
         if (infoBoxState == 2) {
             infoBox.style.width = "0";
             infoBox.style.height = "0";
-            infoBox.style.top = infoBox.offsetTop + "px";
-            infoBox.style.color=getComputedStyle(infoBox).color;
+            infoBox.style.top = infoBox.offsetTop + toc.offsetTop + "px";
+            infoBox.style.color = getComputedStyle(infoBox).color;
             infoBox.style.animation = "CloseInfoBox 0.3s";
             infoBox.style.animationFillMode = "forwards";
             infoBoxState = 0;
