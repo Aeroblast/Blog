@@ -152,9 +152,10 @@ function ReadIndex(element) {
     let r = document.createElement("div");
     r.className = classstr;
     let t = index.length;
-    r.onclick = function () { ClickLoadBlog(t); }
+    r.onclick = function () { ClickLoadBlog(t);return false;}
     r.setAttribute("selected", select);
     r.setAttribute("filename", es[0]);
+    r.setAttribute("href","?n="+es[0]);
     r.setAttribute("len", es[1]);
     r.innerText = display_title;
     index.push(es);
