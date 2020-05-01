@@ -216,6 +216,7 @@ function IndexInfoOn(div) {
     else d = "";
     infoBox.innerHTML = infoBox_content_template.replace("[1]",d).replace("[2]", div.getAttribute("len"));
     if (infoBoxState == 0) {
+        infoBox.style.display="block";
         infoBox.style.left = div.offsetWidth + div.offsetLeft + "px";
         infoBox.style.top = div.offsetTop + "px";
         infoBox.style.animation = "OpenInfoBox 0.3s";
