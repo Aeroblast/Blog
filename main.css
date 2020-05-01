@@ -242,10 +242,10 @@ a:visited {
         height: auto;
         width: 10em;
         color:inherit;
-        display: block;
     }
     100%{
         width: 0;
         color:#586069;
+        display: none;
     }
 }
