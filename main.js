@@ -152,10 +152,10 @@ function ReadIndex(element) {
     let r = document.createElement("a");
     r.className = classstr;
     let t = index.length;
-    r.onclick = function () { ClickLoadBlog(t);return false;}
+    r.onclick = function () { ClickLoadBlog(t); return false; }
     r.setAttribute("selected", select);
     r.setAttribute("filename", es[0]);
-    r.setAttribute("href","?n="+es[0]);
+    r.setAttribute("href", "?n=" + es[0]);
     r.setAttribute("len", es[1]);
     r.innerText = display_title;
     index.push(es);
@@ -199,11 +199,32 @@ function SetIndexAnimeCSS(px) {
     closeindex_css.appendRule("to{transform:none}");
     closeindex_css.appendRule("from{transform:translate(" + px + "px,0)}");
 }
+//////////Anime->InfoBox
+var infoBox = document.getElementById("infobox");
+var infoBoxState = 0;
+var moveInfoBox_keyframes = document.createElement("style");
+moveInfoBox_keyframes.type = 'text/css';
+document.head.appendChild(moveInfoBox_keyframes);
+const moveInfoBox_template = "@keyframes MoveInfoBox{to{top:[2]px}}";
 function IndexInfoOn(div) {
-
+    infoBox.innerHTML = "长度：" + div.getAttribute("len");
+    if (infoBoxState == 0) {
+        infoBox.style.left = div.offsetWidth + div.offsetLeft + "px";
+        infoBox.style.top = div.offsetTop + "px";
+        infoBox.style.animation = "OpenInfoBox 0.5s";
+    } else {
+        moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
+        infoBox.style.animation = "MoveInfoBox 0.5s";
+    }
+    infoBoxState = 1;
 }
 function IndexInfoOff(div) {
-
+    infoBoxState = 2;
+    setTimeout(function () {
+        if (infoBoxState == 2) {
+            infoBox.style.animation = "none";
+        }
+    }, 500);
 }
 function IsInQueryTags(s) {
     if (s == "") return false;
