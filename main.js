@@ -206,19 +206,23 @@ var moveInfoBox_keyframes = document.createElement("style");
 moveInfoBox_keyframes.type = 'text/css';
 document.head.appendChild(moveInfoBox_keyframes);
 const moveInfoBox_template = "@keyframes MoveInfoBox{to{top:[2]px}}";
+const infoBox_content_template = "[1]<br>长度：[2]";
 function IndexInfoOn(div) {
-    infoBox.innerHTML = "长度：" + div.getAttribute("len");
+    let d = TryGetDate(div.getAttribute("filename"));
+    if (d) d = new Intl.DateTimeFormat('zh-CN-u-hc-h24', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d);
+    else d = "";
+    infoBox.innerHTML = infoBox_content_template.replace("[1]",d).replace("[2]", div.getAttribute("len"));
     if (infoBoxState == 0) {
         infoBox.style.left = div.offsetWidth + div.offsetLeft + "px";
         infoBox.style.top = div.offsetTop + "px";
-        infoBox.style.animation = "OpenInfoBox 0.5s";
-        infoBox.style.animationFillMode="forwards";
+        infoBox.style.animation = "OpenInfoBox 0.3s";
+        infoBox.style.animationFillMode = "forwards";
     } else {
-        infoBox.style.width="20em";
-        infoBox.style.height="auto";
+        infoBox.style.width = "10em";
+        infoBox.style.height = "auto";
         moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop);
-        infoBox.style.animation = "MoveInfoBox 0.5s";
-        infoBox.style.animationFillMode="forwards";
+        infoBox.style.animation = "MoveInfoBox 0.3s";
+        infoBox.style.animationFillMode = "forwards";
     }
     infoBoxState = 1;
 }
@@ -226,12 +230,12 @@ function IndexInfoOff(div) {
     infoBoxState = 2;
     setTimeout(function () {
         if (infoBoxState == 2) {
-            infoBox.style.width="0";
-            infoBox.style.height="0";
+            infoBox.style.width = "0";
+            infoBox.style.height = "0";
             infoBox.style.animation = "none";
-            infoBoxState=0;
+            infoBoxState = 0;
         }
-    }, 500);
+    }, 100);
 }
 function IsInQueryTags(s) {
     if (s == "") return false;

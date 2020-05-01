@@ -226,6 +226,6 @@ a:visited {
         width: 0;
         height: 1em;
     }
-    50%{width: 20em;}
+    50%{width: 10em;}
     100%{height: auto;}
 }
