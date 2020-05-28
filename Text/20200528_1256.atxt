@@ -1,0 +1,53 @@
+[title]【C#】解决Systen.Xml处理xhtml时的字符实体定义问题[/title]
+我一直觉得巨硬的C#的基础库和文档写得很完善，偏偏在处理EPUB的时候遇到了这个诡异的问题……而且用谷歌搜“xhtml c#”没有任何有用的信息。[s]不过我这Blog架构谷歌能抓取吗……[/s]
+
+[h4]0.这是个啥问题[/h4]
+[mask]我不喜欢用0起头的编号，不过这一节是high完觉得应该解释一下后加的，所以是第0节[/mask]
+C#中的System.Xml是一个相当标准的XML DOM处理库。然而“标准”意味着遇到未定义——尽管十分常见——的字符实体，会抛出异常。
+例如，在XML中，＆#160;是合法的，但＆nbsp;则是未定义的。
+
+[h4]1.可以忽视的个人黑历史[/h4]
+这个破事大概能追溯到写解包，遇到诸如＆nbsp;这种实体定义就炸了。当时搜了一圈没有个合适的解决方案，快准狠直接字符串替换，可以看到utils.cs里有个ReplaceXmlEntity(string xmltext)。
+后来在我写自用的EPUB处理程序的时候，一气之下另起炉灶，糊了一个XML处理方案，现在的阅读器项目里还在用……
+另外，如果搜一搜，其实还可以找到把Entity塞到文档前面的做法……这个方案我没试，大概也是存在隐患但是对私有格式有效的方法。
+XmlPreloadedResolver？这东西藏的挺深，看上去是个不错的解决方案，不过……只有XHTML 1.0的实体定义，我随便一本书就1.1的啊……
+
+[h4]2.标准的解决方案[/h4]
+巨硬当然是考虑到了这个问题的，有相应的类来处理这种外部定义的XML格式。
+以下做法大概是比较标准的（
+创建XmlTextReader读取文档:
+[code=C#]
+    XmlDocument d = new XmlDocument();
+    using (var rdr = new XmlTextReader(new StringReader(xhtml)))
+    {
+        rdr.DtdProcessing = DtdProcessing.Parse;
+        rdr.XmlResolver =new XhtmlEntityResolver();
+        d.Load(rdr);
+    }
+[/code]
+其中，XhtmlEntityResolver是自己实现的XmlResolver，返回https://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd 和这个文档里套娃引用的其他文档……
+[code=C#]
+class XhtmlEntityResolver : XmlResolver {
+    public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
+    {
+        //按照uri返回那些东西，Type都是要求Stream
+    }
+}
+[/code]
+
+[h4]3.我又懒了[/h4]
+其实只要把那堆东西从w3.org当下来，给个本地映射就行了。但是那些玩意实在太多了，我真的不需要那么多奇奇怪怪的定义。解析也不过是找个图片搜个文本，那些元素定义都是累赘……
+重要的还是字符实体定义，那么它们在哪呢……
+套娃链条是这样的：
+https://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd
+- http://www.w3.org/MarkUp/DTD/xhtml-framework-1.mod
+- - http://www.w3.org/MarkUp/DTD/xhtml-lat1.ent
+- - http://www.w3.org/MarkUp/DTD/xhtml-symbol.ent
+- - http://www.w3.org/MarkUp/DTD/xhtml-special.ent
+
+不看不知道，居然有这么多……而latin-1里的第一个就是熟悉的nbsp。
+把三个文件缝合一下，也不用看uri了，直接在GetEntity返回……就可以啦！
+
+[h4]4.未来[/h4]
+上述代码都跑在.Net Framework 4.7里。从XmlPreloadedResolver也能看出来，其实巨硬是知道xhtml需求的，想支持的话也是分分钟的事（不就从1.0升1.1嘛），或许未来版本就不用这么绕弯，直接指定XmlPreloadedResolver了……
+[time]20200528 12:56:24[/time]

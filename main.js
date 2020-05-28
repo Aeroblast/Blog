@@ -360,12 +360,16 @@ function RenderContent() {
         LoadGitalk();
     }
 }
-
+var encodeState = "";
 function EncodeAtxt(c) {
+    if (encodeState == "code") return c;
     var reg = [
         [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"],
         [/\[note\]/, ""],
         [/\[note=(.*?)\]/, ""],
+        [/\[code\]/, "<code>"],
+        [/\[code=(.*?)\]/, "<code lang='$1'>"],
+        [/\[\/code\]/, "</code>"],
         [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='Images/$1'>"],
         [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='Images/$3'>"],
         [/\[b\](.*?)\[\/b\]/, "<b>$1</b>"],
@@ -389,7 +393,8 @@ function EncodeAtxt(c) {
         [/\[\/spoiler\]/, "</div>"],
         [/\[quote\]/, "<div class='quote'>"],
         [/\[\/quote\]/, "</div>"],
-        [/\[mask\](.*?)\[\/mask\]/, "<span class=\"mask\" title=\"你知道的太多了\">$1</span>"]
+        [/\[mask\](.*?)\[\/mask\]/, "<span class=\"mask\" title=\"你知道的太多了\">$1</span>"],
+
     ];
     var r = c;
     var matched = true;
@@ -408,6 +413,13 @@ function EncodeAtxt(c) {
                     case 2://[note=...]
                         notes.push(match[1]);
                         r = r.replace(reg[i][0], rep);
+                        break;
+                    case 3:
+                    case 4:
+                        encodeState = "code";
+                        break;
+                    case 5:
+                        encodeState = "";
                         break;
                     default:
                         r = r.replace(reg[i][0], rep);
