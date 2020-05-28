@@ -332,7 +332,7 @@ function RenderContent() {
     txtcontent.forEach(ele => {
         var c = ele.replace('\r', '');
         c = EncodeAtxt(c);
-        if (encodeState == "code") { code += c + "\n"; return; }
+        if (encodeState == "code") { if (c.startsWith('<code')) code += c; else code += c + "\n"; return; }
         var cla = "";
         if (c.length == 0) c = "<br>";
         if (c[0] == "「" || c[0] == "『" || c[0] == "（") cla += " drawout";
