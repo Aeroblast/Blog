@@ -41,7 +41,7 @@ https://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd
 - - http://www.w3.org/MarkUp/DTD/xhtml-special.ent
 
 不看不知道，居然有这么多……而latin-1里的第一个就是熟悉的nbsp。
-把三个文件缝合一下，自己实现的XmlResolver，也不用看uri了，直接在GetEntity返回……就可以啦！
+把三个文件缝合一下，自己实现XmlResolver，也不用看uri了，直接在GetEntity返回……就可以啦！
 [code=cs]
     XmlDocument d = new XmlDocument();
     using (var rdr = new XmlTextReader(new StringReader(xhtml)))
