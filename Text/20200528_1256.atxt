@@ -21,13 +21,14 @@ XmlPreloadedResolver？这东西藏的挺深，看上去是个不错的解决方
     using (var rdr = new XmlTextReader(new StringReader(xhtml)))
     {
         rdr.DtdProcessing = DtdProcessing.Parse;
-        rdr.XmlResolver =new XhtmlEntityResolver();
+        rdr.XmlResolver = new XhtmlEntityResolver();
         d.Load(rdr);
     }
 [/code]
 其中，XhtmlEntityResolver是自己实现的XmlResolver，返回https://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd 和这个文档里套娃引用的其他文档……
 [code=cs]
-class XhtmlEntityResolver : XmlResolver {
+class XhtmlEntityResolver : XmlResolver 
+{
     public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
     {
         //按照uri返回那些东西，Type都是要求Stream
