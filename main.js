@@ -332,7 +332,7 @@ function RenderContent() {
     txtcontent.forEach(ele => {
         var c = ele.replace('\r', '');
         c = EncodeAtxt(c);
-        if (encodeState == "code") { code += c + "<br>"; return; }
+        if (encodeState == "code") { code += c + "\n"; return; }
         var cla = "";
         if (c.length == 0) c = "<br>";
         if (c[0] == "「" || c[0] == "『" || c[0] == "（") cla += " drawout";
@@ -368,18 +368,18 @@ function RenderContent() {
 var encodeState = "";
 function EncodeAtxt(c) {
     if (encodeState == "code") {
-        if (c != "[/code]") return c.replace(' ','&nbsp;');
+        if (c != "[/code]") return ReplaceEntity(c);
         else {
             encodeState = "";
-            return "</code>";
+            return "</code></pre>";
         }
     }
     var reg = [
         [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"],
         [/\[note\]/, ""],
         [/\[note=(.*?)\]/, ""],
-        [/\[code\]/, "<code>"],
-        [/\[code=(.*?)\]/, "<code class='lang-$1'>"],
+        [/\[code\]/, "<pre><code>"],
+        [/\[code=(.*?)\]/, "<pre><code class='lang-$1'>"],
         //[/\[\/code\]/, "</code>"],//processed proviously
         [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='Images/$1'>"],
         [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='Images/$3'>"],
