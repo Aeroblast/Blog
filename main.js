@@ -343,7 +343,7 @@ function RenderContent() {
         line++;
     });
     main.innerHTML = code;
-    hljs.configure({ useBR: true });
+    //hljs.configure({ useBR: true });
     document.querySelectorAll('code').forEach((block) => {
         hljs.highlightBlock(block);
     });
