@@ -16,7 +16,7 @@ XmlPreloadedResolver？这东西藏的挺深，看上去是个不错的解决方
 巨硬当然是考虑到了这个问题的，有相应的类来处理这种外部定义的XML格式。
 以下做法大概是比较标准的（
 创建XmlTextReader读取文档:
-[code=C#]
+[code=cs]
     XmlDocument d = new XmlDocument();
     using (var rdr = new XmlTextReader(new StringReader(xhtml)))
     {
@@ -26,7 +26,7 @@ XmlPreloadedResolver？这东西藏的挺深，看上去是个不错的解决方
     }
 [/code]
 其中，XhtmlEntityResolver是自己实现的XmlResolver，返回https://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd 和这个文档里套娃引用的其他文档……
-[code=C#]
+[code=cs]
 class XhtmlEntityResolver : XmlResolver {
     public override object GetEntity(Uri absoluteUri, string role, Type ofObjectToReturn)
     {

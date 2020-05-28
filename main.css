@@ -142,7 +142,13 @@ a:visited {
     background: rgba(255, 255, 255, 0.1);
     color: rgb(255, 228, 192);
 }
-
+code{
+    padding-left: 0.5em;
+    border-left: 3px solid dimgray;
+    background: rgba(255, 255, 255, 0.1);
+    text-indent: 0;
+    font-size: 0.8em;
+}
 /*                 */
 .toc_item:hover {
     background: #303030;
