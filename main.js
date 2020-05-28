@@ -332,21 +332,21 @@ function RenderContent() {
     txtcontent.forEach(ele => {
         var c = ele.replace('\r', '');
         c = EncodeAtxt(c);
-        if(encodeState=="code"){code+=c+"\n";return;}
+        if (encodeState == "code") { code += c + "<br>"; return; }
         var cla = "";
         if (c.length == 0) c = "<br>";
         if (c[0] == "「" || c[0] == "『" || c[0] == "（") cla += " drawout";
-        if (c.startsWith("<div") || c.startsWith("</div")||c.startsWith("</code>"))
+        if (c.startsWith("<div") || c.startsWith("</div") || c.startsWith("</code>"))
             code += c;
         else
             code += "<p id='line" + line + "' class='" + cla + "'>" + c + "</p>";
         line++;
     });
     main.innerHTML = code;
-    hljs.configure({useBR: true});
+    hljs.configure({ useBR: true });
     document.querySelectorAll('code').forEach((block) => {
         hljs.highlightBlock(block);
-      });
+    });
     var ua = navigator.userAgent;
     var iPad = ua.match(/(iPad).*OS\s([\d_]+)/),
         iPhone = !iPad && ua.match(/(iPhone\sOS)\s([\d_]+)/),
