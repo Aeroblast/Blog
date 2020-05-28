@@ -63,7 +63,7 @@ class XhtmlEntityResolver : XmlResolver
     }
 }
 [/code]
-如果全部加载，我也更推崇自己实现而不是XmlPreloadedResolver，因为后者处理套娃直接按照路径返回就行，不需要一个个Add。
+如果全部加载，我也更推崇自己实现而不是XmlPreloadedResolver，因为这样做处理套娃直接按照路径返回就行，不需要一个个Add。
 
 [h4]4.未来[/h4]
 上述代码都跑在.Net Framework 4.7里。从XmlPreloadedResolver也能看出来，其实巨硬是知道xhtml需求的，想支持的话也是分分钟的事（不就从1.0升1.1嘛），或许未来版本就不用这么绕弯，直接指定XmlPreloadedResolver了……
