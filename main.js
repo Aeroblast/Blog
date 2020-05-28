@@ -368,7 +368,7 @@ function RenderContent() {
 var encodeState = "";
 function EncodeAtxt(c) {
     if (encodeState == "code") {
-        if (c != "[/code]") return c;
+        if (c != "[/code]") return c.replace(' ','&nbsp;');
         else {
             encodeState = "";
             return "</code>";
