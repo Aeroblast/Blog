@@ -417,9 +417,11 @@ function EncodeAtxt(c) {
                     case 3:
                     case 4:
                         encodeState = "code";
+                        r = r.replace(reg[i][0], rep);
                         break;
                     case 5:
                         encodeState = "";
+                        r = r.replace(reg[i][0], rep);
                         break;
                     default:
                         r = r.replace(reg[i][0], rep);
