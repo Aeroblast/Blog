@@ -362,14 +362,20 @@ function RenderContent() {
 }
 var encodeState = "";
 function EncodeAtxt(c) {
-    if (encodeState == "code") return c;
+    if (encodeState == "code") {
+        if (c != "[/code]") return c;
+        else {
+            encodeState = "";
+            return "</code>";
+        }
+    }
     var reg = [
         [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"],
         [/\[note\]/, ""],
         [/\[note=(.*?)\]/, ""],
         [/\[code\]/, "<code>"],
         [/\[code=(.*?)\]/, "<code lang='$1'>"],
-        [/\[\/code\]/, "</code>"],
+        //[/\[\/code\]/, "</code>"],//processed proviously
         [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='Images/$1'>"],
         [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='Images/$3'>"],
         [/\[b\](.*?)\[\/b\]/, "<b>$1</b>"],
@@ -417,10 +423,6 @@ function EncodeAtxt(c) {
                     case 3:
                     case 4:
                         encodeState = "code";
-                        r = r.replace(reg[i][0], rep);
-                        break;
-                    case 5:
-                        encodeState = "";
                         r = r.replace(reg[i][0], rep);
                         break;
                     default:
