@@ -1,4 +1,4 @@
-[title]【C#】解决Systen.Xml处理xhtml时的字符实体定义问题[/title]
+[title]【C#】解决System.Xml处理xhtml时的字符实体定义问题[/title]
 我一直觉得巨硬的C#的基础库和文档写得很完善，偏偏在处理EPUB的时候遇到了这个诡异的问题……而且用谷歌搜“xhtml c#”没有任何有用的信息。[s]不过我这Blog架构谷歌能抓取吗……[/s]
 
 [h4]0.这是个啥问题[/h4]
