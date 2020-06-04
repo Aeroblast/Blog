@@ -405,7 +405,7 @@ function EncodeAtxt(c) {
         [/\[quote\]/, "<div class='quote'>"],
         [/\[\/quote\]/, "</div>"],
         [/\[mask\](.*?)\[\/mask\]/, "<span class=\"mask\" title=\"你知道的太多了\">$1</span>"],
-        [/\[tag\](.*?)\[\/tag\]/, "<div class=\"tag\" onclick=\"ClickTag(this,event)\">$1</div>"]
+        [/\[tag\](.*?)\[\/tag\]/, "<span class=\"tag\" onclick=\"ClickTag(this,event)\">$1</span>"]
 
     ];
     var r = c;
