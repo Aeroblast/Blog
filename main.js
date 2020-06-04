@@ -464,7 +464,7 @@ function SpoilerShift(e) {
     if (e.parentNode.hasAttribute("active")) {
         e.parentNode.removeAttribute("active");
     } else
-        e.parentNode.setAttribute("active");
+        e.parentNode.setAttribute("active","");
 }
 function ClickTag(a, event) {
     ReloadIndex(new Array(a.innerText));
