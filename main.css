@@ -75,6 +75,8 @@ a:visited {
     padding-right: 0.3em;
     margin-left: 2.5%;
     margin-right: 2.5%;
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
     border: 1px solid chocolate;
 }
 
