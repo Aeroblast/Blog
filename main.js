@@ -461,10 +461,10 @@ function TryLoadEncrpyted(pw) {
     }
 }
 function SpoilerShift(e) {
-    if (e.parentNode.style.color == "antiquewhite") {
-        e.parentNode.style.color = "transparent";
+    if (e.parentNode.hasAttribute("active")) {
+        e.parentNode.removeAttribute("active");
     } else
-        e.parentNode.style.color = "antiquewhite";
+        e.parentNode.setAttribute("active");
 }
 function ClickTag(a, event) {
     ReloadIndex(new Array(a.innerText));
