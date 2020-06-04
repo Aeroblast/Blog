@@ -336,7 +336,7 @@ function RenderContent() {
         var cla = "";
         if (c.length == 0) c = "<br>";
         if (c[0] == "「" || c[0] == "『" || c[0] == "（") cla += " drawout";
-        if (c.startsWith("<div") || c.startsWith("</div") || c.startsWith("</code>"))
+        if (c.startsWith("<div") || c.startsWith("</div") || c.startsWith("</code>") || c.startsWith("<p "))
             code += c;
         else
             code += "<p id='line" + line + "' class='" + cla + "'>" + c + "</p>";
@@ -465,7 +465,7 @@ function SpoilerShift(e) {
     if (e.parentNode.hasAttribute("active")) {
         e.parentNode.removeAttribute("active");
     } else
-        e.parentNode.setAttribute("active","");
+        e.parentNode.setAttribute("active", "");
 }
 function ClickTag(a, event) {
     ReloadIndex(new Array(a.innerText));
