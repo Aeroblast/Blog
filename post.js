@@ -6,16 +6,22 @@ var stamp;
 var filename;
 SetTimeString();
 let data = fs.readFileSync("temp.atxt");
-let blog_len=CleanText( data.toString()).replace("\n","").replace("\r","").length;
+let blog_len = CleanText(data.toString()).replace("\n", "").replace("\r", "").length;
 data += "\n[time]" + stamp + "[/time]";
-let blog_path="Text/" + filename + ".atxt";
-let record=filename + ","+blog_len+",";
+let blog_path = "Text/" + filename + ".atxt";
+let record = filename + "," + blog_len + ",";
+let reg_title = /\[title\](.*?)\[\/title\]/;
+let title_match = data.match(reg_title);
+if (title_match != null) {
+    record += title_match[1];
+}
+console.log(record);
 if (args.length > 1) {
     let pw = args[1];
     if (args[0] == 'en') {
         let encrypted = aes.encrypt(pw + "\n" + data, pw).toString();
         fs.writeFileSync(blog_path, "ENCRYPTED\n" + encrypted);
-        fs.appendFileSync("index.txt", "\n" +record);
+        fs.appendFileSync("index.txt", record + "\n");
     }
     if (args[0] == 'de') {
         let ds = data.split('\n');
@@ -31,7 +37,7 @@ if (args.length > 1) {
 
 } else {
     fs.writeFileSync(blog_path, data);
-    fs.appendFileSync("index.txt","\n"+record );
+    fs.appendFileSync("index.txt", record + "\n");
 }
 
 
@@ -41,7 +47,7 @@ function SetTimeString() {
     let d = new Date();
     let y = "" + d.getFullYear();
     let dd = d.getDate(); if (dd < 10) dd = "0" + dd;
-    let mm = d.getMonth(); mm++;if (mm < 10) mm = "0" + mm;
+    let mm = d.getMonth(); mm++; if (mm < 10) mm = "0" + mm;
     let hh = d.getHours(); if (hh < 10) hh = "0" + hh;
     let mi = d.getMinutes(); if (mi < 10) mi = "0" + mi;
     let ss = d.getSeconds(); if (ss < 10) ss = "0" + ss;
