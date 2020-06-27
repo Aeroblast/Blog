@@ -6,6 +6,10 @@ a:visited {
     color: palevioletred
 }
 
+b{
+    color: #ffdd9f;
+}
+
 #info_container {
     line-height: 1.5;
     margin-top: 0;
