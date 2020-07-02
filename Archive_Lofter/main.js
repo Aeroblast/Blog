@@ -25,6 +25,9 @@ function ReadData(xmlstring) {
         post.tag = TryGetValue(postItem, "tag");
         post.permalink = postItem.getElementsByTagName("permalink")[0].innerHTML;
         post.content = TryGetValue(postItem, "content");
+        post.caption = TryGetValue(postItem, "caption");
+        post.photoLinks = TryGetValue(postItem, "photoLinks");
+        if (post.photoLinks) post.photoLinks = JSON.parse(post.photoLinks)[0];
         postData.push(post);
     });
 

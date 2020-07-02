@@ -321,6 +321,10 @@
             margin: 10px 0;
             border-left: 4px solid #dfdfdf;
         }
+
+        img {
+            max-width: 100%;
+        }
     </style>
 </head>
 
@@ -419,6 +423,9 @@
             let content = post.content;
             if (post.type == "Long") {
                 content = "发布了长文章：<b><u>" + post.title + "</u></b><br><br><a href='home.html?lpost=" + post.permalink + "' style='color:#73A8DE'>点击查看</a><br><br>"
+            }
+            if (post.type == "Photo") {
+                content = "<p><img src='" + post.photoLinks.raw + "'/></p>" + post.caption;
             }
             if (post.title)
                 content = "<h2>" + link_template + post.title + "</a></h2>" + content;

@@ -329,6 +329,7 @@
         .deactive img {
             float: left;
             width: 50%;
+            margin-right: 0.5em;
         }
 
         .tag_container>a {
@@ -410,7 +411,7 @@
         var lastPostIndex = -1;
         function LoadPost() {
             lastPostIndex++;
-            if (lastPostIndex > postData.length) return false;
+            if (lastPostIndex >= postData.length) return false;
             let e = GenPostHTML(postData[lastPostIndex]);
             main_container.appendChild(e);
             OpenButton(e);
@@ -426,6 +427,7 @@
             let link = "<div class='link'><a class='link' href='index.html?post=" + post.permalink + "' target='_blank'>" + link_icon + "</a></div>";
             let c = "<div class='content'>" + post.content + "</div>";
             if (post.type == "Long") c = "<div class='content'><br><br><a href='?lpost=" + post.permalink + "'>点击查看</a><br><br></div>";
+            if (post.type == "Photo") c = "<div class='content'><p><img src='" + post.photoLinks.raw + "'/></p>" + post.caption + "</div>";
             if (post.title) c = "<div class='title'>" + post.title + "</div>" + c;
             c += "<div class='open_button hide'>展开▼</div>";
             if (post.tag) {
@@ -455,6 +457,7 @@
             if (!onscrollTimer)
                 onscrollTimer = setTimeout(function () {
                     if (CheckIfLoad())
+                        do { LoadPost(); LoadPost(); }
                         while (LoadPost() && CheckIfLoad());
                     onscrollTimer = null;
                 }, 500);
@@ -465,12 +468,6 @@
             if (b < window.innerHeight) return true;
             return false;
         }
-
-
-
-
-
-
 
         const profile = '<div class="profile" style="background: url(profile.jpg) no-repeat;background-size: contain;"><svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 A50 50 0 1 0 50 100L 0 100 L0 0 L50 0 Z" fill="#fff" /><path d="M50 100 A50 50 0 1 0 50 0L 100 0 L100 100 L50 100 Z" fill="#fff" />/svg></div>';
         const info = '<a class="lnk" target="_blank" href="index.html">' + profile + '</a><a class="name" target="_blank" href="index.html">Aeroblast</a>';
