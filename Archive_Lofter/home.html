@@ -381,7 +381,7 @@
             </div>
         </div>
     </div>
-    <div id='main_container' class='center_content'>
+    <div id='main_container' class='center_content hide'>
         <div class="publish">
             <img src="profile.jpg" />
         </div>
@@ -403,6 +403,7 @@
             } else {
                 for (let i = 0; i < 10; i++)LoadPost();
                 window.addEventListener("scroll", OnScroll);
+                main_container.className = 'center_content';
             }
         }
         var lastPostElement;
@@ -481,7 +482,7 @@
             ReplaceImage(main_container);
             let p = main_container.getElementsByClassName('info')[0];
             p.innerHTML = info + p.innerHTML;
-            main_container.className += " lpost";
+            main_container.className = "center_content lpost";
         };
 
 
