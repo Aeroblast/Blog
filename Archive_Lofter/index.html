@@ -1,0 +1,493 @@
+<html lang="zh">
+
+<head>
+    <meta charset="utf8" />
+    <title>冻结的记录 - Aeroblast</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            border: 0;
+            font-size: 12px;
+            color: #444;
+            font-family: "Microsoft YaHei", "微软雅黑", simsun, "宋体";
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            background-color: #dfdfe1;
+            background-image: url(bg.png);
+        }
+
+        a:any-link {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        #header {
+            padding: 0;
+            margin: 0;
+            height: 5vh;
+        }
+
+        .center_content {
+            display: block;
+            width: 70vmin;
+            min-width: 600px;
+            text-align: left;
+        }
+
+        .box {
+
+            color: #737373;
+            box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.2);
+            margin: 0 auto 40px;
+            padding: 25px 30px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .profile {
+
+            color: #737373;
+            position: relative;
+            width: 12%;
+            float: left;
+
+        }
+
+        .profile:before {
+            content: "";
+            float: left;
+            padding-top: 100%;
+        }
+
+        .profile>svg {
+            width: 100%;
+            height: auto;
+        }
+
+        .name {
+            font-size: 2.1em;
+            color: #4c4c4c;
+            margin-left: 16%;
+        }
+
+        .disc {
+            padding-top: 4px;
+            margin-left: 16%;
+            color: #9d9d9d;
+            line-height: 1.5;
+            font-size: 1em;
+        }
+
+        .list {
+            margin-left: 16%;
+            margin-top: 2vw;
+            padding: 0;
+        }
+
+        .list>li {
+            list-style: none;
+            margin: 0;
+            display: inline-block;
+        }
+
+        .list>li>a {
+            list-style: none;
+            transition-property: background-color, color;
+            transition-duration: .4s, .5s;
+            transition-timing-function: ease, ease;
+            border-radius: 15px;
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 0 12px 10px 0;
+            color: #FEFEFE;
+            white-space: nowrap;
+            background-color: #828d95;
+        }
+
+        .list a:hover {
+            background-color: #4d4d4d;
+        }
+
+        /*main*/
+        #blog_container>div {
+            margin-bottom: 3em;
+        }
+
+        .side {
+            padding: 0;
+            margin: 0;
+            width: 80px;
+            float: left;
+        }
+
+        .side a:hover {
+            color: #4c4c4c;
+        }
+
+        .day {
+            padding: 0;
+            margin: 0;
+            color: #828d95;
+            border-color: #828d95;
+        }
+
+        .day>a {
+            padding: 0;
+            margin: 0;
+            text-decoration: none;
+            color: #828d95;
+            transition: 0.3s;
+            border-radius: 40px;
+            width: 70px;
+            height: 70px;
+            line-height: 70px;
+            font-size: 40px;
+            border-width: 5px;
+            display: block;
+            border-style: solid;
+            text-align: center;
+        }
+
+
+        .month>a {
+            padding: 0;
+            text-decoration: none;
+            transition: 0.3s;
+            display: block;
+            margin: 6px 0 0;
+            color: #c0c0c0;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .main {
+
+            padding: 0;
+            margin: 0;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAADCAAAAACcgYFdAAAAEUlEQVQI12O4/p+JgYGJgQEADcwB2/e8wsMAAAAZdEVYdFNvZnR3YXJlAEFkb2JlIEltYWdlUmVhZHlxyWU8AAAAAElFTkSuQmCC) bottom repeat-x;
+            margin-left: 110px;
+            padding-bottom: 48px;
+        }
+
+        .content {
+            line-height: 1.8;
+            font-size: 1.15em;
+        }
+
+        .content a:hover {
+            text-decoration: underline;
+        }
+
+        .tag {
+            margin: 30px 0 0;
+            clear: both;
+        }
+
+        .tag a {
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 0 12px 10px 0;
+            color: #FEFEFE;
+            white-space: nowrap;
+        }
+
+        .tag a:hover {
+            color: #FEFEFE;
+        }
+
+        .link {
+            margin: 20px 0 0;
+            clear: both;
+            overflow: hidden;
+            zoom: 1;
+        }
+
+        .link a {
+            display: block;
+            float: left;
+            height: 17px;
+            margin-right: 25px
+        }
+
+        .link a:hover {
+            color: #4d4d4d;
+        }
+
+        .footer,
+        .footer a {
+            height: 45px;
+            text-align: center;
+            color: #fff;
+        }
+
+        /*arrow*/
+        .arrow {
+            font-size: 20px;
+            border-radius: 20px;
+            height: 40px;
+            width: 40px;
+            background: #ebebeb;
+            color: white;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .arrow>div {
+            height: 40px;
+            line-height: 38px;
+        }
+
+        div.prev>a>div>div,
+        div.prev>div>div {
+            margin-left: 9px;
+        }
+
+        div.next>a>div>div,
+        div.next>div>div {
+
+            margin-right: 9px;
+        }
+
+
+        a>.arrow {
+            background: #828d95;
+            transition: width 0.5s;
+        }
+
+        a>.arrow:hover {
+            width: 110px;
+        }
+
+        .prev,
+        .next {
+            height: 40px;
+            width: 40px;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        .title {
+            display: inline-block;
+            direction: ltr;
+            font-size: 15px;
+        }
+
+        .prev {
+            float: left;
+            text-align: left;
+        }
+
+        .next {
+            float: right;
+            text-align: right;
+            direction: rtl;
+        }
+
+
+        /*other*/
+        .tag a {
+            transition-property: background-color, color;
+            transition-duration: .4s, .5s;
+            transition-timing-function: ease, ease;
+            border-radius: 15px;
+            display: inline-block;
+            padding: 2px 8px;
+            margin: 0 12px 10px 0;
+            color: #FEFEFE;
+            white-space: nowrap;
+            background-color: #828d95;
+        }
+
+        .tag a:hover {
+            background-color: #4d4d4d;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: normal;
+            color: #4c4c4c;
+            font-size: 2em;
+        }
+
+        blockquote {
+            padding: 0 0 0 15px;
+            margin: 10px 0;
+            border-left: 4px solid #dfdfdf;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header"></div>
+    <div class="center_content box">
+        <div class="selfinfo">
+            <div class="profile" style="background: url(profile.jpg) no-repeat;background-size: contain;">
+                <svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="
+                    M50 0 
+                    A50 50 0 1 0 50 100
+                    L 0 100 L0 0 L50 0 
+                    Z" fill="#fff" />
+                    <path d="
+                    M50 100 
+                    A50 50 0 1 0 50 0
+                    L 100 0 L100 100 L50 100 
+                    Z" fill="#fff" />
+                </svg>
+            </div>
+            <div class="name"><a href="?">Aeroblast</a></div>
+            <div class="disc">此页面是冻结的记录……</div>
+            <ul class="list">
+                <li><a href="../">Living Blog</a></li>
+                <li><a href="home.html">Alter View</a></li>
+            </ul>
+        </div>
+    </div>
+    <div id="blog_container" class="center_content box"></div>
+    <div class="footer"><span title="Copyright" style="cursor:pointer;">©</span>&nbsp;<a
+            href="?">Aeroblast</a>&nbsp;|&nbsp;Powered by ……？</div>
+    <script src="../util.js"></script>
+    <script src="main.js"></script>
+    <script>
+        const blog_container = document.getElementById("blog_container");
+        var query_page = "";
+        var query_tag = "";
+        var query_post = ""
+        function ReadQueryAndLoad() {
+            document.title = "冻结的记录 - Aeroblast";
+            query_page = GetQueryString("page");
+            query_tag = GetQueryString("tag");
+            query_post = GetQueryString("post");
+            if (query_post) {
+                let prev = "";
+                let next = "";
+                let flag = false;
+                postData.forEach(function (post) {
+                    if (post.permalink != query_post) {
+                        if (!flag) prev = post.permalink;
+                        else {
+                            if (!next) next = post.permalink;
+                        }
+                    }
+                    else {
+                        blog_container.appendChild(GeneratePostHTML(post, false));
+                        flag = true;
+                        if (post.title) {
+                            document.title = post.title + " - 冻结的记录 - Aeroblast";
+                            history.replaceState({}, document.title, window.location.href);
+                        }
+
+                    }
+
+                });
+                CreateArrow_Post(prev, next);
+            } else if (query_tag) {
+                postData.forEach(function (post) {
+                    if (post.tag.indexOf(query_tag) == -1) return;
+                    blog_container.appendChild(GeneratePostHTML(post));
+                });
+                document.title = query_tag + " - 冻结的记录 - Aeroblast";
+                history.replaceState({}, document.title, window.location.href);
+            } else {
+                let start = 0;
+                if (query_page) { start = (parseInt(query_page) - 1) * 10; }
+                for (let i = 0; i + start < postData.length && i < 10; i++) {
+                    blog_container.appendChild(GeneratePostHTML(postData[start + i]));
+                }
+                CreateArrow();
+            }
+        }
+
+        function GeneratePostHTML(post, addlink = true) {
+            let root = document.createElement("div");
+            root.innerHTML = "<div class='side'><div class='day'></div><div class='month'></div></div><div class='main'><div class='content'></div><div class='tag'></div><div class='link'></div></div>";
+            let link_template = "<a href='?post=" + post.permalink + "' onclick='LocalLink(this,event)'>";
+
+            let month = post.publishTime.getMonth() + 1;
+            let day = post.publishTime.getDate();
+            let date = new Intl.DateTimeFormat('zh-CN-u-hc-h24', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.publishTime);
+            root.children[0].title = date;
+            _SetInner(root, "day", link_template + day + "</a>");
+            _SetInner(root, "month", link_template + month + "</a>");
+            let content = post.content;
+            if (post.type == "Long") {
+                content = "发布了长文章：<b><u>" + post.title + "</u></b><br><br><a href='home.html?lpost=" + post.permalink + "' style='color:#73A8DE'>点击查看</a><br><br>"
+            }
+            if (post.title)
+                content = "<h2>" + link_template + post.title + "</a></h2>" + content;
+            _SetInner(root, "content", content);
+            if (post.tag) {
+                let tags = post.tag.split(',');
+                let r = "";
+                tags.forEach(function (t) {
+                    r += "<a href='?tag=" + t + "' onclick='LocalLink(this,event)'>● " + t + "</a>";
+                });
+                _SetInner(root, "tag", r);
+            }
+            if (addlink)
+                _SetInner(root, "link", link_template + "全文链接</a>");
+            ReplaceImage(root);
+
+            return root;
+        }
+        function _SetInner(e, className, content) {
+            e.getElementsByClassName(className)[0].innerHTML = content;
+        }
+
+        function CreateArrow() {
+            let root = document.createElement("div");
+            let prev = '<div class="arrow"><div>◀　<span class="title">上一页</span></div></div>';
+            let next = '<div class="arrow"><div>▶　<span class="title">下一页</span></div></div>';
+            if (query_page) {
+                let p = parseInt(query_page);
+                if (p == 1) { next = '<a href="?page=2" onclick="LocalLink(this,event)">' + next + '</a>'; }
+                else {
+                    prev = '<a href="?page=' + (p - 1) + '" onclick="LocalLink(this,event)">' + prev + '</a>';
+                    if (p * 10 < postData.length)
+                        next = '<a href="?page=' + (p + 1) + '" onclick="LocalLink(this,event)">' + next + '</a>';
+                }
+            } else {
+                next = '<a href="?page=2" onclick="LocalLink(this,event)">' + next + '</a>';
+            }
+            root.innerHTML = '<div class="side">　</div><div style="margin-left:110px"><div class="prev"></div><div class="next"></div></div>';
+            _SetInner(root, "prev", prev);
+            _SetInner(root, "next", next);
+            blog_container.appendChild(root);
+        }
+        function CreateArrow_Post(prev_id, next_id) {
+            let root = document.createElement("div");
+            let prev = '<div class="arrow"><div>◀　<span class="title">上一篇</span></div></div>';
+            let next = '<div class="arrow"><div>▶　<span class="title">下一篇</span></div></div>';
+            if (prev_id) {
+                prev = '<a href="?post=' + prev_id + '" onclick="LocalLink(this,event)">' + prev + '</a>';
+            }
+            if (next_id) {
+                next = '<a href="?post=' + next_id + '" onclick="LocalLink(this,event)">' + next + '</a>';
+            }
+            root.innerHTML = '<div class="side">　</div><div style="margin-left:110px"><div class="prev"></div><div class="next"></div></div>';
+            _SetInner(root, "prev", prev);
+            _SetInner(root, "next", next);
+            blog_container.appendChild(root);
+        }
+        function LocalLink(ele, event) {
+            event.preventDefault();
+            history.pushState({}, "", ele.href);
+            blog_container.innerHTML = "";
+            ReadQueryAndLoad();
+            document.body.scrollIntoView();
+        }
+        window.onpopstate = function (event) {
+            blog_container.innerHTML = "";
+            ReadQueryAndLoad();
+        };
+    </script>
+</body>
+
+</html>

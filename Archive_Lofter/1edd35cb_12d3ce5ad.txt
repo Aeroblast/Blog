@@ -1,0 +1,125 @@
+<img class="banner" id="banner" data-imgurl="https://imglf5.nosdn0.126.net/img/bHlLeVpPL0RHYlhXSW5sWEcxbHh5L05pcDNGeVFaMlI1cmV0K1FzK29QbmhOU1NieUlCZWNnPT0.jpg" src="https://imglf5.nosdn0.126.net/img/bHlLeVpPL0RHYlhXSW5sWEcxbHh5L05pcDNGeVFaMlI1cmV0K1FzK29QbmhOU1NieUlCZWNnPT0.jpg">
+		<div class="m-cnt" id="m-cnt">
+			<div class="title" id="title">年终的游戏回顾</div>
+
+			<div class="info f-cb">
+				<span class="time">2018-12-31</span>
+			</div>
+
+			
+			<div class="long-text">
+		<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;记账到了新的节点，做了统计也顺便回顾一下。一年下来玩的游戏不少，也有不少想吐槽的东西。上次写还是一年前通关XB2，这一年通了的游戏虽然可能会在空间说两句，还是有很多没有来得及叨叨。</p> 
+<p>顺序随性吧。</p> 
+<h2><strong>##音游Part</strong></h2> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感觉这一年音游玩了不少，尤其是各个平台的太鼓达人……那么从太鼓达人各个平台开始吧。</p> 
+<h4><strong>###太鼓之达人 Nintendo Switch版！</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;首发入手，之后买了初音DLC包。我觉得NS应该是最适合太鼓达人的家用机平台了：便携OK，要触屏有触屏，要按键有按键，接个电视也能用外设鼓，然而这一作拿到以后有种糊弄感……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;作为一个DS~3DS的触屏玩家，电阻屏到电容屏的转换没什么障碍，玩起来太鼓达人还是那个太鼓达人，音质提高了听感舒服了不少，什么练习模式从前没有现在也没有，剧情不玩换成聚会游戏也无所谓，最难受的一点是菜单居然不能用触摸操作。选曲似乎偏少，我开始倒是觉得没什么问题，反正这年头谁还没有个DLC呢。结果到现在能激起购买欲望的只有初音DLC，对比下隔壁PS4的曲包……按理说你官网上家机一栏放着NS版，PS4都放到下面跟过气平台一起了还能经常有点新曲，NS这个各种复刻……算了，这个能随便出更新的时代，未来一切皆有可能……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;聚会游戏很幸运有机会玩了一次，总体上还算可以吧。有些很容易抓到感觉效果还行，有些不明不白的就一起？？？然后跳过。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;额外说几句演奏方式。甩JoyCon这个从发售前就有点怀疑，实际试了发现效果实在堪忧，后来还出来小学生フリフリ比赛实锤了弱智操作，宣传上注重这个实在是败笔。电容屏很稳妥，还能用火腿肠敲，没有实体鼓的话体验应该是最好的。按键算是常规操作，Joycon不对称虽然有点难受，总比Pro和DS4的连体十字好。熟悉换手以后其实操作逻辑不管哪种都差不多相通，区别就是手臂还是手腕还是手指头速度的限制……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;游戏时间55 hours or more，全连蓄势激动得全身发抖，算是值回票价。</p> 
+<h4><strong>###太鼓之达人&nbsp;合奏咚咚咚</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PS4版。11月半价入手数字版本体+曲包1~6,年末九折码买了6~18和初音。玩得不多。就是打鼓，太纯粹了。线上就跟马车的幽灵一样放个别人的数据跟你一起打。逢年过节开个活动攒积分送曲子，赶上两回。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手指头手速跟不上很难受，遇到活动刷一下曲子，没有活动还是一边做自制鼓一边打PC的模拟器吧。买曲包的想法一点是为了以后有了自制鼓就能玩，还有一点老玩模拟器还是补个票……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;本来计划弄的自制鼓直接玩，结果PS4手柄有专门的认证芯片。找到一个叫GIMX的项目可以用PC读取DS4的认证伪装一下然后拿别的设备模拟输入，结果实际试了发现延迟和丢音没法接受，可能是串口速率不行吧。接下来打算魔改GIMX的PS4端固件把自制鼓的arduino程序直接写到固件上跳过传输电脑直接通过单片机转发给PS4。</p> 
+<h4><strong>###其他太鼓相关</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在街机上打了几回。都是12亚，主要挑战的是蓄势，然后配几个动画曲随便玩玩。墩布棍子一边粗的那个棒真是累人……做了自制鼓就没再去了，用PC上的Tjaplayer3玩。音质比较低，有点想替换音源。自制鼓前前后后各种缺零件拖了很久，最后做出来虽然不能连PS4，PC模拟器效果还算满意。3DS版之前也有在玩，有了NS版再也回不去那个小屏幕了……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; iPad版也有在玩，都是偶尔打一下没有肝过，打过几次免费换限时玩的曲目。可能是型号太旧，帧率不高而且经常卡顿十分感人……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;网页那个模拟器也试过，挺厉害的，但是连自制鼓有毛病，延迟大，不是第一选择。</p> 
+<h4><strong>###Deemo</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;去年我还在大骂Deemo演奏感弱，今年不知道咋的就觉得Deemo演奏感还不错。可能是因为那会玩得主要是些简单曲目所以听不出错音？玩了高难度就能发现错音反馈会让你不能忍受。NS版出了以后很快入手数字版。后来有出实体，有点想要但是不想买两份……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NS版十分良心，包含全部曲包，之后的也从发售就一直有在更新，明年还有更新。合算下来比移动端便宜了不知道多少。帧率高，吊打低端型号的iPad iPhone。可惜没有合作曲包，想玩百花缭乱还得用低能的iOS版。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;虽然曲子多，能认真练的还是不多。良曲良铺面不少。毕竟演奏感比不上太鼓，肝度不是很高。最近很少玩了，但是整个游戏给我留下的印象是高质量良心活，可能想起来还会玩一玩。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 30 hours or more。</p> 
+<h4><strong>###ガルバ</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BanG Dream！&nbsp;ガールズバンドパーティ！，邦邦。免费玩家。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对角色没什么感觉，Live2D做得不错。没有太多耐心听那些没营养的剧情，就是打歌。默认打击音效有点吵，换成钝一点的好了不少。特效全关还是有卡顿，如果未来换iPad这一定是重要的动力。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;原创曲能听进去的实在有限，几个组合里比较喜欢的是那个唱功最好的色调比较暗的，还有佐仓那个……叫什么我忘了orz 翻唱曲有很多唱不出原作气势的，也有演绎得还可以的。邦邦的铺面判定需要注意抬手一开始有点不习惯，这个对协调性的要求稍微高了点，还有需要划的方向音，总体上演奏感还是不错的。反馈只有一种音所以很多最高难度铺面反而显得吵，也有不错的就是了。F2P所以打不完会强行停止，没办法的事，免费玩家不要求更多了，只要你能打过都是免费的，评分低又能怎样，体验是自己的。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;过一首赚一首（暴论）</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;话说插着充电线判定就会变得奇怪这iPad稀奇毛病真是……</p> 
+<h4><strong>###其他音游</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;有段时间Cytus II iOS限时免费就领了一个，结果发现这个演奏模式不是很能接受，太不符合读谱直觉。明年改改登陆NS，估计是1和2 整合买断应该会比较值。不知道能不能跟Deemo一样让我能有改观。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;之前又看见推荐Pianista的就去玩了一下，主打古典的F2P。一开始打起来感觉还行，结果多打了一点发现这游戏偷懒得要命，正确的音没有反馈，错误的音发出一个超违和的坏音…只有负反馈可还行。上NS也买断，但是拿古典曲都不用自己作曲，还不认真做个Key……不看好。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;借来玩过兰空。大概是视觉反馈派，不太能接受……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;其他有几个试玩过的，没有深入就不提了吧。</p> 
+<p><br /></p> 
+<h2><strong>##Splatoon 2</strong></h2> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;在会员收费之前爽了几个月。中间也通了DLC。明年考虑开会员和加速器爽。</p> 
+<h4><strong>###本体</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;一开始没有玩剧情，直接去涂地。不知不觉就打了很久了。网络报错其实很多占了不少，实际涂地肯定也是不少。主要玩双枪，水桶和刷子也偶尔用。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;网游比单机有着天然的新鲜感优势，因为敌人的不可预测性，根本不知道会有什么骚操作。单机部分大型教程，也揭露了不少世界观设定。从设定上、游戏性上，整个游戏的完成感十分的充足，还附带个硬核音游。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;对游戏的理解什么立回啥的不太懂，就不多谈了。死喷乱涂一时爽，一直涂一直爽。</p> 
+<h4><strong>###DLC</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DLC的难度比本体高。关卡看似很多，每个都比本体短了不是一点。一关一关打下来挺有成就感的。难度说高，通关也不是太难，反正可以多试几次，看似要钱其实老头会一直借钱给你……票价当然是值回来了，但是这些关卡应该不会挑战第二次了。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;里boss挑战了很多次最后也过了，当时还录了一段视频。开发者深知人形boss拼技术不可能拼过玩家，只能堆了一堆外挂，各种副武器大跳什么的……最后过得还挺惊险。</p> 
+<p><br /></p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 185 hours or more。网游就是强。</p> 
+<p><br /></p> 
+<h2><strong>##一些单独买的DLC</strong></h2> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;万恶的DLC商法大大提高了数字版的比例……好在主机游戏都不会太过分，大多没什么在线验证运行之类的恶心玩意也就忍了吧（温水煮青蛙啊这个）</p> 
+<h4><strong>###塞尔达传说&nbsp;旷野之息&nbsp;季票</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多了几个好用的小玩意和几个迷宫。小迷宫还是跟以前一样的小谜题，最后的超大迷宫也不过是分了几个大区，老实说有点失望。可能最值的还是多的那几个剧情吧。</p> 
+<h4><strong>###尼尔&nbsp;机械纪元 DLC</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;原则上要抄一遍正式名称但是那一串数字字母实在不想查了。多了几个挑战，给了几个色色的外观。再来个玩得很嗨的打社长……挑战一方面是2B的正常打就完了，一方面是9S的控制机器人打架。虽然乱七八糟但是也还挺有意思的。打折买的也对得起这价钱。</p> 
+<h4><strong>###异度神剑&nbsp;黄金之国伊拉</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这个可以拿出来当单独游戏的，还是实体卡番外+下载码本篇追加内容，不过和本体联系比较紧密就当DLC了。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;这玩意怎么说的，就是惨啊。制作人十分邪恶的拿支线任务完成数卡进度，做支线增加路人友善度才让你推主线，最后终盘booooom首都炸了，哎呀你伤心了吧。虽然已经知道结局，剧情往后走看着还是挺揪心的。往后一些本体讲过的东西一笔带过，补了几句话，真独白几句，调子也是阴阴沉沉的。填了不少坑吧。劳拉可惜啊~~</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;战斗系统比本体舒服不少，属性连击基本随便走，而且链上每个属性都挂个球，换人带个攻击而且都有特效，玩起来很带感，只要每个操作都得当，正反馈是每时每刻的。想到还要回本体在旧体系下刷挑战有点那啥……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 30 hours or more</p> 
+<p><br /></p> 
+<h2><strong>##一些单独的</strong></h2> 
+<h4><strong>###大神&nbsp;绝景版</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;大部分想说的当时通关就叨叨过了。挺不错的冷饭，据说是“理想形态”。实际还有点操作细节比较恼人，也不算事吧。</p> 
+<p>30 hours or more</p> 
+<p><br /></p> 
+<h4><strong>###Octopath Traveler</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;高清像素RPG。商人开局，通了八条线。隐藏剧情没打，实在不想练级了，太烦人了。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;整个游戏世界塑造得还是有声有色的。雪山沙漠什么的满屏特效，海面还有波光粼粼的水。BGM算是一流，浅野组又找了个音游大佬做BGM。路人都有一段介绍，支线也不算无聊。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;那么接下来就是问题了。每条线的剧情都比较短，放在别的游戏里一章的量。分别来看，每个人的剧情虽然短但是也明确的完成了一个目的，但是强行把8个人堆到一起实在不怎么高明，在某些情况出戏太严重。如果希望8个人只作为游戏机制的一部分，只作为战斗员出现，那么请你装傻到底，不要搞什么小对话“我一定会帮你”之类的，结果主角被刺的时候又不救人，扔进牢房还能一起老老实实进去，掉进陷阱也全员一起掉……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感觉制作人就没有想过一个代入感的问题，而是照着“JRPG该有的样子”做了个游戏，但是想搞创新又没法处理好这些矛盾，一些以往渲染沉浸感的要素反而成了累赘。比起那些从菜单到剧情都营造出一个整体世界的游戏，这样的操作只能算是二流。JRPG这么发展是不会有未来的。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;总觉得不太值主机全价，可能的确比掌机价应该高一点卖个50刀比较符合我的理想价格。不过从另一方面来讲，我还是希望这样的游戏能受到青睐，毕竟在有创意没能力的独立和有钱没胆子的大投资中间，还是多一些中规模的作品比较好。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 75 hours or more 练级实在是无聊，哪天想起来再打真结局。</p> 
+<p><br /></p> 
+<h4><strong>###God of War</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;新战神。一镜到底是真厉害。并没有玩过前作，后来战神3会免也没玩下去，视角太难受。通关一遍封盘。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剧情上没有什么不好也没什么特别亮眼的地方，只是觉得小孩真的很小孩……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;战斗觉得一般般。不管多么费心思计算打点或者抓闪避的慢动作，收益都不如扔斧子。一大把敌人动作快挨斧子没硬直，再慢悠悠砍早就被打翻了。没有硬直，某个装备附带的闪避时间也是鸡肋，砍一下没卵用还是会被打断，本来还以为是白金一样的闪避……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;各种被批的怪物重复倒是觉得没什么，虽然多少察觉到重复，不去刷也没感觉。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;缺点不是没有，但是这不算很长的游戏时间里，带给人的视觉、操作上的体验，绝对的一流。我觉得不亏。</p> 
+<p><br /></p> 
+<h4><strong>###Bayonetta 1+2</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下载码1实体卡2 。各15小时or more。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剧情比较单纯，动作是真的爽。至于脱衣服这个噱头…感觉一般，贝姐这类不符合兴趣……低端玩家就是打打打看准了闪避~打打打。稍微研究一下连招可能会弄出点炫酷动作，不过我不想那么累就当个低端玩家吧。有不同武器换着玩也不错，有时间还想继续刷高难度通关。一代比二代难，主要还是玩二代，目前打了几章高难度就停下来，之前也打过tag match。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;白金的动作都一个味，轻重闪避键位都一样，然而这个比尼尔的动作丰富多了。不管多厉害的对手总能打出硬直，只要技术好很容易无伤通。低难度下容错高挨几下也没事，高难度本质上拿血量限制容错率。闪避高回馈奠定爽感，加上扎实的连招，期待续作。</p> 
+<h4><strong>###Resident Evil Revelations 1+2</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;下载码2实体卡1 。3DS那一作挺喜欢的，2代没玩过所以顺便玩一下。这个也用了体感但是比喷射差远了，只能joy-con没有适配pro，精度也不行（可能喷射在这方面本身有优势）。虽然有汉化但是质量不怎么样。1代具体叨叨过说说2。二代玩下来有那么一些解密，突突突也不算枯燥，算是个中规中矩的线性游戏，突击模式也偶尔能找人玩一下。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;两代加起来的冷饭，这价钱还算值。</p> 
+<p><br /></p> 
+<h4><strong>###Monster Hunter World</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可能快两百小时了吧，现在是有活动就上线刷了新外观，打不过拉倒。没有上掌机有点难受，因为我今年甚至翻出来玩过MHXX（也不是高强度刷，只是欺负白丝……）。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MHW比以前的系列现代的不光是画面，更重要是动作的流畅程度。蓄力、空中等等攻击方向都可以微调，连起来就是能让动作打得更有操控感。有些新动作给的无敌时间能让整个武器的运作方式发生改变……没错我说的就是大剑的撞击，拿一点点伤害正面杠铁山靠，开局砍一刀接撞击挡吼继续输出……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;内容少是真的。怪少，防具少，武器少而且还偷懒。所以现在也就有活动才玩。不过DLC也公布了，应该有迅喵，再来点其他的嘛……俺想打高清碎龙啊……</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;看mod有点想换平台，继续PS4也不是不行，到时候再说。</p> 
+<p><br /></p> 
+<h4><strong>###星之卡比&nbsp;新星同盟</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10小时封盘。之前机械星球和整个都是偏简单的，可能再也见不到镜子迷宫那种路线的卡比作了吧。这一作简单不是问题，问题是乱……队友呼啦扑上去就清场了自己都不用动……属性复合能力也不是新概念了，不过能复合的种类多一些。有点偏平淡，也许是因为我SOLO玩的吧。通关后有操控小怪的挑战模式和boss战模式，也算有点玩头。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;感觉有点贵了。有空玩了更新的内容可能会有所改观。</p> 
+<p><br /></p> 
+<h4><strong>###大乱闘スマッシュブラザーズ SPECIAL</strong></h4> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;买了NS就念叨什么时候出NS大乱斗，然后终于公布了，发售了。系统统计时间已经120+小时了。真正打架时间有44小时，剩下是跑图听音乐之类的吧。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;全员参战是不错的，但是和我好像没什么关系因为大部分都不认识。Joker参战倒是很让我兴奋。打算练黑彼一筋了。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;剧情模式普通难度100%了。拿现有的一切要素模拟一个角色是个很有趣的事情，而且碰见认识的总能会心一笑。做这个玩意的人是真懂的。通关以后这游戏最杀时间的项目基本已经没了。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;居然不支持触屏有点不爽，完全的传统家用机思路做的，选人还拿摇杆选，烦。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;音乐播放器是真的强，支持无缝循环，支持建立歌单。不过NS输出比较弱，换成塞子效果才好点，进入黑屏模式也希望能再方便点。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;中文翻译虽然能看出良心，但是也有很多不爽的，多半是能力不足和不可抗力。能翻译的基于日文文本翻译，不能翻译的拿英文——结果就是大面积英文。一些日文名还拿罗马音上估计是真懒得去一步步找人核对汉字写法。另外有些小错纯属对各个系列的不熟悉……这也没办法，樱井还会在塞尔达复杂的世界线问题上犯错呢，更不用说汉化的员工。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;年末换了线上体验券试了试。线上的延迟让很多高速反应变得毫无意义，必须加入各种先读。即便会了先读，一直存在的延迟也大大降低了操纵感。我可能会为了乌贼买会员，但是不会为大乱斗买会员，老老实实玩线下吧。</p> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;可能有机会再买一份实体，要日版的——中文版标题那个“任天堂”放在现在实在多余，这游戏已经是整个游戏界的狂欢了……</p> 
+<p><br /></p> 
+<h2><strong>##其他和未来</strong></h2> 
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FGO还在继续。Galgame也有玩（粉上了柚子…）。大大小小的体验版什么刀剑闪乱如龙底特律也玩一些，旧游戏也会翻出来耍耍。会免那么多也没有认真玩过，血缘不喜欢，暴雨智障游戏（顺便底特律智障游戏），各种4399……会员要不要续实在让人犹豫，不过这次有跳楼妹2也许会玩一玩，如果有12+3的优惠也许还会续上，MHW也不换平台了吧。NS的会员也在考虑，不过一个个联机收费搞得人十分不爽……明年有不少系列计划要玩，最近的就是Kingdom Hearts 3了……越来越忙不知道能玩多少。一个个玩下来，也希望自己能多从这些游戏里汲取一些东西，也希望有一天能自己做出点什么厉害的东西吧……</p> 
+<p><br /></p>
+			</div>
+<div class="tag-wrapper" id="tag-wrapper" >
+						<a class="tag" href="?tag=游戏" target="_blank"># 游戏</a>
+				</div>
+			</div>

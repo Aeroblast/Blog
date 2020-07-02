@@ -1,0 +1,490 @@
+<html>
+
+<head>
+    <meta charset="utf8" />
+    <title>冻结的记录</title>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            border: 0;
+            font-size: 12px;
+            color: #444;
+            font-family: "Microsoft YaHei", "微软雅黑", simsun, "宋体";
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            background-color: #ededef;
+        }
+
+        a:any-link {
+            color: inherit;
+        }
+
+        #header {
+            padding: 0;
+            margin: 0;
+            background: #24292c;
+            height: 9vh;
+        }
+
+        #header>div {
+            text-align: left;
+        }
+
+        .center_content {
+            width: 80vmin;
+            min-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        #logo {
+            display: inline-block;
+            color: white;
+            text-align: left;
+            padding: 0;
+            font-weight: bold;
+            font-size: 3vh;
+            line-height: 100%;
+            padding-top: 3vh;
+            padding-bottom: 0;
+            width: auto;
+        }
+
+        #nav {
+            display: inline-block;
+            color: #999;
+            font-size: 1.7vh;
+        }
+
+        #nav a:any-link {
+            text-decoration: none;
+        }
+
+        #nav>ul {
+            list-style: none;
+        }
+
+        #nav>ul>li {
+            display: inline-block;
+            width: auto;
+            padding-left: 0.7vh;
+            padding-right: 0.7vh;
+            height: 6vh;
+        }
+
+        .current {
+            color: white;
+            background: url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 20 20\'><polygon points=\'4,20 16,20 10,12\' style=\'fill:%23ededef;\' /></svg>') no-repeat center bottom;
+        }
+
+        #nav_current {
+            display: block;
+            position: absolute;
+            width: 3vh;
+            height: 2vh;
+            padding: 0;
+            margin: 0;
+            top: 7.5vh;
+            left: 0;
+        }
+
+        #nav_current>svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer {
+            border-top: 1px solid #74808b;
+        }
+
+        .footer,
+        .footer a {
+            margin-top: 3em;
+            padding-top: 2em;
+            height: 45px;
+            text-align: center;
+            color: #74808b;
+        }
+
+        /*Long Post*/
+        .lpost {
+            color: #444;
+            padding-bottom: 5em;
+            text-align: center;
+            margin: 0 auto;
+            background: #fff;
+            position: relative;
+            border: 1px solid #e1e1e3;
+            margin-top: 2em;
+            width: 90vmin;
+        }
+
+        #banner {
+            display: inline-block;
+            width: 95%;
+            margin-top: 1em;
+        }
+
+        #m-cnt {
+            display: inline-block;
+            color: #444;
+            text-align: left;
+            margin: 0;
+            width: 70%;
+            background: #fff;
+        }
+
+        #title {
+            box-sizing: border-box;
+            padding: 1.7em 0 1.3em;
+            color: #171717;
+            font-size: 3em;
+            text-align: left;
+            line-height: 1;
+        }
+
+        .info {
+            line-height: 3em;
+        }
+
+        .profile {
+            float: left;
+            width: 3em;
+            height: 3em;
+        }
+
+        .profile>svg {
+            width: 100%;
+            height: 100%;
+            outline: 0.5px solid #fff;
+            outline-offset: -1px;
+        }
+
+        .name {
+            text-decoration: none;
+            float: left;
+            font-size: 1.1em;
+            color: #666;
+            margin-left: 0.9em;
+        }
+
+        .time {
+            float: right;
+            font-size: 1.1em;
+            color: #999;
+        }
+
+        .info:after {
+            content: '　';
+            width: 100%;
+            height: 3em;
+            display: block;
+        }
+
+        .long-text {
+            color: #444;
+            text-align: left;
+            padding: 0;
+            margin-top: 4em;
+        }
+
+        .long-text p {
+            font-size: 1.3em;
+            line-height: 1.8;
+        }
+
+        .long-text h1 {
+            font-size: 2.2em;
+        }
+
+        .long-text h2 {
+            font-size: 2em;
+        }
+
+        .long-text h3 {
+            font-size: 1.8em;
+        }
+
+        .long-text h4 {
+            font-size: 1.6em;
+        }
+
+        .tag {
+            cursor: pointer;
+            text-decoration: none;
+            outline: none;
+            font-size: 14px;
+            color: #666;
+            display: inline-block;
+            margin-right: 10px;
+            padding: 0 20px;
+            border: .5px solid #bec8c8;
+            border-radius: 26px;
+            height: 26px;
+            line-height: 26px;
+        }
+
+        /*Home*/
+        .publish {
+            background: white;
+            box-shadow: 1px 1px 2px #e2e2e2;
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 0;
+            height: 12vh;
+            margin: 3em 12vh 1.7em 0;
+        }
+
+        .publish>img {
+            height: 100%;
+        }
+
+        .post {
+            text-align: left;
+            padding: 0;
+            padding-bottom: 2em;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-left: 12vh;
+            margin-right: 12vh;
+            box-shadow: 1px 1px 2px #e2e2e2;
+            border: 1px solid #dddddd;
+            background: white;
+            margin-top: 1.7em;
+            margin-bottom: 1.7em;
+        }
+
+        .post>div {
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+
+        div.link {
+            height: 1.5em;
+            margin-top: -1px;
+            margin-right: -2px;
+            text-align: right;
+        }
+
+        a.link {
+            display: none;
+            margin-right: 0;
+
+        }
+
+        .link_icon {
+            display: inline-block;
+            width: 1.5em;
+            height: 1.5em;
+        }
+
+        .link_icon>svg {
+            width: 100%;
+            height: 100%;
+            background-color: #ededef;
+        }
+
+        svg>.tri {
+            fill: #c3c3c3;
+        }
+
+        svg:hover>.tri {
+            fill: #7a96b3;
+        }
+
+
+        .post:hover>div>a.link {
+            display: inline-block;
+        }
+
+        .post img {
+            max-width: 100%;
+        }
+
+        .post p {
+            margin-top: 0;
+            margin-bottom: 0.7em;
+        }
+
+        .post>.title {
+            color: #444;
+            line-height: normal;
+            padding: 0;
+            font-weight: normal;
+            font-size: 1.5em;
+        }
+
+        .post>.content {
+            margin-bottom: 1.5em;
+        }
+
+        .post.deactive>.content {
+            max-height: 17.6em;
+            overflow: hidden;
+        }
+
+        .deactive img {
+            float: left;
+            width: 50%;
+        }
+
+        .tag_container>a {
+            display: inline-block;
+            margin-left: 0.7em;
+            margin-right: 0.7em;
+            font-size: 0.9em;
+            line-height: 1.5;
+            white-space: nowrap;
+            cursor: pointer;
+            color: #aaa;
+            text-decoration: none;
+        }
+
+        .tag_icon {
+            opacity: 0.5;
+        }
+
+        .open_button {
+            cursor: pointer;
+            text-decoration: none;
+            line-height: 1.2;
+            font-size: 0.9em;
+            color: #888;
+            padding-bottom: 1em;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        blockquote {
+            padding: 0 0 0 15px;
+            margin: 10px 0;
+            border-left: 4px solid #dfdfdf;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header">
+        <div class='center_content' style='display: inline-block;'>
+            <div id="logo">Frozen Record</div>
+            <div id="nav">
+                <ul>
+                    <li class="current"><a href="?">首页</a></li>
+                    <li><a href="index.html">Index</a></li>
+                    <li><a href="..">Living Blog</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div id='main_container' class='center_content'>
+        <div class="publish">
+            <img src="profile.jpg" />
+        </div>
+    </div>
+    <div class="footer center_content"><span title="Copyright" style="cursor:pointer;">©</span>&nbsp;<a
+            href="?">Aeroblast</a>&nbsp;|&nbsp;Powered by ……？</div>
+    <script src="../util.js"></script>
+    <script src="main.js"></script>
+    <script>
+        const main_container = document.getElementById('main_container');
+        var query_lpost = ""
+        function ReadQueryAndLoad() {
+            query_lpost = GetQueryString("lpost");
+            if (query_lpost) {
+                xhr = new XMLHttpRequest();
+                xhr.open("GET", query_lpost + ".txt", true);
+                xhr.onload = OnDownloadLpost;
+                xhr.send(null);
+            } else {
+                for (let i = 0; i < 10; i++)LoadPost();
+                window.addEventListener("scroll", OnScroll);
+            }
+        }
+        var lastPostElement;
+        var lastPostIndex = -1;
+        function LoadPost() {
+            lastPostIndex++;
+            if (lastPostIndex > postData.length) return false;
+            let e = GenPostHTML(postData[lastPostIndex]);
+            main_container.appendChild(e);
+            OpenButton(e);
+            lastPostElement = e;
+            return true;
+        }
+
+        const link_icon = '<div class="link_icon"><svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path class="tri" d="M0 0 L0 100 L 100 100Z" /></svg></div>';
+
+        function GenPostHTML(post) {
+            let root = document.createElement("div");
+            root.className = "post deactive";
+            let link = "<div class='link'><a class='link' href='index.html?post=" + post.permalink + "' target='_blank'>" + link_icon + "</a></div>";
+            let c = "<div class='content'>" + post.content + "</div>";
+            if (post.type == "Long") c = "<div class='content'><br><br><a href='?lpost=" + post.permalink + "'>点击查看</a><br><br></div>";
+            if (post.title) c = "<div class='title'>" + post.title + "</div>" + c;
+            c += "<div class='open_button hide'>展开▼</div>";
+            if (post.tag) {
+                let ts = post.tag.split(',');
+                let temp = "";
+                ts.forEach(t => {
+                    temp += "<a href='index.html?tag=" + t + "' target='_blank'>" + t + "</a>";
+                });
+                c += "<div class='tag_container'><span class='tag_icon'>🔖</span>" + temp + "</div>";
+            }
+            root.innerHTML = link + c;
+            ReplaceImage(root);
+            return root;
+        }
+        function OpenButton(e) {
+            let c = e.getElementsByClassName('content')[0];
+
+            if (c.scrollHeight > c.offsetHeight) {
+                let b = e.getElementsByClassName('open_button')[0];
+                b.className = 'open_button';
+                b.onclick = function () { b.className += " hide"; b.parentElement.className = 'post'; };
+            }
+        }
+
+        var onscrollTimer = null;
+        function OnScroll() {
+            if (!onscrollTimer)
+                onscrollTimer = setTimeout(function () {
+                    if (CheckIfLoad())
+                        while (LoadPost() && CheckIfLoad());
+                    onscrollTimer = null;
+                }, 500);
+
+        }
+        function CheckIfLoad() {
+            let b = lastPostElement.getBoundingClientRect().bottom;
+            if (b < window.innerHeight) return true;
+            return false;
+        }
+
+
+
+
+
+
+
+        const profile = '<div class="profile" style="background: url(profile.jpg) no-repeat;background-size: contain;"><svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M50 0 A50 50 0 1 0 50 100L 0 100 L0 0 L50 0 Z" fill="#fff" /><path d="M50 100 A50 50 0 1 0 50 0L 100 0 L100 100 L50 100 Z" fill="#fff" />/svg></div>';
+        const info = '<a class="lnk" target="_blank" href="index.html">' + profile + '</a><a class="name" target="_blank" href="index.html">Aeroblast</a>';
+        function OnDownloadLpost() {
+            let r = "";
+            if (xhr.status != 200) { console.log("Loading Failure."); r = "404"; }
+            else { r = xhr.responseText; }
+            main_container.innerHTML = r;
+            ReplaceImage(main_container);
+            let p = main_container.getElementsByClassName('info')[0];
+            p.innerHTML = info + p.innerHTML;
+            main_container.className += " lpost";
+        };
+
+
+    </script>
+</body>
+
+</html>
