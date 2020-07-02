@@ -401,9 +401,9 @@
                 xhr.onload = OnDownloadLpost;
                 xhr.send(null);
             } else {
+                main_container.className = 'center_content';
                 for (let i = 0; i < 10; i++)LoadPost();
                 window.addEventListener("scroll", OnScroll);
-                main_container.className = 'center_content';
             }
         }
         var lastPostElement;
