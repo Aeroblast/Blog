@@ -215,7 +215,7 @@ const moveInfoBox_template = "\
 const infoBox_content_template = "<div>[1]<br>长度：[2]</div>";
 function IndexInfoOn(div) {
     let d = TryGetDate(div.getAttribute("filename"));
-    if (d) d = new Intl.DateTimeFormat('zh-CN-u-hc-h24', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d);
+    if (d) d = sharedDatetimeFormat.format(d);
     else d = "";
     infoBox.innerHTML = infoBox_content_template.replace("[1]", d).replace("[2]", div.getAttribute("len"));
     if (infoBoxState == 0) {
@@ -343,6 +343,7 @@ function RenderContent() {
         line++;
     });
     main.innerHTML = code;
+    [].forEach.call(main.getElementsByClassName('time'), NormalizeTime);
     //hljs.configure({ useBR: true });
     document.querySelectorAll('code').forEach((block) => {
         hljs.highlightBlock(block);
@@ -390,7 +391,7 @@ function EncodeAtxt(c) {
         [/\/\/\/.*/, ""],
         [/\[emphasis\](.*?)\[\/emphasis\]/, "<span class=\"emph\">$1</span>"],
         [/\[s\](.*?)\[\/s\]/, "<s>$1</s>"],
-        [/\[time\](.*?)\[\/time\]/, "<p class='time'>$1</p>"],
+        [/\[time\](.*?)\[\/time\]/, "<p class='time' >$1</p>"],
         [/\[h1\](.*?)\[\/h1\]/, "<h1>$1</h1>"],
         [/\[h2\](.*?)\[\/h2\]/, "<h2>$1</h2>"],
         [/\[h3\](.*?)\[\/h3\]/, "<h3>$1</h3>"],
@@ -496,7 +497,10 @@ function LoadGitalk() {
     x.style.height = "auto";
     x.style.cursor = "";
 }
-
+function NormalizeTime(ele) {
+    let s = TryGetDate(ele.innerHTML);
+    ele.innerHTML = sharedDatetimeFormat.format(s);
+}
 //////////////Event//////////
 main_frame.oncopy = OnCopy;
 function OnCopy(oEvent)//不要给每个p都加空行啦！于是有了这个函数

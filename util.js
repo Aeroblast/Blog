@@ -1,3 +1,4 @@
+const sharedDatetimeFormat=new Intl.DateTimeFormat('zh-CN-u-hc-h24', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
