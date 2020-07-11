@@ -293,7 +293,7 @@ function _LoadBlog(i) {
     log = document.getElementById("log");
     main = document.getElementById("main");
     info = document.getElementById("info");
-    log.innerHTML += "文档【" + filename + "】;";
+    log.innerHTML += "文档【<a class='hide_link' href='?n="+filename+"'>" + filename + "</a>】;";
     info.innerHTML = Index2HTML(index[i_n]);
     content_ok = false;
     let txtpath = "Text/" + filename + ".atxt";
