@@ -29,6 +29,7 @@ function ReadData(xmlstring) {
         post.photoLinks = TryGetValue(postItem, "photoLinks");
         if (post.photoLinks) post.photoLinks = JSON.parse(post.photoLinks)[0];
         postData.push(post);
+        //console.log(new Intl.DateTimeFormat('zh-CN-u-hc-h24', { year: 'numeric', month: '2-digit', day: '2-digit'}).format(post.publishTime) +","+post.permalink+","+post.title+","+post.tag);
     });
 
 }

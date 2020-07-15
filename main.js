@@ -75,7 +75,7 @@ function _LoadIndex() {
 
     let refnode = null;
     raw_index.forEach(element => {
-        let ele = ReadIndex(element);
+        let ele = ReadIndex(element.replace('\r',""));
         let fn = ele.getAttribute("filename");
         if (fn) {
             ele.onmouseover = function () { IndexInfoOn(ele); }
@@ -133,7 +133,7 @@ function ReadIndex(element) {
     let select = "false";
     let classstr = "toc_item";
     if (query_tags)
-        for (let i = 2; i < es.length; i++) {//Tags check
+        for (let i = 3; i < es.length; i++) {//Tags check
             if (IsInQueryTags(es[i])) {
                 select = "true";
             }
@@ -250,6 +250,7 @@ function IndexInfoOff(div) {
             infoBox.style.animation = "CloseInfoBox 0.3s";
             infoBox.style.animationFillMode = "forwards";
             infoBoxState = 0;
+            setTimeout(function(){infoBox.style.display="none";},300);
         }
     }, 100);
 }
@@ -278,7 +279,9 @@ var main_template = '\
         <p id="pw_zone">加密内容：<input id="pw_input" type="text" /></p>\
     </div>\
     <div id="main" class="main_width">加载中……</div>\
-    <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>';
+    <div class="footer main_width"><div>©<span> Aeroblast </span><br/><a href="?"> Home </a>|<a href="?"> About </a></div></div>\
+    <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>\
+    ';
 function ClickLoadBlog(i) {
     _LoadBlog(i);
     PushState();

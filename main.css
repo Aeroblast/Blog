@@ -1,3 +1,4 @@
+@charset "UTF-8";
 a:link {
     color: pink;
 }
@@ -24,7 +25,6 @@ b{
 
 #main {
     line-height: 1.5;
-    padding: 2%;
     font-size: 20px;
     font-family: "宋体";
     border: 1px solid brown;
@@ -32,13 +32,14 @@ b{
 }
 
 #gitalk-container {
-    height: 10%;
+    height: 5%;
     cursor: pointer;
 }
 
 .main_width {
     width: 110vh;
     max-width: 95%;
+    padding: 2%;
     margin: auto;
 }
 
@@ -230,7 +231,18 @@ code{
 .button {
     cursor: pointer;
 }
-
+.footer{
+    color:#83a8ab;
+    text-align: right;
+    font-size: 0.8em;
+    padding-top: 1em;
+    padding-bottom: 3em;
+}
+.footer a{text-decoration: none;}
+.footer>div{
+    position: relative;
+    left: 2%;
+}
 
 /*Overide Gitalk*/
 .gt-comment-content
