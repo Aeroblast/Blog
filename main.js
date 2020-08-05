@@ -279,7 +279,7 @@ var main_template = '\
         <p id="pw_zone">加密内容：<input id="pw_input" type="text" /></p>\
     </div>\
     <div id="main" class="main_width">加载中……</div>\
-    <div class="footer main_width"><div>©<span> Aeroblast </span><br/><a href="?"> Home </a>|<a href="?"> About </a></div></div>\
+    <div class="footer main_width"><div>©<span> Aeroblast </span><br/><a href="?"> Home </a>|<a href="?n=about"> About </a></div></div>\
     <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>\
     ';
 function ClickLoadBlog(i) {
@@ -380,10 +380,11 @@ function EncodeAtxt(c) {
     }
     var reg = [
         [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"],
-        [/\[note\]/, ""],
-        [/\[note=(.*?)\]/, ""],
-        [/\[code\]/, "<pre><code>"],
-        [/\[code=(.*?)\]/, "<pre><code class='lang-$1'>"],
+        [/\[note\]/, ""],//1
+        [/\[note=(.*?)\]/, ""],//2
+        [/\[code\]/, "<pre><code>"],//3
+        [/\[code=(.*?)\]/, "<pre><code class='lang-$1'>"],//4
+        [/\[color=(.*?)\](.*?)\[\/color\]/, "<span style=\"color:$1\">$2</span>"],
         //[/\[\/code\]/, "</code>"],//processed proviously
         [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='Images/$1'>"],
         [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='Images/$3'>"],
@@ -409,7 +410,10 @@ function EncodeAtxt(c) {
         [/\[quote\]/, "<div class='quote'>"],
         [/\[\/quote\]/, "</div>"],
         [/\[mask\](.*?)\[\/mask\]/, "<span class=\"mask\" title=\"你知道的太多了\">$1</span>"],
-        [/\[tag\](.*?)\[\/tag\]/, "<span class=\"tag\" onclick=\"ClickTag(this,event)\">$1</span>"]
+        [/\[tag\](.*?)\[\/tag\]/, "<span class=\"tag\" onclick=\"ClickTag(this,event)\">$1</span>"],
+        [/^#left:(.*)/,"<p class='aligned' style='text-align:left'>$1</p>"],
+        [/^#center:(.*)/,"<p class='aligned' style='text-align:center'>$1</p>"],
+        [/^#right:(.*)/,"<p class='aligned' style='text-align:right'>$1</p>"]
 
     ];
     var r = c;
