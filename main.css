@@ -8,12 +8,12 @@ a:visited {
     color: palevioletred
 }
 
-a.hide_link{
+a.hide_link {
     color: inherit;
     text-decoration: none;
 }
 
-b{
+b {
     color: #ffdd9f;
 }
 
@@ -29,7 +29,6 @@ b{
     font-size: 20px;
     font-family: "宋体";
     border: 1px solid brown;
-
 }
 
 #gitalk-container {
@@ -91,7 +90,7 @@ b{
     border: 1px solid chocolate;
 }
 
-.spoiler>*{
+.spoiler>* {
     filter: opacity(0);
 }
 
@@ -105,7 +104,7 @@ b{
     color: cornsilk;
 }
 
-.spoiler[active]>*{
+.spoiler[active]>* {
     filter: none;
 }
 
@@ -122,12 +121,14 @@ b{
     text-indent: 0;
 }
 
-.mask{
+.mask {
     color: transparent;
 }
-.mask a:link{
+
+.mask a:link {
     color: transparent;
 }
+
 .mask:hover {
     color: inherit;
 }
@@ -164,14 +165,17 @@ b{
     background: rgba(255, 255, 255, 0.1);
     color: rgb(255, 228, 192);
 }
-code{
+
+code {
     padding-left: 0.5em;
     border-left: 3px solid dimgray;
     background: rgba(255, 255, 255, 0.1);
     text-indent: 0;
     font-size: 0.8em;
 }
+
 /*                 */
+
 .toc_item:hover {
     background: #303030;
 }
@@ -179,7 +183,7 @@ code{
 .toc_item {
     display: block;
     text-decoration: none;
-    color:inherit;
+    color: inherit;
     border-bottom: #660000 solid 2px;
     white-space: nowrap;
     overflow-x: scroll;
@@ -191,11 +195,13 @@ code{
     cursor: pointer;
     text-align: left;
 }
+
 .toc_item:link {
-    color:inherit;
- }
+    color: inherit;
+}
+
 .toc_item:visited {
-    color:inherit;
+    color: inherit;
 }
 
 .toc_item_selected {
@@ -232,59 +238,119 @@ code{
 .button {
     cursor: pointer;
 }
-.footer{
-    color:#83a8ab;
+
+.footer {
+    color: #83a8ab;
     text-align: right;
     font-size: 0.8em;
     padding-top: 1em;
     padding-bottom: 3em;
 }
-.footer a{text-decoration: none;}
-.footer>div{
+
+.footer a {
+    text-decoration: none;
+}
+
+.footer>div {
     position: relative;
     left: 2%;
 }
 
 /*Overide Gitalk*/
-.gt-comment-content
-{
-   background:  #586069;
-   color:#f3f3e5;
-}
-.gt-header-textarea {
-    background:  #586069;
-    color:#f3f3e5;
-}
-.gt-btn-preview{
-    background:#f3f3e5;
+
+.gt-comment-content {
+    background: #586069;
+    color: #f3f3e5;
 }
 
-#infobox>div{width: 10em;}
-@keyframes OpenInfoBox{
-    0%{
+.gt-header-textarea {
+    background: #586069;
+    color: #f3f3e5;
+}
+
+.gt-btn-preview {
+    background: #f3f3e5;
+}
+
+:root {
+  --infobox-unfocus-color: #47494c;
+}
+
+#infobox>div {
+    width: 11em;
+}
+
+#infobox {
+    position: fixed;
+    display: none;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    background: inherit;
+    border: 1px solid brown;
+}
+
+#infobox[state="Opening"] {
+    display: block;
+    animation: OpenInfoBox 0.3s;
+    animation-fill-mode: forwards;
+}
+
+#infobox[state="beforeMoving"] {
+    color: var(--infobox-unfocus-color);
+    width: 11em;
+    display: block;
+    animation: none;
+}
+
+#infobox[state="Moving"] {
+    color: var(--infobox-unfocus-color);
+    width: 11em;
+    display: block;
+    animation: MoveInfoBox 0.3s;
+    animation-fill-mode: forwards;
+}
+
+#infobox[state="Closing"] {
+    width: 0em;
+    height: 0;
+    display: block;
+    animation: CloseInfoBox 0.3s;
+    animation-fill-mode: forwards;
+}
+
+#infobox[state="Closed"] {
+    display: none;
+}
+
+@keyframes OpenInfoBox {
+    0% {
         width: 0;
         height: 1em;
-        color:#586069;
+        color: var(--infobox-unfocus-color);
     }
-    50%{width: 10em;}
-    75%{
-        color:#586069;
+    50% {
+        width: 11em;
     }
-    100%{
+    75% {
+        color: var(--infobox-unfocus-color);
+    }
+    100% {
         height: auto;
-        width: 10em;
-        color:inherit;
+        width: 11em;
+        color: inherit;
     }
 }
-@keyframes CloseInfoBox{
-    0%{
+
+@keyframes CloseInfoBox {
+    0% {
         height: auto;
-        width: 10em;
-        color:inherit;
+        width: 11em;
+        color: inherit;
     }
-    100%{
+    100% {
         width: 0;
-        color:#586069;
+        color: var(--infobox-unfocus-color);
         display: none;
     }
 }

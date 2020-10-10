@@ -75,7 +75,7 @@ function _LoadIndex() {
 
     let refnode = null;
     raw_index.forEach(element => {
-        let ele = ReadIndex(element.replace('\r',""));
+        let ele = ReadIndex(element.replace('\r', ""));
         let fn = ele.getAttribute("filename");
         if (fn) {
             ele.onmouseover = function () { IndexInfoOn(ele); }
@@ -121,7 +121,7 @@ function ListShift() {
 }
 function CloseIndex() {
     if (list_state == 1) ListShift();
-    infoBox.style.display = "none";
+    infoBox.setAttribute("state", "Closed");
 };
 function ClearTags() {
     query_tags = null;
@@ -219,21 +219,16 @@ function IndexInfoOn(div) {
     else d = "";
     infoBox.innerHTML = infoBox_content_template.replace("[1]", d).replace("[2]", div.getAttribute("len"));
     if (infoBoxState == 0) {
-        infoBox.style.display = "block";
         infoBox.style.left = div.offsetWidth + div.offsetLeft + "px";
         infoBox.style.top = div.offsetTop - toc.scrollTop + "px";
-        infoBox.style.animation = "OpenInfoBox 0.3s";
-        infoBox.style.animationFillMode = "forwards";
+        infoBox.setAttribute("state", "Opening");
     } else {
-        infoBox.style.color = "#586069";
-        infoBox.style.width = "10em";
         infoBox.style.height = infoBox.offsetHeight + "px";
         infoBox.style.top = infoBox.offsetTop + "px";
         moveInfoBox_keyframes.innerHTML = moveInfoBox_template.replace("[2]", div.offsetTop - toc.scrollTop);
-        infoBox.style.animation = "none";
+        infoBox.setAttribute("state", "beforeMoving");
         setTimeout(function () {
-            infoBox.style.animation = "MoveInfoBox 0.3s";
-            infoBox.style.animationFillMode = "forwards";
+            infoBox.setAttribute("state", "Moving");
         }, 10);
 
     }
@@ -243,14 +238,11 @@ function IndexInfoOff(div) {
     infoBoxState = 2;
     setTimeout(function () {
         if (infoBoxState == 2) {
-            infoBox.style.width = "0";
-            infoBox.style.height = "0";
             infoBox.style.top = infoBox.offsetTop + "px";
             infoBox.style.color = getComputedStyle(infoBox).color;
-            infoBox.style.animation = "CloseInfoBox 0.3s";
-            infoBox.style.animationFillMode = "forwards";
+            infoBox.setAttribute("state", "Closing");
             infoBoxState = 0;
-            setTimeout(function(){infoBox.style.display="none";},300);
+            setTimeout(function () { infoBox.setAttribute("state", "Closed"); }, 300);
         }
     }, 100);
 }
@@ -296,7 +288,7 @@ function _LoadBlog(i) {
     log = document.getElementById("log");
     main = document.getElementById("main");
     info = document.getElementById("info");
-    log.innerHTML += "文档【<a class='hide_link' href='?n="+filename+"'>" + filename + "</a>】;";
+    log.innerHTML += "文档【<a class='hide_link' href='?n=" + filename + "'>" + filename + "</a>】;";
     info.innerHTML = Index2HTML(index[i_n]);
     content_ok = false;
     let txtpath = "Text/" + filename + ".atxt";
@@ -411,9 +403,9 @@ function EncodeAtxt(c) {
         [/\[\/quote\]/, "</div>"],
         [/\[mask\](.*?)\[\/mask\]/, "<span class=\"mask\" title=\"你知道的太多了\">$1</span>"],
         [/\[tag\](.*?)\[\/tag\]/, "<span class=\"tag\" onclick=\"ClickTag(this,event)\">$1</span>"],
-        [/^#left:(.*)/,"<p class='aligned' style='text-align:left'>$1</p>"],
-        [/^#center:(.*)/,"<p class='aligned' style='text-align:center'>$1</p>"],
-        [/^#right:(.*)/,"<p class='aligned' style='text-align:right'>$1</p>"]
+        [/^#left:(.*)/, "<p class='aligned' style='text-align:left'>$1</p>"],
+        [/^#center:(.*)/, "<p class='aligned' style='text-align:center'>$1</p>"],
+        [/^#right:(.*)/, "<p class='aligned' style='text-align:right'>$1</p>"]
 
     ];
     var r = c;
