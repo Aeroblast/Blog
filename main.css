@@ -206,6 +206,7 @@ code {
 
 .toc_item_selected {
     color: white!important;
+    box-shadow: inset 0 0 3px 1px #c76e87;
 }
 
 .toc_item_sp {
