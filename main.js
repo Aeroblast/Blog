@@ -7,6 +7,7 @@ var loader = new XMLHttpRequest();
 var toc = document.getElementById('toc');
 var title;
 var filename;
+var filename_i;//only set at _LoadBlog(i)
 var raw_index;
 
 var query_n;
@@ -41,17 +42,22 @@ function LoadIndex() {
     _LoadIndex();
     LoadBlogByQuery();
 }
-function LoadBlogByQuery() {
+function LoadBlogByQuery(fallback = 0) {
     let hit = false;
+    if (!query_n) {
+        hit = true;
+        _LoadBlog(0);
+    }
     if (query_n && query_n.length > 1) {
         for (let i = 0; i < index.length; i++) {
             if (index[i][0] == query_n) { _LoadBlog(i); hit = true; break; }
         }
     }
     if (!hit) {
-        filename = "welcome";
-        _LoadBlog(0);
+        _LoadBlog(fallback, "<span style='color:red;'>[Error]</span>似乎并不存在文档“" + query_n + "”; ");
+        return false;
     }
+    return true;
 }
 function ReloadIndex(tags_ = null) {
     if (tags_) {
@@ -279,7 +285,8 @@ function ClickLoadBlog(i) {
     PushState();
     _LoadIndex();
 }
-function _LoadBlog(i) {
+function _LoadBlog(i, extra_info = null) {
+    filename_i = i
     CloseIndex();
     let i_n = parseInt(i);
     filename = index[i_n][0];
@@ -288,7 +295,15 @@ function _LoadBlog(i) {
     log = document.getElementById("log");
     main = document.getElementById("main");
     info = document.getElementById("info");
-    log.innerHTML += "文档【<a class='hide_link' href='?n=" + filename + "'>" + filename + "</a>】;";
+    if (extra_info) {
+        log.innerHTML += extra_info + "<br/>";
+    }
+    log.innerHTML +=
+        "<span id='filename_trigger' onclick='OpenByFileName()'>文档</span>"
+        + "【<span id='filename_display'><a class='hide_link' href='?n=" + filename + "'>" + filename
+        + "</a><input id='filename_input' onblur='FileNameInputBlur()' onkeydown='FileNameInputKeyDown(event)' type='text' /></span>】; "
+        ;
+
     info.innerHTML = Index2HTML(index[i_n]);
     content_ok = false;
     let txtpath = "Text/" + filename + ".atxt";
@@ -499,6 +514,32 @@ function LoadGitalk() {
 function NormalizeTime(ele) {
     let s = TryGetDate(ele.innerHTML);
     ele.innerHTML = sharedDatetimeFormat.format(s);
+}
+/////////////Open By Input Filename////////
+function OpenByFileName() {
+    let dis = document.getElementById('filename_display');
+    if (!dis) return;
+    let input = dis.getElementsByTagName("input")[0];
+    input.value = filename;
+    input.style.width = dis.offsetWidth + "px";
+    dis.setAttribute("focus", "true");
+    input.focus();
+    input.select();
+
+}
+function FileNameInputBlur() {
+    let dis = document.getElementById('filename_display');
+    if (!dis) return;
+    dis.setAttribute("focus", "false");
+}
+function FileNameInputKeyDown(e) {
+    if (e.key == 'Enter') {
+        query_n = e.target.value;
+        if (LoadBlogByQuery(filename_i)) {
+            PushState();
+            _LoadIndex();
+        }
+    }
 }
 //////////////Event//////////
 main_frame.oncopy = OnCopy;

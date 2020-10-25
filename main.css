@@ -257,6 +257,25 @@ code {
     left: 2%;
 }
 
+#filename_display>input {
+    display: none;
+    background: inherit;
+    color: inherit;
+    font-family: inherit;
+}
+
+#filename_display[focus="true"]>input {
+    display: inline;
+}
+
+#filename_display[focus="true"]>a {
+    display: none;
+}
+
+#filename_trigger {
+    cursor: pointer;
+}
+
 /*Overide Gitalk*/
 
 .gt-comment-content {
@@ -274,7 +293,7 @@ code {
 }
 
 :root {
-  --infobox-unfocus-color: #47494c;
+    --infobox-unfocus-color: #47494c;
 }
 
 #infobox>div {
