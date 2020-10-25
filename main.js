@@ -300,7 +300,7 @@ function _LoadBlog(i, extra_info = null) {
     }
     log.innerHTML +=
         "<span id='filename_trigger' onclick='OpenByFileName()'>文档</span>"
-        + "【<span id='filename_display'><a class='hide_link' href='?n=" + filename + "'>" + filename
+        + "【<span id='filename_display'><a class='hide_link' onclick='FileNameLink(event)' href='?n=" + filename + "'>" + filename
         + "</a><input id='filename_input' onblur='FileNameInputBlur()' onkeydown='FileNameInputKeyDown(event)' type='text' /></span>】; "
         ;
 
@@ -531,6 +531,9 @@ function FileNameInputBlur() {
     let dis = document.getElementById('filename_display');
     if (!dis) return;
     dis.setAttribute("focus", "false");
+}
+function FileNameLink(e) {
+    e.preventDefault();
 }
 function FileNameInputKeyDown(e) {
     if (e.key == 'Enter') {
