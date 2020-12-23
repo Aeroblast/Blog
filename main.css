@@ -159,6 +159,10 @@ b {
     font-size: 16px;
 }
 
+#filename_input {
+    font-size: 16px;
+}
+
 .quote {
     padding-left: 0.5em;
     border-left: 3px solid dimgray;
