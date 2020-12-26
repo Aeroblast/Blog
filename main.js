@@ -346,7 +346,13 @@ function RenderContent() {
         var cla = "";
         if (c.length == 0) c = "<br>";
         if (c[0] == "「" || c[0] == "『" || c[0] == "（") cla += " drawout";
-        if (c.startsWith("<div") || c.startsWith("</div") || c.startsWith("</code>") || c.startsWith("<p "))
+        if ((function (str) {
+            var reg_startswith = [/^<div/, /^<\/div/, /<^\/code>/, /^<p /, /^<h[1-6]/];
+            for (let i = 0; i < reg_startswith.length; i++) {
+                if (str.match(reg_startswith[i])) { return true; }
+            }
+            return false;
+        })(c))
             code += c;
         else
             code += "<p id='line" + line + "' class='" + cla + "'>" + c + "</p>";
@@ -403,11 +409,7 @@ function EncodeAtxt(c) {
         [/\[emphasis\](.*?)\[\/emphasis\]/, "<span class=\"emph\">$1</span>"],
         [/\[s\](.*?)\[\/s\]/, "<s>$1</s>"],
         [/\[time\](.*?)\[\/time\]/, "<p class='time' >$1</p>"],
-        [/\[h1\](.*?)\[\/h1\]/, "<h1>$1</h1>"],
-        [/\[h2\](.*?)\[\/h2\]/, "<h2>$1</h2>"],
-        [/\[h3\](.*?)\[\/h3\]/, "<h3>$1</h3>"],
-        [/\[h4\](.*?)\[\/h4\]/, "<h4>$1</h4>"],
-        [/\[h5\](.*?)\[\/h5\]/, "<h5>$1</h5>"],
+        [/\[h([1-6])\](.*?)\[\/h[1-6]\]/, "<h$1>$2</h$1>"],
         [/\[size=(.*?)\](.*?)\[\/size\]/, "<span style=\"font-size:$1em\">$2</span>"],
         [/\[link=(.*?)\](.*?)\[\/link\]/, "<a href=\"$1\"target=\"_blank\">$2</a>"],
         [/\[ASIN\](.*?)\[\/ASIN\]/, "ASIN:<a href=\"https://www.google.com/search?q=$1\" target=\"_blank\">$1</a>"],
@@ -420,8 +422,13 @@ function EncodeAtxt(c) {
         [/\[tag\](.*?)\[\/tag\]/, "<span class=\"tag\" onclick=\"ClickTag(this,event)\">$1</span>"],
         [/^#left:(.*)/, "<p class='aligned' style='text-align:left'>$1</p>"],
         [/^#center:(.*)/, "<p class='aligned' style='text-align:center'>$1</p>"],
-        [/^#right:(.*)/, "<p class='aligned' style='text-align:right'>$1</p>"]
-
+        [/^#right:(.*)/, "<p class='aligned' style='text-align:right'>$1</p>"],
+        [/^#title:(.*)/, "<p class='title0'>$1</p>"],
+        [/^#spoiler/, "<div class='spoiler'><div onclick='SpoilerShift(this)' title='该块可能包含剧透内容'>Spoiler</div>"],
+        [/^#\/spoiler/, "</div>"],
+        [/^#quote/, "<div class='quote'>"],
+        [/^#\/quote/, "</div>"],
+        [/^#h([1-6]):(.*)/, "<h$1>$2</h$1>"]
     ];
     var r = c;
     var matched = true;

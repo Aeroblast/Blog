@@ -10,7 +10,7 @@ let blog_len = CleanText(data.toString()).replace("\n", "").replace("\r", "").le
 data += "\n[time]" + stamp + "[/time]";
 let blog_path = "Text/" + filename + ".atxt";
 let record = filename + "," + blog_len + ",";
-let reg_title = /\[title\](.*?)\[\/title\]/;
+let reg_title = /^#title:(.*)/;
 let title_match = data.match(reg_title);
 if (title_match != null) {
     record += title_match[1];
@@ -84,7 +84,17 @@ function CleanText(atext) {
         [/\[\/spoiler\]/, ""],
         [/\[quote\]/, ""],
         [/\[\/quote\]/, ""],
-        [/\[mask\](.*?)\[\/mask\]/, "$1"]
+        [/\[mask\](.*?)\[\/mask\]/, "$1"],
+        [/\[tag\](.*?)\[\/tag\]/, "$1"],
+        [/^#left:(.*)/, "$1"],
+        [/^#center:(.*)/, "$1"],
+        [/^#right:(.*)/, "$1"],
+        [/^#title:(.*)/, "$1"],
+        [/^#spoiler/, ""],
+        [/^#\/spoiler/, ""],
+        [/^#quote/, ""],
+        [/^#\/quote/, ""],
+        [/^#h([1-6]):/, ""]
     ];
     lines.forEach(line => {
         let r = line;
