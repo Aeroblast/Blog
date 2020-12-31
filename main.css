@@ -65,33 +65,60 @@ b {
 #main h1,h2,h3,h4,h5,h6{
     margin-bottom: 0.3em;
     margin-top: 0.3em;
+    margin-left:2em;
+    color: #ffd593;
 }
 
 #main h1{
     font-size: 1.6em;
+    text-indent: -2.2em;
 }
 
 #main h2{
     font-size: 1.6em;
     font-weight: normal;
+    text-indent:-2em;
 }
 
 #main h3{
     font-size: 1.4em;
+    text-indent:-1.8em;
 }
 
 #main h4{
     font-size: 1.4em;
     font-weight: normal;
+    text-indent:-1.6em;
 }
 
 #main h5{
     font-size: 1.2em;
+    text-indent:-1.4em;
 }
 
 #main h6{
     font-size: 1.2em;
     font-weight: normal;
+    text-indent:-1.4em;
+}
+
+#main h1:before {
+    content: "◉ ";
+}
+#main h2:before {
+    content: "● ";
+}
+#main h3:before {
+    content: "▶ ";
+}
+#main h4:before {
+    content: "▷ ";
+}
+#main h5:before {
+    content: "◆ ";
+}
+#main h6:before {
+    content: "◇ ";
 }
 
 .aimg {
