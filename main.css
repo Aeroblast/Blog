@@ -109,7 +109,7 @@ b {
     content: "● ";
 }
 #main h3:before {
-    content: "▶ ";
+    content: "\25B6 \FE0E ";
 }
 #main h4:before {
     content: "▷ ";

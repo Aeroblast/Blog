@@ -434,8 +434,8 @@
 
         function CreateArrow() {
             let root = document.createElement("div");
-            let prev = '<div class="arrow"><div>◀　<span class="title">上一页</span></div></div>';
-            let next = '<div class="arrow"><div>▶　<span class="title">下一页</span></div></div>';
+            let prev = '<div class="arrow"><div>&#x25c0;&#xfe0e;　<span class="title">上一页</span></div></div>';
+            let next = '<div class="arrow"><div>&#x25b6;&#xfe0e;　<span class="title">下一页</span></div></div>';
             if (query_page) {
                 let p = parseInt(query_page);
                 if (p == 1) { next = '<a href="?page=2" onclick="LocalLink(this,event)">' + next + '</a>'; }
