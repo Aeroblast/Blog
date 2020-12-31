@@ -454,8 +454,8 @@
         }
         function CreateArrow_Post(prev_id, next_id) {
             let root = document.createElement("div");
-            let prev = '<div class="arrow"><div>◀　<span class="title">上一篇</span></div></div>';
-            let next = '<div class="arrow"><div>▶　<span class="title">下一篇</span></div></div>';
+            let prev = '<div class="arrow"><div>&#x25c0;&#xfe0e;　<span class="title">上一篇</span></div></div>';
+            let next = '<div class="arrow"><div>&#x25b6;&#xfe0e;　<span class="title">下一篇</span></div></div>';
             if (prev_id) {
                 prev = '<a href="?post=' + prev_id + '" onclick="LocalLink(this,event)">' + prev + '</a>';
             }
