@@ -426,8 +426,9 @@ function EncodeAtxt(c) {
         [/^#title:(.*)/, "<p class='title0'>$1</p>"],
         [/^#spoiler/, "<div class='spoiler'><div onclick='SpoilerShift(this)' title='该块可能包含剧透内容'>Spoiler</div>"],
         [/^#\/spoiler/, "</div>"],
-        [/^#quote/, "<div class='quote'>"],
+        [/^#quote$/, "<div class='quote'>"],
         [/^#\/quote/, "</div>"],
+        [/^#quote:(.*)/, "<div class='quote aligned'>$1</div>"],
         [/^#h([1-6]):(.*)/, "<h$1>$2</h$1>"]
     ];
     var r = c;

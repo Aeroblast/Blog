@@ -92,8 +92,9 @@ function CleanText(atext) {
         [/^#title:(.*)/, "$1"],
         [/^#spoiler/, ""],
         [/^#\/spoiler/, ""],
-        [/^#quote/, ""],
+        [/^#quote$/, ""],
         [/^#\/quote/, ""],
+        [/^#quote:(.*)/, "$1"],
         [/^#h([1-6]):/, ""]
     ];
     lines.forEach(line => {
