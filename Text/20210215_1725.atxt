@@ -1,0 +1,101 @@
+#title:下载Web端Canvas图像的一种思路
+这方法弄出来好久了，但是也不太想到处传成品脚本，万一被注意到搞得目标站点改用WebAssemby就麻烦了。不过还是有必要写个思路，备用分享。[s]也给博客增加点技术气息。[/s]
+思路很简单，有些坑可以绕一绕。会放一些半吊子水准的JS代码。
+
+#h3:条件与目标
+不少漫画站的Web端传输分块打乱的图，再按照打乱的规则把分块绘制到Canvas上显示漫画。
+
+直接下载Canvas或截图存在降低画质的风险，而辨识混淆过的网站代码十分繁琐。本文将提供一种思路解决这些问题。
+
+本文的目标是能半自动化地获取与原生分辨率相同的图像。运行环境是脚本管理器Tampermonkey。
+
+#h3:方法简述
+通过Hook浏览器的Canvas API，避免跟网站的混淆硬碰硬，获得绘制信息保存下来。
+
+#h3:构建步骤
+如何构建一个抓取脚本
+#h5:一切的基础——Hook
+首先，为了确保插件脚本优先运行，指定运行时机：
+[code=js]
+// @run-at       document-start
+[/code]
+
+接下来就可以在脚本主体里进行Hook：
+[code=js]
+CanvasRenderingContext2D.prototype.drawImageO=CanvasRenderingContext2D.prototype.drawImage;
+const drawImageHook_yours=function(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight){
+    //do your thing here...
+    //...
+    if(dx==undefined) this.drawImageO(image, sx, sy, sWidth, sHeight);
+    else this.drawImageO(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+}
+CanvasRenderingContext2D.prototype.drawImage=drawImageHook_yours;
+[/code]
+我们首先留下了原本的drawImage备用，命名为drawImageO（随意起名）。而drawImage被替换成了我们自己写的函数。当然，该干的活不能丢，我们要在自己的函数里通过drawImageO调用原本的绘图函数。
+
+至此，网站每次调用绘图的时候，我们可以在中间获得数据。
+
+#h5:对症下药——分析网站的行为
+接下来我们需要分析网站的绘制行为。比如有直接绘制到显示Canvas上的，还有先绘制到隐藏Canvas再绘制到显示上的。
+可以用类似这种控制台输出来观察：
+[code=js]
+let imageSourceType=image.constructor.toString();
+console.log("DrawCall:sx="+sx+" sy="+sy+" sw="+sWidth+" sh="+ sHeight+" dx="+dx+" dy="+dy+" dw="+dWidth+" dh="+dHeight+" "+imageSourceType);
+[/code]
+请想出判断一张图绘制完成的条件。这并不难，比如：
+#left:·判断特定源的使用次数。分块的数量往往是固定的。你可以给传入的image参数加个计数属性。
+#left:·判断绘制的位置。s(source)或d(destination)往往有其一是被遍历的。例如源的分块被遍历时，配合image.naturalWidth之类的参数，判断是否在绘制右下角。
+#left:·判断绘制的宽高。如果站点先后台画出正常图再绘制到屏幕，挑大的存就好了。
+#left:·判断图像类型。和上一个例子一样，ImageBitmap、HTMLCanvasElement、HTMLImageElement可能代表不同的步骤。
+
+#h5:最后一步——保存
+如果你可以找到一个Canvas符合保存的条件（分辨率），那么直接存下来就好，这些随便找找就有代码。另外，来回翻页的过程可能导致重复，个人做了防重复的处理。参考：
+[code=js]
+function SaveCanvas(canvas)
+{
+    let dataUrl=canvas.toDataURL('image/png').replace("image/png", "image/octet-stream");
+    if(!TryAddToDatabase(hash(dataUrl)))
+    {
+        log('Duplicated image.');return;
+    }
+
+    let link=document.createElement('a');
+    link.href=dataUrl;
+    imageCount++;
+    let filename=GenImageName(imageCount);
+    link.setAttribute('download',filename );
+    link.click();
+    log('Save image:'+filename);
+}
+[/code]
+
+如果要保存一个ImageBitmap对象，自己建个Canvas画一下就好了：
+[code=js]
+function SaveImage(image)
+{
+    let canvas=document.createElement('canvas');
+    canvas.width=image.width;
+    canvas.height=image.height;
+    let context=canvas.getContext('2d');
+    context.drawImageO(image,0,0);
+    SaveCanvas(canvas);
+}
+[/code]
+
+#h5:疑难杂症
+#h6:Tainted canvases对策
+少数站点会遇到执行toDataURL时报错。这是浏览器的跨域安全限制。听说有改浏览器启动参数的方法，没成功。这里提供一个纯脚本的方法，写一次就不用折腾浏览器了。
+
+在获得一个图的第一次drawImage调用时，首先通过脚本管理器的GM_xmlhttpRequest重新下载图片备用，自己建立Canvas。在之后的调用中，同步在自己的Canvas里绘制。脚本管理器似乎不提供同步的下载函数，为确保绘制时的资源有效，需要setInterval异步检查加载状态。
+因为用的是插件的请求，不算跨域，后续正常保存。
+
+代码比较繁琐就不放了。
+
+#h6:保存图片的顺序
+刚刚说保存前可以验证重复图片，但是顺序另外有个小问题。
+一般站点肯定是按浏览顺序加载，但网速不给力的话顺序可能乱。一般左右两页一起加载（有提前量），可以尝试判断目标canvas在屏幕的位置。
+
+#h3:结语
+全自动可能需要适配自动翻页，甚至按键精灵。感觉没必要。
+话又说回来，其实使用场景少之又少，大概就是些网络连载？愿意看单行本的话用不着，还有些站点压根不加密随便抓。随便啦，俺自己都很久没用了。
+[time]20210215 17:25:55[/time]
