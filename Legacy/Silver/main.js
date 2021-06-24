@@ -1,3 +1,6 @@
+const index_path = "../../index.txt";
+const text_root_path = "../../Text/";
+const img_root_path = "../../Images/";
 
 var mainwin = document.getElementById("mainwin");
 var mainwin_container = document.getElementById("mainwin_container");
@@ -18,7 +21,7 @@ var query_pw;
 ReadQuery();
 PrepareIndexAnime();
 
-loader.open('GET', "index.txt?" + RandomQuery(), true);
+loader.open('GET', index_path + "?" + RandomQuery(), true);
 loader.onload = LoadIndex;
 loader.send(null);
 
@@ -306,7 +309,7 @@ function _LoadBlog(i, extra_info = null) {
 
     info.innerHTML = Index2HTML(index[i_n]);
     content_ok = false;
-    let txtpath = "Text/" + filename + ".atxt";
+    let txtpath = text_root_path + filename + ".atxt";
     loader = new XMLHttpRequest();
     loader.open('GET', txtpath + "?" + RandomQuery(), true);
     loader.onload = ProcContent;
@@ -399,8 +402,8 @@ function EncodeAtxt(c) {
         [/\[code=(.*?)\]/, "<pre><code class='lang-$1'>"],//4
         [/\[color=(.*?)\](.*?)\[\/color\]/, "<span style=\"color:$1\">$2</span>"],
         //[/\[\/code\]/, "</code>"],//processed proviously
-        [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='Images/$1'>"],
-        [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='Images/$3'>"],
+        [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='" + img_root_path + "$1'>"],
+        [/\[img=(.*?),(.*?)\](.*?)\[\/img\]/, "<img class='aimg' style='width:$1;height:$2' src='" + img_root_path + "$3'>"],
         [/\[b\](.*?)\[\/b\]/, "<b>$1</b>"],
         [/\[title\](.*?)\[\/title\]/, "<p class='title0'>$1</p>"],
         [/\[ruby=(.*?)\](.*?)\[\/ruby\]/, "<ruby>$2<rt>$1</rt></ruby>"],
