@@ -2,58 +2,77 @@
 const fs = require("fs");
 var aes = require("./aes");
 var args = process.argv.splice(2);
-var stamp;
-var filename;
-SetTimeString();
-let data = fs.readFileSync("temp.atxt");
-let blog_len = CleanText(data.toString()).replace("\n", "").replace("\r", "").length;
-data += "\n[time]" + stamp + "[/time]";
-let blog_path = "Text/" + filename + ".atxt";
-let record = filename + "," + blog_len + ",";
-let reg_title = /^#title:(.*)/;
-let title_match = data.match(reg_title);
-if (title_match != null) {
-    record += title_match[1];
+
+if (args.length == 0) PostBlog();
+else {
+    switch (args[0]) {
+        case "en": {
+            let pw = args[1];
+            PostBlog(pw);
+        } break;
+        case "de": {
+            let pw = args[1];
+            let ds = data.split('\n');
+            if (ds[0] == 'ENCRYPTED') {
+                let decrypted = aes.decrypt(ds[1], pw).toString(aes.enc);
+                if (pw == decrypted.split('\n')[0]) {
+                    console.log('Success');
+                    fs.writeFileSync('temp_decrypted.atxt', decrypted.substring(decrypted.indexOf('\n') + 1));
+                }
+            }
+        } break;
+        default:
+            PostBlog();
+            break;
+    }
 }
-console.log(record);
-if (args.length > 1) {
-    let pw = args[1];
-    if (args[0] == 'en') {
+
+
+function PostBlog(pw) {
+    var className = "";
+    if (args.length >= 2) {
+        if (args[0] == "class") {
+            className = args[1];
+        }
+    }
+    var stamp;
+    var filename;
+    {
+        let d = new Date();
+        let y = "" + d.getFullYear();
+        let dd = d.getDate(); if (dd < 10) dd = "0" + dd;
+        let mm = d.getMonth(); mm++; if (mm < 10) mm = "0" + mm;
+        let hh = d.getHours(); if (hh < 10) hh = "0" + hh;
+        let mi = d.getMinutes(); if (mi < 10) mi = "0" + mi;
+        let ss = d.getSeconds(); if (ss < 10) ss = "0" + ss;
+        stamp = y + mm + dd + " " + hh + ":" + mi + ":" + ss;
+        filename = y + mm + dd + "_" + hh + mi;
+    }
+    let data = fs.readFileSync("temp.atxt");
+    let blog_len = CleanText(data.toString()).replace("\n", "").replace("\r", "").length;
+    data += "\n[time]" + stamp + "[/time]";
+    let blog_path = "docs/Text/" + filename + ".atxt";
+    let record = filename + "," + blog_len + ",";
+    let reg_title = /^#title:(.*)/;
+    let title_match = data.match(reg_title);
+    if (title_match != null) {
+        record += "【" + className + "】" + title_match[1];
+    }
+    if (className) {
+        record += "," + className
+    }
+    console.log(record);
+    if (pw) {
         let encrypted = aes.encrypt(pw + "\n" + data, pw).toString();
         fs.writeFileSync(blog_path, "ENCRYPTED\n" + encrypted);
         fs.appendFileSync("index.txt", record + "\n");
     }
-    if (args[0] == 'de') {
-        let ds = data.split('\n');
-        if (ds[0] == 'ENCRYPTED') {
-            let decrypted = aes.decrypt(ds[1], pw).toString(aes.enc);
-            if (pw == decrypted.split('\n')[0]) {
-                console.log('Success');
-                fs.writeFileSync('temp_decrypted.atxt', decrypted.substring(decrypted.indexOf('\n') + 1));
-            }
-        }
-    }
-
-
-} else {
     fs.writeFileSync(blog_path, data);
-    fs.appendFileSync("index.txt", record + "\n");
+    fs.appendFileSync("docs/index.txt", record + "\n");
 }
 
 
 
-
-function SetTimeString() {
-    let d = new Date();
-    let y = "" + d.getFullYear();
-    let dd = d.getDate(); if (dd < 10) dd = "0" + dd;
-    let mm = d.getMonth(); mm++; if (mm < 10) mm = "0" + mm;
-    let hh = d.getHours(); if (hh < 10) hh = "0" + hh;
-    let mi = d.getMinutes(); if (mi < 10) mi = "0" + mi;
-    let ss = d.getSeconds(); if (ss < 10) ss = "0" + ss;
-    stamp = y + mm + dd + " " + hh + ":" + mi + ":" + ss;
-    filename = y + mm + dd + "_" + hh + mi;
-}
 function CleanText(atext) {
     let lines = atext.split('\n');
     let result = "";
