@@ -188,6 +188,9 @@ const atxtRegex = [
   [/^#quote:(.*)/, "<div class='quote aligned'>$1</div>"],
   [/^#h([1-6]):(.*)/, "<h$1>$2</h$1>"],
   [/^#mode:(.*)/, "<p><!--skip--></p>"],
+  [/\[link=(.*?)\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$2</a>'],
+  [/\[link\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$1</a>'],
+  [/^\+ (.*)/,'<p class="list_item">$1</p>']
 ];
 const atxtRegex_old = [
   [
@@ -198,7 +201,6 @@ const atxtRegex_old = [
   [/\[quote\]/, "<div class='quote'>"],
   [/\[\/quote\]/, "</div>"],
   [/\[title\](.*?)\[\/title\]/, "<p class='title0'>$1</p>"],
-  [/\[link=(.*?)\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$2</a>'],
   [/\[h([1-6])\](.*?)\[\/h[1-6]\]/, "<h$1>$2</h$1>"],
   [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"],
 ];

@@ -200,6 +200,14 @@ code {
     font-size: 0.8em;
 }
 
+.list_item {
+    text-indent: 1em;
+}
+
+.list_item::before {
+    content: "✦";
+}
+
 .footer {
     color: #83a8ab;
     text-align: right;
