@@ -1,0 +1,41 @@
+#mode:tech
+#title:博客内部代码重写
+
+最近跟风折腾Vue，发现挺好使。现在发现没啥权限需求的东西都能Web App，需要权限也可以套个壳（话说你巨硬折腾几代内置Webview，现在WebView2终于是Chromium了但还是不太敢用啊……）
+然后想想当初博客那个手写回调的风格……当初写着就觉得别扭，又没啥动力搞框架，随手糊了一个，搞得现在维护都不想维护……已经拿Vue弄了个漫画打包工具了，所以趁热弄一下博客吧。
+
+大概的点（和饼）：
++ 外观不换。这鬼样子看久了感觉还不错。
++ 还是用Vue的CLI了。虽然对npm还是有点抗拒，不过那个垃圾堆build之后炸掉就好了。
++ 旧的没扔，放到[link]Legacy/Silver/[/link]了。新功能不支持，但也能凑合看。
++ 引入一些类markdown的语法，主要是列表和小标题。虽然写读书记录用不上，本文这种就能用。
++ 加个模式分类。折腾类文章不需要文学类那些段首啥的。
+
+回过头来一看，这旧版全是js渲染模板，好像有点那意思……然后意外地做了不少东西，重写起来还有点费事。总之先弄到基本可用。这一迁，功能好像还变少了，慢慢加吧。
+
+关于调试，试着跑静态服务一直用dotnet，一个bat就启动了，配点什么端口、顺手写个API测试也好办。然后每次配总得进wwwroot就很烦，这次用了带构建的框架更是要把东西迁出来……姑且记一笔：
+在Startup.cs这个里面：
+[code=cs]
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+[/code]
+加入：
+[code=cs]
+var provider = new FileExtensionContentTypeProvider();
+provider.Mappings[".atxt"] = "text/plain";
+
+app.UseDefaultFiles(new DefaultFilesOptions
+{
+	FileProvider = new PhysicalFileProvider("E://Blog//docs"),
+	RequestPath = "/Blog"
+});
+app.UseStaticFiles(new StaticFileOptions
+{
+	FileProvider = new PhysicalFileProvider("E://Blog//docs"),
+	RequestPath = "/Blog",
+	ContentTypeProvider = provider
+});
+[/code]
+这下差不多跟GitHub Page效果一样了，区别可能剩下本地CRLF然后git给过滤了，早就handle了。
+
+最后抱怨下，js里那个for的in和of，害人不浅。
+[time]20210626 00:24:40[/time]
