@@ -433,7 +433,7 @@ function EncodeAtxt(c) {
         [/^#\/quote/, "</div>"],
         [/^#quote:(.*)/, "<div class='quote aligned'>$1</div>"],
         [/^#h([1-6]):(.*)/, "<h$1>$2</h$1>"],
-        [/^#mode:(.*)/]
+        [/^#mode:(.*)/,""]
     ];
     var r = c;
     var matched = true;
