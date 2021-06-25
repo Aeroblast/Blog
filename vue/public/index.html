@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <META HTTP-EQUIV="pragma" CONTENT="no-cache">
+  <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+  <META HTTP-EQUIV="expires" CONTENT="0">
+  <title>Floating Whirl Island</title>
+  <style>
+    html,
+    body {
+      background: #101010;
+      color: #FAEBD7;
+      /*antiquewhite*/
+      text-align: center;
+      overflow-x: hidden;
+      font-size: 16px;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>
+    <strong>Need JavaScript.</strong>
+  </noscript>
+  <div id="app"></div>
+  <script>
+    const imageRoot = "Images/";
+    const indexRoot = "Index/";
+    const textRoot = "Text/";
+    const indexPageCount = 1;
+    const sharedDatetimeFormat = new Intl.DateTimeFormat('zh-CN-u-hc-h24', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+    String.prototype.replaceAll = function (s1, s2) { return this.replace(new RegExp(s1, "gm"), s2); }
+
+    function SpoilerShift(e) {
+      if (e.parentNode.hasAttribute("active")) {
+        e.parentNode.removeAttribute("active");
+      } else
+        e.parentNode.setAttribute("active", "");
+    }
+  </script>
+</body>
+
+</html>
