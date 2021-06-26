@@ -9,18 +9,18 @@
             >】;<span class="article_log">{{ log }}</span>
           </td>
         </tr>
-        <tr>
+        <tr v-if="indexItem.title">
           <td>标题:</td>
           <td>{{ indexItem.title }}</td>
         </tr>
-        <tr>
+        <tr v-if="indexItem.tags.length > 0">
           <td>Tags:</td>
           <td>
             <div
               class="tag"
               v-for="tag in indexItem.tags"
               :key="tag"
-              @click="$emit('tag', tag)"
+              @click.stop="$emit('tag', tag)"
             >
               {{ tag }}
             </div>
@@ -114,8 +114,9 @@ export default {
         let vm = this;
         let inlineTags = this.$refs.article.getElementsByClassName("tag");
         for (let inlineTag of inlineTags) {
-          inlineTag.onclick = function () {
+          inlineTag.onclick = function (e) {
             vm.$emit("tag", inlineTag.innerText);
+            e.stopPropagation();
           };
         }
       });
@@ -170,10 +171,7 @@ const atxtRegex = [
     /\[mask\](.*?)\[\/mask\]/,
     '<span class="mask" title="你知道的太多了">$1</span>',
   ],
-  [
-    /\[tag\](.*?)\[\/tag\]/,
-    '<span class="tag" onclick="ActiveInlineTag(\'$1\')">$1</span>',
-  ],
+  [/\[tag\](.*?)\[\/tag\]/, '<span class="tag">$1</span>'],
   [/^#left:(.*)/, "<p class='aligned' style='text-align:left'>$1</p>"],
   [/^#center:(.*)/, "<p class='aligned' style='text-align:center'>$1</p>"],
   [/^#right:(.*)/, "<p class='aligned' style='text-align:right'>$1</p>"],
@@ -190,7 +188,7 @@ const atxtRegex = [
   [/^#mode:(.*)/, "<p><!--skip--></p>"],
   [/\[link=(.*?)\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$2</a>'],
   [/\[link\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$1</a>'],
-  [/^\+ (.*)/,'<p class="list_item">$1</p>']
+  [/^\+ (.*)/, '<p class="list_item">$1</p>'],
 ];
 const atxtRegex_old = [
   [
@@ -202,7 +200,10 @@ const atxtRegex_old = [
   [/\[\/quote\]/, "</div>"],
   [/\[title\](.*?)\[\/title\]/, "<p class='title0'>$1</p>"],
   [/\[h([1-6])\](.*?)\[\/h[1-6]\]/, "<h$1>$2</h$1>"],
-  [/\[align=(.*?)\](.*?)\[\/align\]/i, "<p class='aligned' style='text-align:$1'>$2</p>"],
+  [
+    /\[align=(.*?)\](.*?)\[\/align\]/i,
+    "<p class='aligned' style='text-align:$1'>$2</p>",
+  ],
 ];
 
 function RenderContent(lines) {

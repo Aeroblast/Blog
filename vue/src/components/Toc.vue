@@ -37,7 +37,7 @@
       :href="'?n=' + item.filename"
       @click.prevent="$emit('ClickItem', item.filename)"
     >
-      {{ item.title }}
+      {{ item.title ? item.title : item.filename }}
     </a>
     <div style="height: 40%; width: 1px"><!--for scroll--></div>
   </div>

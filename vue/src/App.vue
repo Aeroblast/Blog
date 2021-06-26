@@ -10,6 +10,7 @@
         height: 100%;
       "
       :data-toc-play="tocAnimationCtrl"
+      @click="ListClose()"
     >
       <div
         id="main_frame"
@@ -120,14 +121,18 @@ export default {
       this.$refs.aritcle.Read(this.currentFile);
     },
     async DownloadIndex() {
+      if (this.indexItems.length > 0) return;
       for (let page = indexPageCount - 1; page >= 0; page--) {
-        console.log(page)
         let r = await fetch(indexRoot + "page" + page + ".txt");
         let t = await r.text();
         let indexPage = t.split("\n");
         for (let i = indexPage.length - 1; i >= 0; i--) {
           let obj = Record2Object(indexPage[i].replace("\r", ""));
-          if (obj) this.indexItems.push(obj);
+          if (obj) {
+            if (obj.special) {
+              this.indexItems.splice(0, 0, obj);
+            } else this.indexItems.push(obj);
+          }
         }
       }
     },
@@ -158,6 +163,7 @@ export default {
       });
     },
     ListClose() {
+      console.log('close')
       if (this.tocState == 0) return;
       let start = this.tocWidth;
       this.tocState = 0;
@@ -191,9 +197,8 @@ export default {
     },
     ActiveTag(tag) {
       this.queryTags = [tag];
-      this.tocState = 1;
-      this.PushState();
       this.ListOpen();
+      this.PushState();
     },
     ClearTags() {
       this.queryTags = [];
@@ -216,9 +221,6 @@ function Record2Object(line) {
     length: args[1],
     title: args[2],
   };
-  if (!obj.title) {
-    obj.title = obj.filename;
-  }
   let tags = [];
   for (let i = 3; i < args.length; i++) {
     if (args[i]) tags.push(args[i]);
