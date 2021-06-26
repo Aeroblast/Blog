@@ -5,7 +5,12 @@
         <tr>
           <td><span @click="activeFilenameInput = true">文档</span></td>
           <td>
-            【<span ref="filename">{{ filename }}</span
+            【<a
+              class="hide_link"
+              ref="filename"
+              @click.prevent
+              :href="'?n=' + filename"
+              >{{ filename }}</a
             >】;<span class="article_log">{{ log }}</span>
           </td>
         </tr>
@@ -14,13 +19,13 @@
           <td>{{ indexItem.title }}</td>
         </tr>
         <tr v-if="indexItem.tags.length > 0">
-          <td>Tags:</td>
+          <td>标签:</td>
           <td>
             <div
               class="tag"
               v-for="tag in indexItem.tags"
               :key="tag"
-              @click.stop="$emit('tag', tag)"
+              @click.stop="$emit('tag', { name: tag, index: indexItem })"
             >
               {{ tag }}
             </div>
@@ -50,8 +55,6 @@
       </a>
     </div>
   </div>
-
-  <div id="gitalk-container" class="main_width" onclick="LoadGitalk()"></div>
 </template>
 <script>
 import { TryGetDate } from "../utils.js";
@@ -76,6 +79,7 @@ export default {
   computed: {},
   methods: {
     async Read(filename) {
+      console.log(filename);
       this.filename = filename;
       this.renderedContent = "加载中……";
       this.waitPassword = false;
@@ -115,7 +119,7 @@ export default {
         let inlineTags = this.$refs.article.getElementsByClassName("tag");
         for (let inlineTag of inlineTags) {
           inlineTag.onclick = function (e) {
-            vm.$emit("tag", inlineTag.innerText);
+            vm.$emit("tag", { name: inlineTag.innerText, index: vm.indexItem });
             e.stopPropagation();
           };
         }
@@ -143,7 +147,11 @@ export default {
     },
   },
 
-  mounted() {},
+  mounted() {
+    if (this.indexItem) {
+      this.Read(this.indexItem.filename);
+    }
+  },
 };
 
 const atxtRegex = [
@@ -332,5 +340,8 @@ table {
 }
 td {
   vertical-align: super;
+}
+tr > td:nth-child(1) {
+  white-space: nowrap;
 }
 </style>

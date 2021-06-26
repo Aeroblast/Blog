@@ -31,6 +31,7 @@
     <a
       class="toc_item"
       v-for="item in items"
+      :ref="'tocItem_' + item.filename"
       :key="item.filename"
       :data-select="item.filename == currentFile"
       :data-display="isDisplay(item)"
@@ -71,6 +72,26 @@ export default {
     },
     GetWidth() {
       return this.$refs.toc.offsetWidth;
+    },
+    GetNext(indexItem) {
+      let flag = false;
+      for (const obj of this.items) {
+        if (obj.filename == indexItem.filename) {
+          flag = true;
+          continue;
+        }
+        if (flag) {
+          if (this.isDisplay(obj)) {
+            return obj;
+          }
+        }
+      }
+      return null;
+    },
+    ScrollDisplay(filename) {
+      let a = "tocItem_" + filename;
+      let e = this.$refs[a];
+      if (e) this.$refs.toc.scroll(0, e.offsetTop - window.innerHeight / 3);
     },
   },
   computed: {},

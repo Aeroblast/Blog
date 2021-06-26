@@ -9,6 +9,7 @@
         width: 90%;
         height: 100%;
       "
+      ref="mainContainer"
       :data-toc-play="tocAnimationCtrl"
       @click="ListClose()"
     >
@@ -29,6 +30,20 @@
           :indexItem="currentIndex"
           @tag="ActiveTag($event)"
         ></AtxtArticle>
+        <div
+          v-if="flowTrigger == 0"
+          class="main_width"
+          style="height: 3em; cursor: help"
+          @click="ActiveFlow()"
+        ></div>
+        <component
+          v-for="f in flowIndexList"
+          v-bind:is="'AtxtArticle'"
+          :key="f.filename"
+          :password="queryPassword"
+          :indexItem="f"
+          @tag="ActiveTag($event)"
+        ></component>
       </div>
     </div>
     <Toc
@@ -78,6 +93,8 @@ export default {
       queryFilename: "",
       queryTags: [],
       queryPassword: "",
+      flowTrigger: 0,
+      flowIndexList: [],
     };
   },
   computed: {
@@ -105,6 +122,7 @@ export default {
   },
   mounted() {
     let vm = this;
+    window.addEventListener("scroll", this.OnScroll);
     window.onpopstate = function (event) {
       vm.LoadFromQuery();
     };
@@ -135,6 +153,9 @@ export default {
           }
         }
       }
+      this.$nextTick(() => {
+        this.$refs.toc.ScrollDisplay(this.currentFile);
+      });
     },
     ListShift() {
       if (this.tocState == 0) {
@@ -163,7 +184,6 @@ export default {
       });
     },
     ListClose() {
-      console.log('close')
       if (this.tocState == 0) return;
       let start = this.tocWidth;
       this.tocState = 0;
@@ -174,9 +194,11 @@ export default {
       });
     },
     LoadAritcle(filename) {
-      console.log(filename);
+      this.flowTrigger = 0;
+      this.flowIndexList = [];
       this.queryFilename = filename;
       this.$refs.aritcle.Read(this.currentFile);
+      this.$refs.toc.ScrollDisplay(filename);
       this.ListClose();
       this.PushState();
     },
@@ -196,14 +218,40 @@ export default {
       //History.replaceState()
     },
     ActiveTag(tag) {
-      this.queryTags = [tag];
+      this.flowTrigger = 0;
+      this.flowIndexList = [];
+      this.queryTags = [tag.name];
+      if (tag.index.filename != this.currentFile) {
+        this.queryFilename = tag.index.filename;
+        this.$refs.aritcle.Read(this.currentFile);
+      }
       this.ListOpen();
       this.PushState();
     },
     ClearTags() {
+      this.flowTrigger = 0;
+      this.flowIndexList = [];
       this.queryTags = [];
       this.ListOpen();
       this.PushState();
+    },
+    ActiveFlow() {
+      if (this.flowTrigger == 0) {
+        this.flowTrigger = 1;
+        let next = this.$refs.toc.GetNext(this.currentIndex);
+        if (next) this.flowIndexList.push(next);
+      }
+    },
+    OnScroll() {
+      if (this.flowTrigger > 0) {
+        let e = this.$refs.mainContainer;
+        if (e.offsetHeight + e.scrollTop >= document.body.scrollHeight - 20) {
+          let next = this.$refs.toc.GetNext(
+            this.flowIndexList[this.flowIndexList.length - 1]
+          );
+          if (next) this.flowIndexList.push(next);
+        }
+      }
     },
   },
 };
