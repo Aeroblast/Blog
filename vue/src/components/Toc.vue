@@ -1,5 +1,5 @@
 <template>
-  <div
+  <nav
     ref="toc"
     id="toc"
     style="
@@ -13,6 +13,7 @@
       background: rgba(0, 0, 0, 0.5);
     "
     :data-toc-play="tocAnimationCtrl"
+    data-nosnippet
   >
     <div style="margin: 1em 0.5em" v-if="queryTags.length > 0">
       Tag Search
@@ -41,7 +42,7 @@
       {{ item.title ? item.title : item.filename }}
     </a>
     <div style="height: 40%; width: 1px"><!--for scroll--></div>
-  </div>
+  </nav>
 </template>
 
 <script>

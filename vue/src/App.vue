@@ -117,7 +117,8 @@ export default {
   },
   watch: {
     currentIndex(val) {
-      document.title = "Floating Whirl Island | " + val.title;
+      document.title =
+        "Floating Whirl Island" + (val.title ? " | " + val.title : "");
     },
   },
   mounted() {
@@ -224,6 +225,10 @@ export default {
       if (tag.index.filename != this.currentFile) {
         this.queryFilename = tag.index.filename;
         this.$refs.aritcle.Read(this.currentFile);
+      } else {
+        this.$nextTick(() => {
+          this.$refs.toc.ScrollDisplay(this.currentFile);
+        });
       }
       this.ListOpen();
       this.PushState();
@@ -232,6 +237,9 @@ export default {
       this.flowTrigger = 0;
       this.flowIndexList = [];
       this.queryTags = [];
+      this.$nextTick(() => {
+        this.$refs.toc.ScrollDisplay(this.currentFile);
+      });
       this.ListOpen();
       this.PushState();
     },

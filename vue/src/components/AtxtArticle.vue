@@ -50,7 +50,7 @@
   ></article>
   <div class="footer main_width">
     <div>
-      ©<span> Aeroblast </span><br /><a href="?"> Home </a>|<a href="?n=about">
+      ©<span> Aeroblast </span><br /><a href="./"> Home </a>|<a href="?n=about">
         About
       </a>
     </div>
@@ -89,6 +89,16 @@ export default {
       this.passwordInput = "";
       this.mode = "";
       let r = await fetch(textRoot + filename + ".atxt");
+      if (r.status != 200) {
+        this.renderedContent =
+          "文档【" +
+          filename +
+          "】无法加载。<br>" +
+          r.status +
+          ": " +
+          r.statusText;
+        return;
+      }
       this.rawText = await r.text();
 
       if (this.rawText.startsWith("ENCRYPTED")) {
