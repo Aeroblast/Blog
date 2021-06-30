@@ -13,7 +13,7 @@ article {
 }
 
 article.main_width {
-    padding: 1em 3%;
+    padding: 1em 2%;
 }
 
 article p {
@@ -237,12 +237,16 @@ code {
     .article_log::before {
         content: "Mobile; ";
     }
-    .spoiler{
-        width: 88%;
+    .spoiler {
+        width: 94%;
+        padding-left: 0.4em;
+        padding-right: 0.4em;
+    }
+    .spoiler>:nth-child(1) {
+        text-indent: 0em;
     }
     article h1, h2, h3, h4, h5, h6 {
         margin-left: 1.85em;
-
     }
 }
 

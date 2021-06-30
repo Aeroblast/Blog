@@ -252,8 +252,10 @@ export default {
     },
     OnScroll() {
       if (this.flowTrigger > 0) {
-        let e = this.$refs.mainContainer;
-        if (e.offsetHeight + e.scrollTop >= document.body.scrollHeight - 20) {
+        if (
+          window.innerHeight + document.documentElement.scrollTop >
+          document.body.scrollHeight - 200
+        ) {
           let next = this.$refs.toc.GetNext(
             this.flowIndexList[this.flowIndexList.length - 1]
           );

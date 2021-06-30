@@ -291,8 +291,8 @@ function RenderContent(lines) {
           const list = ["「", "『", "（"];
           for (const k of list) {
             if (c[0] == k) return true;
-            return false;
           }
+          return false;
         })(rendered)
       ) {
         //should drawout
