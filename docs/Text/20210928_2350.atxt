@@ -92,7 +92,7 @@ EPUB文档使用Web系技术定义，有极强的表现力，可以应对各种�
 #h5:元数据乱象
 不是什么大事，就是扎眼。这东西也确实没人看，就当强迫症在胡言乱语好了。
 
-file-as。在EPUB2.0里这是一个属性，3.0里变成了用meta标签定义。这个东西可以关联给很多标签，含义是“a normalized form of the name”，说白了就是给电脑排序用的，比如标准里的例子就是作者写名字然后姓氏，排序写姓然后名，[url=https://www.w3.org/publishing/epub3/epub-packages.html#example-9]有兴趣可以看一眼[/url]。而日本出版社在这里填的是标题、作者、出版社的全片假名和数字写法。很多人把该往contributor元素里写的东西往上写，就非常诡异。contributor可以写得很清楚，还能从MARC Relators vocabulary里找个合适的身份，比如Book designer [bkd]、Book producer [bkp]。
+file-as。在EPUB2.0里这是一个属性，3.0里变成了用meta标签定义。这个东西可以关联给很多标签，含义是“a normalized form of the name”，说白了就是给电脑排序用的，比如标准里的例子就是作者写名字然后姓氏，排序写姓然后名，[link=https://www.w3.org/publishing/epub3/epub-packages.html#example-9]有兴趣可以看一眼[/link]。而日本出版社在这里填的是标题、作者、出版社的全片假名和数字写法。很多人把该往contributor元素里写的东西往上写，就非常诡异。contributor可以写得很清楚，还能从MARC Relators vocabulary里找个合适的身份，比如Book designer [bkd]、Book producer [bkp]。
 
 其他也没什么规律。
 手工制作者的名字往哪写的都有，除了file-as还有直接跟作者并列的，像rights这种敏感的地方有人还填上个名字。description描述书的内容，简介嘛，结果有的简介就是谁做的书。
