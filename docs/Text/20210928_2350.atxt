@@ -98,11 +98,14 @@ file-as。在EPUB2.0里这是一个属性，3.0里变成了用meta标签定义�
 手工制作者的名字往哪写的都有，除了file-as还有直接跟作者并列的，像rights这种敏感的地方有人还填上个名字。description描述书的内容，简介嘛，结果有的简介就是谁做的书。
 见到过比较有心的人打算在元数据里写插画或者译者，结果自创了一套格式，非常诡异，EPUBCheck也会报Undefined property。实际上无论creator还是contributor元素，都可以定义角色，在MARC code里找到标准的写法。大家都在写作者是aut，也就是Author，其实还有插画师Illustrator [ill]、译者Translator [trl]，校对大概是Proofreader [pfr]，那个列表里甚至能找到什么金主Funder[fnd]。
 
-W3C的EPUB标准可能有点虚，一些具体实践可以参考目标平台的指南，比如：
-Kindle Publishing Guidelines
-Apple Books Asset Guide
-
 #h3:结语
 上面提到的实践也有一部分我不用，另外还有一些额外的个人喜好，比如直角引号的缩进调整、名单和目录换行后缩进。所以，很多地方都是彼之蜜糖吾之砒霜，只能说都是努力根据自己的需求制作最符合维护和浏览要求的东西，很可能换一个用户就不吃这套了。
 长期以来，一些对话字里行间透着一种手工比生成好意识。这篇文章就是用来解释一下，生成EPUB提供的可能性，实际有过多少考虑。另一方面，当我同时照顾PC、手机、平板、Kindle的可用性时，我不希望看到有哪个出家门就乱套的版本主动跑过来展示工匠精神。
+
+
+附录：
+W3C的EPUB标准都应该看看，不过这个可能有点虚，一些具体实践可以参考目标平台的指南，比如：
+Kindle Publishing Guidelines
+Apple Books Asset Guide
+Kobo EPUB Guidelines
 [time]20210928 23:50:15[/time]
