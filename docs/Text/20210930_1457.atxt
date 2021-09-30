@@ -1,0 +1,35 @@
+#mode:tech
+#title:【与mongoDB .NET Driver玩耍】将BSON简单地输出为能用的JSON
+准备做东西的时候，随便查了查表面知识，然后选了mongoDB。然后驱动语言上，咱是真的讨厌类型不清楚的东西写重活，Java和C#二选一肯定选自己熟悉的，结果资料出乎预料地少……
+
+MongoDB.Driver和MongoDB.Bson版本2.13.1。
+
+先放结论……
+
+[code=cs]
+using (var stringWriter = new StringWriter())
+using (var jsonWriter = new JsonWriter(stringWriter, new JsonWriterSettings { OutputMode = JsonOutputMode.RelaxedExtendedJson }))
+{
+	jsonWriter.WriteStartDocument();
+	jsonWriter.WriteName("success");
+	jsonWriter.WriteBoolean(true);
+	jsonWriter.WriteName("data");
+	var c = BsonSerializationContext.CreateRoot(jsonWriter);
+	collection.DocumentSerializer.Serialize(c, doc);
+	jsonWriter.WriteEndDocument();
+	var jsonString = stringWriter.ToString();
+	await context.Response.WriteAsync(jsonString);
+}
+[/code]
+
+文档的范例里有[link=https://mongodb.github.io/mongo-csharp-driver/2.13/examples/exporting_json/]序列化的写法[/link]（其实总共也没多少文章）。
+而JsonWriter的用法连蒙带猜很快就会用了（说明这个API设计得不错ww），于是在前后加点别的内容（但是要自己算括号对应，它不会帮你验证）。
+然而，没有JsonWriterSettings的话，结果里输出ObjectId("xxx")之类的东西到前端就直接报错了。讲道理这都不是合法JSON，怎么能默认输出方言……事实上如果数据里没啥BSON拓展的玩意，直接ToString()也没差。
+
+关键就是设定OutputMode，参数是个Enum，叫JsonOutputMode（[link=https://mongodb.github.io/mongo-csharp-driver/2.13/apidocs/html/T_MongoDB_Bson_IO_JsonOutputMode.htm]🔗.NET驱动的API文档[/link]），其中CanonicalExtendedJson和RelaxedExtendedJson都应该是合法JSON。
+
+至于这俩东西是啥，在mongoDB手册里有，叫做[link=https://docs.mongodb.com/manual/reference/mongodb-extended-json/]MongoDB Extended JSON[/link]。没错，不是驱动的文档，是本体的文档，因为这个JSON不同语言的驱动都在用……
+
+这么一看其实很清楚，但两眼一抹黑的情况下去谷歌都不知道用什么关键词，最后还是在某著名问答站看到了正解（而且OutputMode是obsolete的值）。
+对于简单连接前端和数据库的程序，暂时不需要搞那些反射，这么一个简单的需求烦恼好久真的闹心，新手向的需求入不了大佬的法眼吗……
+[time]20210930 14:57:30[/time]
