@@ -1,0 +1,29 @@
+#mode:tech
+#title:使用 Headless Chrome 在本地命令行将 HTML 转换为图片
+
+不是啥大事，然而搜出来要么是奇奇怪怪的工具，要么就要你使各种爬虫API……姑且记一笔。
+
+整了个Windows batch（.bat）
+[code=dos]
+"C:\Program Files (x86)\Google\Chrome\Application\chrome" --headless --disable-gpu --screenshot=%~dpn1.png --window-size=2048,2048 file://%~dp0/%1
+[/code]
+这个bat接收一个html文件的路径，在工作目录生成同名图片。
+
++ 谷歌[link=https://developers.google.com/web/updates/2017/04/headless-chrome#screenshots]很早以前的文档[/link]说，不指定文件名会生成文件名为screenshot的截图。实际上不行，会没反应。
++ 需要用file://，不然没反应。
++ 猜测没反应是忽略了截图命令进入了别的模式。
++ 用了file:// 但是路径填错的话，不会没反应，而是生成空白图。
++ 输出是PNG。即使文件名指定为JPG，内容还是PNG。
+
+（以上操作使用Chrome版本为 95。）
+
+
+于是可以愉快地把当前目录下的 html 都转换成图片。
+[code=dos]
+for %%f in (*.xhtml) do (
+call "html2image.bat"  %~dp0%%f
+)
+[/code]
+
+最后再加点转格式或者压缩啥的就好。
+[time]20211104 13:26:21[/time]
