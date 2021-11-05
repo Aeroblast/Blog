@@ -59,7 +59,7 @@
 <script>
 import { TryGetDate } from "../utils.js";
 import { CryptoJS } from "../lib/aes.js";
-import hljs from "../lib/highlight.pack.js";
+import hljs from "../lib/highlight.min.js";
 export default {
   name: "Atxt-Article",
   emits: ["tag"],
