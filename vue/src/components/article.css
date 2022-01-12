@@ -163,6 +163,10 @@ article h6:before {
     color: inherit;
 }
 
+.asin:link .underline{
+    text-decoration: underline;
+}
+
 article .title0 {
     font-size: 1.5em;
     text-indent: 0;

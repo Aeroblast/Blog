@@ -179,11 +179,11 @@ const atxtRegex = [
   [/\[size=(.*?)\](.*?)\[\/size\]/, '<span style="font-size:$1em">$2</span>'],
   [
     /\[ASIN\](.*?)\[\/ASIN\]/,
-    'ASIN:<a href="https://www.google.com/search?q=$1" target="_blank">$1</a>',
+    '<a class="asin" title="$1" href="https://www.google.com/search?q=$1" target="_blank">🔗<span class="underline">ASIN</span></a>',
   ],
   [
     /\[ASIN=(.*?)\](.*?)\[\/ASIN\]/,
-    '<a href="https://www.google.com/search?q=$1" target="_blank">$2</a>',
+    '<a class="asin" href="https://www.google.com/search?q=$1" target="_blank">$2</a>',
   ],
   [
     /\[mask\](.*?)\[\/mask\]/,
