@@ -120,7 +120,7 @@ export default {
       if (settings == "#mode:tech") {
         this.mode = "tech";
       }
-      this.renderedContent = RenderContent(content);
+      this.renderedContent = RenderContent(content, this.filename);
       this.$nextTick(() => {
         document.querySelectorAll("code").forEach((block) => {
           hljs.highlightBlock(block);
@@ -163,8 +163,24 @@ export default {
     }
   },
 };
+const atxtLeveledBlockRegex = [
+  /^#h([1-6]):(.*)/,
+  "<h$1>$2</h$1><div class='leveled-block h$1block'>",
+];
 
-const atxtRegex = [
+const atxtBlockEndRegexList = [
+  [/^#\/(quote)/, "</div>"],
+  [/^#\/(spoiler)/, "</div>"],
+];
+const atxtBlockRegexList = [
+  [
+    /^#(spoiler)/,
+    "<div class='spoiler'><div onclick='SpoilerShift(this)' title='该块可能包含剧透内容'>Spoiler</div>",
+  ],
+
+  [/^#(quote)$/, "<div class='quote'>"],
+];
+const atxtRegexList = [
   [/\[color=(.*?)\](.*?)\[\/color\]/, '<span style="color:$1">$2</span>'],
   [/\[img\](.*?)\[\/img\]/, "<img class='aimg' src='" + imageRoot + "$1'>"],
   [
@@ -194,21 +210,13 @@ const atxtRegex = [
   [/^#center:(.*)/, "<p class='aligned' style='text-align:center'>$1</p>"],
   [/^#right:(.*)/, "<p class='aligned' style='text-align:right'>$1</p>"],
   [/^#title:(.*)/, "<p class='title0'>$1</p>"],
-  [
-    /^#spoiler/,
-    "<div class='spoiler'><div onclick='SpoilerShift(this)' title='该块可能包含剧透内容'>Spoiler</div>",
-  ],
-  [/^#\/spoiler/, "</div>"],
-  [/^#quote$/, "<div class='quote'>"],
-  [/^#\/quote/, "</div>"],
   [/^#quote:(.*)/, "<div class='quote aligned'>$1</div>"],
-  [/^#h([1-6]):(.*)/, "<h$1>$2</h$1>"],
   [/^#mode:(.*)/, "<p><!--skip--></p>"],
   [/\[link=(.*?)\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$2</a>'],
   [/\[link\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$1</a>'],
   [/^\+ (.*)/, '<p class="list_item">$1</p>'],
 ];
-const atxtRegex_old = [
+const atxtRegexList_old = [
   [
     /\[spoiler\]/,
     "<div class='spoiler'><div onclick='SpoilerShift(this)' title='该块可能包含剧透内容'>Spoiler</div>",
@@ -224,10 +232,16 @@ const atxtRegex_old = [
   ],
 ];
 
-function RenderContent(lines) {
+function RenderContent(lines, filename) {
+  let year = parseInt(filename.substring(0, 4));
+  let oldPost = false;
+  if (year && year < 2021) oldPost = true;
+
   let r = "";
   let encodeState = "";
   let count = 0;
+  let leveledBlockStack = [];
+  let blockStack = [];
   for (const line of lines) {
     count++;
     let rendered = line.replace("\r", "");
@@ -259,8 +273,62 @@ function RenderContent(lines) {
         "<p class='time' >" + sharedDatetimeFormat.format(time) + "</p>"
       );
     }
-    rendered = RenderContentLine(rendered, atxtRegex);
-    rendered = RenderContentLine(rendered, atxtRegex_old);
+    let canStop = false;
+    let leveledBlockTest = RenderContentLine(rendered, [atxtLeveledBlockRegex]);
+    rendered = leveledBlockTest.result;
+    if (leveledBlockTest.matches.length > 0) {
+      let level = leveledBlockTest.matches[0][1];
+      level = parseInt(level);
+      while (leveledBlockStack.length > 0) {
+        let lastlevel = leveledBlockStack[leveledBlockStack.length - 1];
+        if (lastlevel > level) {
+          leveledBlockStack.pop();
+          rendered = "</div>\n" + rendered;
+        } else if (lastlevel == level) {
+          leveledBlockStack.pop();
+          rendered = "</div>\n" + rendered;
+          break;
+        } else if (lastlevel < level) {
+          break;
+        }
+      }
+      leveledBlockStack.push(level);
+      let s = leveledBlockTest.matches[0][2];
+      if (needDrawOut(s)) {
+        rendered = rendered.replace(/(<h[1-6])/, "$1 class='drawout-h'");
+      }
+
+      canStop = true;
+    }
+    if (!canStop) {
+      let blockTest = RenderContentLine(rendered, atxtBlockRegexList);
+      if (blockTest.matches.length > 0) {
+        rendered = blockTest.result;
+        blockStack.push({
+          name: blockTest.matches[0][1],
+          levelCount: leveledBlockStack.length,
+        });
+        canStop = true;
+      }
+    }
+    if (!canStop) {
+      let blockTest = RenderContentLine(rendered, atxtBlockEndRegexList);
+      if (blockTest.matches.length > 0) {
+        rendered = blockTest.result;
+        let info = blockStack.pop();
+        //to-do: 验证info.name不可交叉……但博客都是自己写的就不验证了
+        while (leveledBlockStack.length > info.levelCount) {
+          leveledBlockStack.pop();
+          rendered = "</div>\n" + rendered;
+        }
+        canStop = true;
+      }
+    }
+
+    rendered = RenderContentLine(rendered, atxtRegexList).result;
+
+    if (oldPost)
+      rendered = RenderContentLine(rendered, atxtRegexList_old).result;
 
     //empty line
     if (rendered == "") rendered = "<br>";
@@ -285,17 +353,7 @@ function RenderContent(lines) {
     ) {
       //should add <p></p>
       let pClass = "";
-      if (
-        //if should drawout
-        ((c) => {
-          const list = ["「", "『", "（"];
-          for (const k of list) {
-            if (c[0] == k) return true;
-          }
-          return false;
-        })(rendered)
-      ) {
-        //should drawout
+      if (needDrawOut(rendered)) {
         pClass += " drawout";
       }
       rendered =
@@ -310,6 +368,7 @@ function RenderContent(lines) {
 function RenderContentLine(line, reg) {
   let r = line;
   let matched = true;
+  let matches = [];
   while (matched) {
     matched = false;
     for (let i = 0; i < reg.length; i++) {
@@ -317,13 +376,22 @@ function RenderContentLine(line, reg) {
       if (!match) continue;
       r = r.replace(reg[i][0], reg[i][1]);
       matched = true;
+      matches.push(match);
       break;
     }
   }
-  return r;
+  return { result: r, matches: matches };
 }
 function ReplaceEntity(c) {
   return c.replaceAll("<", "&lt;").replaceAll(">", "&rt;");
+}
+
+function needDrawOut(content) {
+  const list = ["「", "『", "（"];
+  for (const k of list) {
+    if (content[0] == k) return true;
+  }
+  return false;
 }
 </script>
 <style src="./article.css">
