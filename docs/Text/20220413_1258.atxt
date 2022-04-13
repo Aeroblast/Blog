@@ -1,0 +1,61 @@
+#mode:tech
+#title:今日折腾：简单的扫描线风格滤镜部署＆压图笔记
+
+起因：唐突沉迷『ポケモン＋ノブナガのやぼう』（进行中）。
+
+#h2:Day 1：处理图片
+DeSmuME 提供内部截图＆录像功能，输出原始图。好事。[s]melonDS 似乎有更好的性能，不过功能上就简单不少，没有内部截图和一些滤镜。[/s]
+
+原始图是好，可是如果用一般的方法浏览截图……NDS 屏幕单个是 256×192，如果放大，插值怎么弄都很丑，临近其实也好不到哪去。模拟器提供的扫描线（scanline）滤镜看着挺好，弄个类似的吧！
+
+查到个 CSS 自定义 filter ，然而已经被废弃了。最后还是写了个全套的 WebGL 处理（复习一遍 WebGL 基础w）。
+
+目前是 2x2 描述一个像素，简单拆出 RGB 排列了一下。与其说扫描线，不如说模拟液晶屏的效果？看着还不错就先这样了。（万一以后改了，大概这里也会变吧。）
+
+然后是整合进博客。以前内容都没几个图所以没感觉，现在发现 bbcode 风格那个写法真臃肿。于是再从 Markdown 那借点东西来：
+[code]
+#center:![retro](20220413_nobu.webp) ![pixelated][512px](20220413_nobu.webp)
+[/code]
+'retro' 就是本次主角啦，加载完文章后会在 nextTick 中把图替换成加滤镜后的 blob。'pixelated' 是简单加个 CSS。如果有数字开头的标签，依次分配给宽高。
+#center:![retro](20220413_nobu.webp) ![pixelated][512px](20220413_nobu.webp)
+
+附：切图笔记（反正之后要压视频就用这个了）
+[code]
+ffmpeg -i nobu.png -vf "crop=iw:ih/2:0:ih/2" nobu_crop.webp
+[/code]
+
+#h2: Day 2：视频
+看一下模拟器录制的视频……
+#quote
+格式: AVI
+视频：RGB, Basic Windows bitmap format, 141 Mb/s, 分辨率 256×384, 59.826 FPS, 8 bits, 数据密度【码率/(像素×帧率)】24.000
+音频：PCM, 2 channels, 44.1 kHz
+#/quote
+嗯，很原始。
+
+先压一下吧。
+[code]
+ffmpeg -ss 00:00:03 -to 00:00:10 -i i.avi -vf "crop=iw:ih/2:0:ih/2, setpts=0.5*PTS, fps=24" -c:v libvpx-vp9 -b:v 300K -pass 1 -an -f null NUL && ^
+ffmpeg -ss 00:00:03 -to 00:00:10 -i i.avi -vf "crop=iw:ih/2:0:ih/2, setpts=0.5*PTS, fps=24" -c:v libvpx-vp9 -b:v 300K -pass 2 -an output.webm
+[/code]
+
++ crop 依次指定 w h x y，通过 iw ih 引用输入的尺寸；这里截的是下屏
++ setpts 改变速度；这里是加速
++ -an 去掉声音
++ 写两遍是 2pass，据说是这个格式最推荐的方法，参见[link=https://trac.ffmpeg.org/wiki/Encode/VP9]编码指南[/link]
+
+然后新图片格式的拓展性就体现出来了～
+[code]
+![v][512px][retro](20220413_nobu.webm)滤镜
+![v][512px][retro][loop][autoplay](20220413_nobu.webm)循环自动播放滤镜
+![v][512px][loop](20220413_nobu.webm)原始对比
+[/code]
+![v][512px][retro](20220413_nobu.webm)滤镜
+![v][512px][retro][loop][autoplay](20220413_nobu.webm)循环自动播放滤镜
+![v][512px][loop](20220413_nobu.webm)原始对比
+不过如果用户完全没有输入，浏览器不许一开始就自动播放，所以用处不大……无所谓了。
+
+## 结束
+好像也没用多少时间。时间跨度大概一天，但毕竟中间还有正事和摸鱼。
+[s]之前还计划改进一下文章列表呢，然而这次的想法冒出来之后突然很有行动力，先实现了。果然欲望都是突然降临的[/s]。
+[time]20220413 12:58:53[/time]
