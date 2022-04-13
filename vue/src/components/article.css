@@ -116,6 +116,14 @@ article h6:before {
     text-align: center;
 }
 
+.pixelated {
+    image-rendering: pixelated;
+}
+
+video, canvas.video {
+    cursor: pointer;
+}
+
 .emph {
     text-emphasis: dot;
     text-emphasis-position: under right;
@@ -216,7 +224,7 @@ code {
 }
 
 .list_item::before {
-    content: "✦";
+    content: "✦ ";
 }
 
 .footer {

@@ -60,6 +60,8 @@
 import { TryGetDate } from "../utils.js";
 import { CryptoJS } from "../lib/aes.js";
 import hljs from "../lib/highlight.min.js";
+import RetroFilter from "./RetroFilter.js";
+
 export default {
   name: "Atxt-Article",
   emits: ["tag"],
@@ -122,7 +124,7 @@ export default {
       }
       this.renderedContent = RenderContent(content, this.filename);
       this.$nextTick(() => {
-        document.querySelectorAll("code").forEach((block) => {
+        this.$refs.article.querySelectorAll("code").forEach((block) => {
           hljs.highlightBlock(block);
         });
         let vm = this;
@@ -133,6 +135,8 @@ export default {
             e.stopPropagation();
           };
         }
+        RetroFilter.ApplyToAllImage("img.retro");
+        RetroFilter.ApplyToAllVideo("video.retro");
       });
     },
     TryLoadEncrypted(password) {
@@ -273,6 +277,7 @@ function RenderContent(lines, filename) {
         "<p class='time' >" + sharedDatetimeFormat.format(time) + "</p>"
       );
     }
+
     let canStop = false;
     let leveledBlockTest = RenderContentLine(rendered, [atxtLeveledBlockRegex]);
     rendered = leveledBlockTest.result;
@@ -326,6 +331,54 @@ function RenderContent(lines, filename) {
     }
 
     rendered = RenderContentLine(rendered, atxtRegexList).result;
+
+    // 类MD的图片&视频
+    {
+      let match;
+      do {
+        match = /\!((\[.*?\])+)\((.*?)\)/.exec(rendered);
+        if (!match) break;
+        let path = match[3];
+        let classNames = "";
+        let w, h;
+        let param = match[1].substring(1, match[1].length - 1).split("][");
+        let tag = "img";
+        const video_option_kw = ["loop", "controls", "autoplay"];
+        let v_options = [];
+        for (const p of param) {
+          if (p[0] <= "9" && p[0] >= "0") {
+            if (!w) w = p;
+            else if (!h) h = p;
+          } else {
+            if (p == "v") {
+              tag = "video";
+              continue;
+            }
+            if (tag == "video" && video_option_kw.includes(p)) {
+              v_options.push(p);
+              continue;
+            }
+            classNames += " " + p;
+          }
+        }
+        let html;
+        let sizeStyle = `${w ? "width:" + w + ";" : ""}${
+          h ? "height:" + h + ";" : ""
+        }`;
+        if (tag == "video") {
+          html = ` <video class='aimg${classNames}'
+            style='${sizeStyle}'
+            ${v_options.join(" ")} preload
+            src='${imageRoot + path}' 
+            onclick='this.paused?this.play():this.pause()'></video>`;
+        } else {
+          html = `<img class='aimg${classNames}' style='${sizeStyle}' src='${
+            imageRoot + path
+          }'>`;
+        }
+        rendered = rendered.replace(match[0], html);
+      } while (match);
+    }
 
     if (oldPost)
       rendered = RenderContentLine(rendered, atxtRegexList_old).result;
