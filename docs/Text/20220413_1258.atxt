@@ -38,7 +38,6 @@ ffmpeg -i nobu.png -vf "crop=iw:ih/2:0:ih/2" nobu_crop.webp
 ffmpeg -ss 00:00:03 -to 00:00:10 -i i.avi -vf "crop=iw:ih/2:0:ih/2, setpts=0.5*PTS, fps=24" -c:v libvpx-vp9 -b:v 300K -pass 1 -an -f null NUL && ^
 ffmpeg -ss 00:00:03 -to 00:00:10 -i i.avi -vf "crop=iw:ih/2:0:ih/2, setpts=0.5*PTS, fps=24" -c:v libvpx-vp9 -b:v 300K -pass 2 -an output.webm
 [/code]
-
 + crop 依次指定 w h x y，通过 iw ih 引用输入的尺寸；这里截的是下屏
 + setpts 改变速度；这里是加速
 + -an 去掉声音
@@ -55,7 +54,10 @@ ffmpeg -ss 00:00:03 -to 00:00:10 -i i.avi -vf "crop=iw:ih/2:0:ih/2, setpts=0.5*P
 ![v][512px][loop](20220413_nobu.webm)原始对比
 不过如果用户完全没有输入，浏览器不许一开始就自动播放，所以用处不大……无所谓了。
 
-## 结束
+#h2:结束
 好像也没用多少时间。时间跨度大概一天，但毕竟中间还有正事和摸鱼。
 [s]之前还计划改进一下文章列表呢，然而这次的想法冒出来之后突然很有行动力，先实现了。果然欲望都是突然降临的[/s]。
 [time]20220413 12:58:53[/time]
+
+追记：iOS上视频无效，明明听说已经支持了 webm ……调试起来也不方便，暂时不想动了……
+[time]20220414 18:48:00[/time]
