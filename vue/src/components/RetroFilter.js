@@ -106,7 +106,7 @@ async function ApplyToVideo(video) {
 
     const canvas = initGL(w, h);
     canvas.setAttribute("style", video.getAttribute("style"));
-    canvas.className = "video retro";
+    canvas.className = "video retro aimg";
     video.parentElement.insertBefore(canvas, video);
     Draw(canvas, video);
 
