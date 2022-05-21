@@ -440,7 +440,7 @@ function ReplaceEntity(c) {
 }
 
 function needDrawOut(content) {
-  const list = ["「", "『", "（"];
+  const list = ["「", "『", "（","【"];
   for (const k of list) {
     if (content[0] == k) return true;
   }

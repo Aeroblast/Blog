@@ -30,7 +30,7 @@
     </div>
     <a class="toc_item_dummy"></a>
     <a
-      class="toc_item"
+      :class="'toc_item ' + (needDrawOut(item.title) ? 'toc_drawout' : '')"
       v-for="item in items"
       :ref="'tocItem_' + item.filename"
       :key="item.filename"
@@ -94,6 +94,14 @@ export default {
       let e = this.$refs[a];
       if (e) this.$refs.toc.scroll(0, e.offsetTop - window.innerHeight / 3);
     },
+    needDrawOut(content) {
+      if (!content) return false;
+      const list = ["「", "『", "（", "【"];
+      for (const k of list) {
+        if (content[0] == k) return true;
+      }
+      return false;
+    },
   },
   computed: {},
 };
@@ -126,6 +134,7 @@ function Contains(array, target) {
   background: #101010;
   cursor: pointer;
   text-align: left;
+  text-indent: 0.5em;
 }
 .toc_item_dummy {
   border-bottom: #660000 solid 2px;
@@ -139,6 +148,10 @@ function Contains(array, target) {
 
 .toc_item:visited {
   color: inherit;
+}
+
+.toc_drawout {
+  text-indent: 0em;
 }
 
 ::-webkit-scrollbar {
