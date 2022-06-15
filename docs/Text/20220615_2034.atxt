@@ -1,0 +1,38 @@
+#mode:tech
+#title:M4B 转换尝试笔记
+M4B，M4A加个章节。有听书软件支持。
+
+弄了俩简易脚本，暂时可能不用了。记一下用法。[s]照搬注释[/s]。
+
+都是 node.js 脚本，附带个 bat 用于 drag-drop 文件夹。
+
+#h1:重新封装用 [link=https://gist.github.com/Aeroblast/f491b933ca59b05b7a4fbb1d23b3a055] copy2m4b.js [/link]
+预期输入：文件夹路径，文件夹内是分章节的 mp4，每个包含元数据（章节标题、作者、书名、类别）。
+输出：复制音频流，合并为一个 m4b 文件。
+
+用到的binary：
++ ffmpeg ffprobe (ffmpeg)
++ mp4chaps mp4art (mp4v2, 原版不能用，这里用 m4b-tool 作者提供的 fork：[link=https://github.com/sandreas/m4b-tool/releases/download/v0.2/mp4v2-windows.zip]download[/link])
+
+Tips:
++ foobar2000 读出的时间长度不知道为什么有时候跟 ffprobe 读的差 0.001 秒，忽略了。
++ mp4v2 接收命令带亚洲字符就炸，少用。理论上ffmpeg可以代替，但是一些命令 mp4v2 简单。
++ BookPlayer (iOS)读取 artist, 不管album artist。
++ 转换会丢失的信息：tags.date（特典日期可能和正片不一样，不好处理干脆没管这个信息）tags.encoder（源是贩卖网站的名字）
++ 所以原档留着比较好，转换 m4b 只用来丢进听书软件。
+
+用于某角川扶持的有声书网站提取出来的有声书。不加密真好（不过别的站似乎也是订阅才加密）。拿 fb2k 重命名一下文件（用于排序）就好，很方便。不过他家标题的章节数字不做 0 padding，个人喜欢补上。
+
+
+#h1:重新编码用 [link=https://gist.github.com/Aeroblast/c0f66d0cda7bb313b41f67301137d4f3] encode2m4b.js [/link]
+预期输入：文件夹路径，文件夹内是分章节的音频（目前有 WAV FLAC MP3，可以看 qaac 的支持继续加），每个包含元数据。
+输出：用 qaac 合并为一个 m4b 文件。用的 TVBR 模式，跑之前可以改 quality。尽量搬运元数据，会随手拿一个文件夹里的图当封面。
+
+用到的binary：
++ ffmpeg ffprobe (ffmpeg)
++ [link=https://github.com/nu774/qaac]qaac[/link]（依赖iTunes）
++ libFLAC（给 qaac 用。不好找 binary，用了个 [link=https://www.rarewares.org/lossless.php]第三方下载[/link]）
+
+用来转 DLsite 的音声。一般 WAV 元数据匮乏，转 FLAC 存档后比较舒服。fb2k的从文件名猜元数据 %tracknumber% %title% 什么的弄一下也很快。
+mp3 的元数据状况没好到哪去。还有些莫名其妙的社团给的声道不一致，导致 qaac 拒绝处理。总之需要更多手动操作。
+[time]20220615 20:34:39[/time]
