@@ -31,7 +31,13 @@ Tips:
 用到的binary：
 + ffmpeg ffprobe (ffmpeg)
 + [link=https://github.com/nu774/qaac]qaac[/link]（依赖iTunes）
-+ libFLAC（给 qaac 用。不好找 binary，用了个 [link=https://www.rarewares.org/lossless.php]第三方下载[/link]）
++ libFLAC（给 qaac 用，放入文件夹即可。不好找 binary，用了个 [link=https://www.rarewares.org/lossless.php]第三方下载[/link]）
+
+检查libFLAC是否生效：
+[code]
+qaac64 --check
+[/code]
+输出版本和加载的 lib。本身自带了几个 lib，新出现 FLAC 即可。比如 libFLAC 1.3.4 。
 
 用来转 DLsite 的音声。一般 WAV 元数据匮乏，转 FLAC 存档后比较舒服。fb2k的从文件名猜元数据 %tracknumber% %title% 什么的弄一下也很快。
 mp3 的元数据状况没好到哪去。还有些莫名其妙的社团给的声道不一致，导致 qaac 拒绝处理。总之需要更多手动操作。
