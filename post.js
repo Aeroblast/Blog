@@ -8,6 +8,7 @@ else {
     switch (args[0]) {
         case "en": {
             let pw = args[1];
+            console.log(pw)
             PostBlog(pw);
         } break;
         case "de": {
@@ -66,6 +67,7 @@ function PostBlog(pw) {
         let encrypted = aes.encrypt(pw + "\n" + data, pw).toString();
         fs.writeFileSync(blog_path, "ENCRYPTED\n" + encrypted);
         fs.appendFileSync("index.txt", record + "\n");
+        return;
     }
     fs.writeFileSync(blog_path, data);
     fs.appendFileSync("docs/index.txt", record + "\n");
