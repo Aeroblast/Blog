@@ -1,64 +1,35 @@
 <template>
-  <div :style="listAnimationVar">
-    <div
-      id="mainwin_container"
-      style="
+  <div :style="sidebarAnimationVar" :data-movement-play="sidebarAnimationCtrl">
+    <div id="mainwin_container" style="
         -webkit-overflow-scrolling: touch;
         overflow-x: hidden;
         display: inline-block;
         width: 90%;
         height: 100%;
-      "
-      ref="mainContainer"
-      :data-list-play="listAnimationCtrl"
-      @click="ListClose()"
-    >
-      <div
-        id="main_frame"
-        style="
+      " ref="mainContainer" @click="SidebarClose()">
+      <div id="main_frame" style="
           width: 100%;
           height: 100%;
           border: 0 none;
           overflow-x: hidden;
           text-align: left;
           padding-top: 1em;
-        "
-      >
-        <AtxtArticle
-          ref="aritcle"
-          :password="queryPassword"
-          :indexItem="currentIndex"
-          @tag="ActiveTag($event)"
-        ></AtxtArticle>
-        <div
-          v-if="flowTrigger == 0"
-          class="main_width"
-          style="height: 3em; cursor: help"
-          @click="ActiveFlow()"
-        ></div>
-        <component
-          v-for="f in flowIndexList"
-          v-bind:is="'AtxtArticle'"
-          :key="f.filename"
-          :password="queryPassword"
-          :indexItem="f"
-          @tag="ActiveTag($event)"
-        ></component>
+        ">
+        <AtxtArticle ref="aritcle" :password="queryPassword" :indexItem="currentIndex" @tag="ActiveTag($event)"
+          @loaded="ArticleLoaded($event)">
+        </AtxtArticle>
+        <div v-if="flowTrigger == 0" class="main_width" style="height: 3em; cursor: help" @click="ActiveFlow()"></div>
+        <component v-for="f in flowIndexList" v-bind:is="'AtxtArticle'" :key="f.filename" :password="queryPassword"
+          :indexItem="f" @tag="ActiveTag($event)"></component>
       </div>
     </div>
-    <ArticleList
-      ref="list"
-      :items="indexItems"
-      :listAnimationCtrl="listAnimationCtrl"
-      :currentFile="currentFile"
-      :queryTags="queryTags"
-      @ClickItem="LoadAritcle($event)"
-      @ClearQueryTags="ClearTags()"
-    ></ArticleList>
-    <div
-      id="list_shift_button"
-      class="button"
-      style="
+    <ArticleList ref="list" :items="indexItems" :currentFile="currentFile" :queryTags="queryTags"
+      @ClickItem="LoadAritcle($event)" @ClearQueryTags="ClearTags()"></ArticleList>
+
+    <TableOfContent ref="toc" :toc="toc" @ClickItem="ScrollArticle($event)"></TableOfContent>
+
+  </div>
+  <div id="shift_button_left" class="button" :data-state="sidebarState" style="
         position: fixed;
         width: 3em;
         left: 0;
@@ -66,35 +37,46 @@
         margin: 0;
         bottom: 0;
         cursor: pointer;
-      "
-      @click="ListShift"
-    ></div>
-  </div>
+      " @click="SidebarLeftShift"></div>
+  <div id="shift_button_right" class="button" :data-state="sidebarState" style="
+        position: fixed;
+        width: 3em;
+        right: 0;
+        height: 100%;
+        margin: 0;
+        bottom: 0;
+        cursor: pointer;
+      " @click="SidebarRightShift" :data-disable="toc == null"></div>
+
 </template>
 
 <script>
 import ArticleList from "./components/ArticleList.vue";
 import AtxtArticle from "./components/AtxtArticle.vue";
+import TableOfContent from "./components/TableOfContent.vue"
 
 export default {
   name: "App",
   components: {
     ArticleList,
     AtxtArticle,
+    TableOfContent
   },
   data() {
     return {
       title: "",
       indexItems: [],
-      listState: 0,
-      listAnimationVar: "",
-      listAnimationCtrl: 0,
+      sidebarState: 'none',
+      sidebarAnimationVar: "",
+      sidebarAnimationCtrl: 0,
       listWidth: 100,
+      tocWidth: 100,
       queryFilename: "",
       queryTags: [],
       queryPassword: "",
       flowTrigger: 0,
       flowIndexList: [],
+      toc: null
     };
   },
   computed: {
@@ -158,41 +140,72 @@ export default {
         this.$refs.list.ScrollDisplay(this.currentFile);
       });
     },
-    ListShift() {
-      if (this.listState == 0) {
-        this.ListOpen();
+    SidebarLeftShift() {
+      if (this.sidebarState == "left") {
+        this.SidebarLeftClose();
       } else {
-        this.ListClose();
+        this.SidebarLeftOpen();
       }
     },
-    ListOpen() {
+    SidebarLeftOpen() {
       let start = 0;
-      if (this.listState == 1) {
+      if (this.sidebarState == 'left') {
         start = this.listWidth;
       }
-      this.listState = 1;
+      this.sidebarState = 'left';
       this.$nextTick(function () {
         this.listWidth = this.$refs.list.GetWidth();
-
-        this.listAnimationVar =
-          "--list-move-start:" +
-          start +
-          "px;" +
-          "--list-move-end:" +
-          this.listWidth +
-          "px;";
-        this.listAnimationCtrl = (this.listAnimationCtrl + 1) % 2;
+        this.sidebarAnimationVar =
+          `--sidebar-move-start: ${start}px;
+         --sidebar-move-end: ${this.listWidth}px;`;
+        this.sidebarAnimationCtrl = (this.sidebarAnimationCtrl + 1) % 2;
       });
     },
-    ListClose() {
-      if (this.listState == 0) return;
+    SidebarLeftClose() {
+      if (this.sidebarState != "left") return;
       let start = this.listWidth;
-      this.listState = 0;
+      this.sidebarState = 'none';
       this.$nextTick(function () {
-        this.listAnimationVar =
-          "--list-move-start:" + start + "px;" + "--list-move-end:0px;";
-        this.listAnimationCtrl = (this.listAnimationCtrl + 1) % 2;
+        this.sidebarAnimationVar =
+          `--sidebar-move-start: ${start}px; --sidebar-move-end:0px;`;
+        this.sidebarAnimationCtrl = (this.sidebarAnimationCtrl + 1) % 2;
       });
+    },
+    SidebarRightShift() {
+      if (this.sidebarState == "right") {
+        this.SidebarRightClose();
+      } else {
+        this.SidebarRightOpen();
+      }
+    },
+    SidebarRightOpen() {
+      let start = 0;
+      if (this.sidebarState == 'right') {
+        start = this.tocWidth;
+      }
+      this.sidebarState = 'right';
+      this.$nextTick(function () {
+        this.tocWidth = this.$refs.toc.GetWidth();
+        this.sidebarAnimationVar =
+          `--sidebar-move-start: ${start}px;
+         --sidebar-move-end: -${this.tocWidth}px;`;
+        this.sidebarAnimationCtrl = (this.sidebarAnimationCtrl + 1) % 2;
+      });
+    },
+    SidebarRightClose() {
+      if (this.sidebarState != "right") return;
+      let start = this.tocWidth;
+      this.sidebarState = 'none';
+      this.$nextTick(function () {
+        this.sidebarAnimationVar =
+          `--sidebar-move-start: -${start}px; --sidebar-move-end:0px;`;
+        this.sidebarAnimationCtrl = (this.sidebarAnimationCtrl + 1) % 2;
+      });
+    },
+    SidebarClose() {
+      if (this.sidebarState == "none") return;
+      this.SidebarRightClose();
+      this.SidebarLeftClose();
     },
     LoadAritcle(filename) {
       this.flowTrigger = 0;
@@ -200,8 +213,11 @@ export default {
       this.queryFilename = filename;
       this.$refs.aritcle.Read(this.currentFile);
       this.$refs.list.ScrollDisplay(filename);
-      this.ListClose();
+      this.SidebarClose();
       this.PushState();
+    },
+    ScrollArticle(enrty) {
+
     },
     PushState() {
       let querys = this.queryFilename ? "n=" + this.queryFilename : "";
@@ -230,8 +246,12 @@ export default {
           this.$refs.list.ScrollDisplay(this.currentFile);
         });
       }
-      this.ListOpen();
+      this.SidebarLeftOpen();
       this.PushState();
+    },
+    ArticleLoaded(e) {
+      const { toc } = e;
+      this.toc = toc;
     },
     ClearTags() {
       this.flowTrigger = 0;
@@ -240,7 +260,7 @@ export default {
       this.$nextTick(() => {
         this.$refs.list.ScrollDisplay(this.currentFile);
       });
-      this.ListOpen();
+      this.SidebarLeftOpen();
       this.PushState();
     },
     ActiveFlow() {
@@ -297,6 +317,7 @@ function Record2Object(line) {
 
 <style>
 @charset "UTF-8";
+
 a:link {
   color: pink;
   text-decoration: none;
@@ -329,29 +350,45 @@ b {
 }
 
 /* 给这里的主要div和list.vue里的生效 */
-@keyframes listMove {
+@keyframes sidebarMove {
   from {
-    transform: translate(var(--list-move-start), 0);
+    transform: translate(var(--sidebar-move-start), 0);
   }
+
   to {
-    transform: translate(var(--list-move-end), 0);
-  }
-}
-@keyframes listMove2 {
-  from {
-    transform: translate(var(--list-move-start), 0);
-  }
-  to {
-    transform: translate(var(--list-move-end), 0);
+    transform: translate(var(--sidebar-move-end), 0);
   }
 }
 
-[data-list-play="0"] {
-  animation: listMove 0.3s;
+@keyframes sidebarMove2 {
+  from {
+    transform: translate(var(--sidebar-move-start), 0);
+  }
+
+  to {
+    transform: translate(var(--sidebar-move-end), 0);
+  }
+}
+
+[data-movement-play="0"]>* {
+  animation: sidebarMove 0.3s;
   animation-fill-mode: forwards;
 }
-[data-list-play="1"] {
-  animation: listMove2 0.3s;
+
+[data-movement-play="1"]>* {
+  animation: sidebarMove2 0.3s;
   animation-fill-mode: forwards;
+}
+
+#shift_button_left[data-state="right"] {
+  display: none;
+}
+
+#shift_button_right[data-state="left"] {
+  display: none;
+}
+
+#shift_button_right[data-disable="true"] {
+  display: none;
 }
 </style>

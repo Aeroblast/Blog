@@ -46,7 +46,7 @@ import { RetroFilter_ApplyToImages, RetroFilter_ApplyToVideos } from "./RetroFil
 
 export default {
   name: "Atxt-Article",
-  emits: ["tag"],
+  emits: ["tag", "loaded"],
   props: { password: String, indexItem: Object },
   data() {
     return {
@@ -58,6 +58,7 @@ export default {
       rawText: "",
       passwordInput: "",
       mode: "",
+      toc: null
     };
   },
   computed: {},
@@ -98,13 +99,20 @@ export default {
     },
     LoadContent(content) {
       if (typeof content == "string") {
-        content = content.split("\n");
+        content = content.replaceAll("\r", "").split("\n");
       }
-      let settings = content[0].replace("\r", "");
+      let settings = content[0];
       if (settings == "#mode:tech") {
         this.mode = "tech";
       }
-      this.renderedContent = RenderContent(content, this.filename);
+
+      const { text, toc } = RenderContent(content, this.filename);
+      this.renderedContent = text;
+      if (toc.children.length == 0) {
+        this.toc = null;
+      } else {
+        this.toc = toc;
+      }
       this.$nextTick(() => {
         this.$refs.article.querySelectorAll("code").forEach((block) => {
           hljs.highlightElement(block);
@@ -120,6 +128,7 @@ export default {
         RetroFilter_ApplyToImages("img.retro");
         RetroFilter_ApplyToVideos("video.retro");
       });
+      this.$emit("loaded", { toc: this.toc });
     },
     TryLoadEncrypted(password) {
       let de = this.TryDecrypt(this.rawText, password);
@@ -200,34 +209,24 @@ const atxtRegexList = [
   [/^#mode:(.*)/, "<p><!--skip--></p>"],
   [/\[link=(.*?)\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$2</a>'],
   [/\[link\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$1</a>'],
+  [/\[url=(.*?)\](.*?)\[\/url\]/, '<a href="$1"target="_blank">$2</a>'],
+  [/\[url\](.*?)\[\/url\]/, '<a href="$1"target="_blank">$1</a>'],
   [/^\+ (.*)/, '<p class="list_item">$1</p>'],
 ];
-const atxtRegexList_old = [
-  [
-    /\[spoiler\]/,
-    "<div class='spoiler'><div onclick='SpoilerShift(this)' title='该块可能包含剧透内容'>Spoiler</div>",
-  ],
-  [/\[\/spoiler\]/, "</div>"],
-  [/\[quote\]/, "<div class='quote'>"],
-  [/\[\/quote\]/, "</div>"],
-  [/\[title\](.*?)\[\/title\]/, "<p class='title0'>$1</p>"],
-  [/\[h([1-6])\](.*?)\[\/h[1-6]\]/, "<h$1>$2</h$1>"],
-  [
-    /\[align=(.*?)\](.*?)\[\/align\]/i,
-    "<p class='aligned' style='text-align:$1'>$2</p>",
-  ],
-];
+
 
 function RenderContent(lines, filename) {
-  let year = parseInt(filename.substring(0, 4));
-  let oldPost = false;
-  if (year && year < 2021) oldPost = true;
-
   let r = "";
   let encodeState = "";
   let count = 0;
   let leveledBlockStack = [];
-  let blockStack = [];
+  const toc = {
+    text: "文章",
+    children: [],
+    level: 0,
+    parent: null
+  };
+  let currentTocParent = toc;
   for (const line of lines) {
     count++;
     let rendered = line.replace("\r", "");
@@ -260,58 +259,50 @@ function RenderContent(lines, filename) {
       );
     }
 
-    let canStop = false;
+
     let leveledBlockTest = RenderContentLine(rendered, [atxtLeveledBlockRegex]);
     rendered = leveledBlockTest.result;
     if (leveledBlockTest.matches.length > 0) {
-      let level = leveledBlockTest.matches[0][1];
-      level = parseInt(level);
+      const level = parseInt(leveledBlockTest.matches[0][1]);
+      const heading_text = leveledBlockTest.matches[0][2];
+      const entry = {
+        level: level,
+        text: heading_text,
+        children: [],
+      }
       while (leveledBlockStack.length > 0) {
-        let lastlevel = leveledBlockStack[leveledBlockStack.length - 1];
+        const lastlevel = leveledBlockStack[leveledBlockStack.length - 1];
         if (lastlevel > level) {
           leveledBlockStack.pop();
           rendered = "</div>\n" + rendered;
+          currentTocParent = currentTocParent.parent;
         } else if (lastlevel == level) {
           leveledBlockStack.pop();
           rendered = "</div>\n" + rendered;
           break;
         } else if (lastlevel < level) {
+          currentTocParent = currentTocParent.children[currentTocParent.children.length - 1];
           break;
         }
       }
+      currentTocParent.children.push(entry);
+      entry.parent = currentTocParent;
+      entry.id = `heading-${filename}-${count}`;
       leveledBlockStack.push(level);
-      let s = leveledBlockTest.matches[0][2];
-      if (needDrawOut(s)) {
+
+
+
+      if (needDrawOut(heading_text)) {
         rendered = rendered.replace(/(<h[1-6])/, "$1 class='drawout-h'");
       }
 
-      canStop = true;
-    }
-    if (!canStop) {
-      let blockTest = RenderContentLine(rendered, atxtBlockRegexList);
-      if (blockTest.matches.length > 0) {
-        rendered = blockTest.result;
-        blockStack.push({
-          name: blockTest.matches[0][1],
-          levelCount: leveledBlockStack.length,
-        });
-        canStop = true;
-      }
-    }
-    if (!canStop) {
-      let blockTest = RenderContentLine(rendered, atxtBlockEndRegexList);
-      if (blockTest.matches.length > 0) {
-        rendered = blockTest.result;
-        let info = blockStack.pop();
-        //to-do: 验证info.name不可交叉……但博客都是自己写的就不验证了
-        while (leveledBlockStack.length > info.levelCount) {
-          leveledBlockStack.pop();
-          rendered = "</div>\n" + rendered;
-        }
-        canStop = true;
-      }
+      rendered = rendered.replace(/(<h[1-6])/, `$1 id='${entry.id}'`);
+
+
     }
 
+    rendered = RenderContentLine(rendered, atxtBlockRegexList).result;
+    rendered = RenderContentLine(rendered, atxtBlockEndRegexList).result;
     rendered = RenderContentLine(rendered, atxtRegexList).result;
 
     // 类MD的图片&视频
@@ -360,9 +351,6 @@ function RenderContent(lines, filename) {
       } while (match);
     }
 
-    if (oldPost)
-      rendered = RenderContentLine(rendered, atxtRegexList_old).result;
-
     //empty line
     if (rendered == "") rendered = "<br>";
 
@@ -395,7 +383,9 @@ function RenderContent(lines, filename) {
 
     r += rendered + "\n";
   }
-  return r;
+  const text = r;
+  // console.log(toc)
+  return { text, toc };
 }
 
 function RenderContentLine(line, reg) {

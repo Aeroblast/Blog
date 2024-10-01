@@ -12,7 +12,6 @@
       border-right: 1px solid brown;
       background: rgba(0, 0, 0, 0.5);
     "
-    :data-list-play="listAnimationCtrl"
     data-nosnippet
   >
     <div style="margin: 1em 0.5em" v-if="queryTags.length > 0">
@@ -52,7 +51,6 @@ export default {
   props: {
     items: Array,
     currentFile: String,
-    listAnimationCtrl: Number,
     queryTags: Array,
   },
   methods: {
@@ -158,11 +156,11 @@ function Contains(array, target) {
   display: none;
 }
 
-#list {
+#ArticleList {
   overflow: scroll;
 }
 
-#list::-webkit-scrollbar {
+#ArticleList::-webkit-scrollbar {
   display: none;
 }
 
