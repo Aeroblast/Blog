@@ -133,7 +133,6 @@ video, canvas.video {
 }
 
 .spoiler {
-    width: 95%;
     overflow: hidden;
     height: auto;
     padding: 0;
