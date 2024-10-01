@@ -1,5 +1,5 @@
 <template>
-  <div :style="tocAnimationVar">
+  <div :style="listAnimationVar">
     <div
       id="mainwin_container"
       style="
@@ -10,7 +10,7 @@
         height: 100%;
       "
       ref="mainContainer"
-      :data-toc-play="tocAnimationCtrl"
+      :data-list-play="listAnimationCtrl"
       @click="ListClose()"
     >
       <div
@@ -46,15 +46,15 @@
         ></component>
       </div>
     </div>
-    <Toc
-      ref="toc"
+    <ArticleList
+      ref="list"
       :items="indexItems"
-      :tocAnimationCtrl="tocAnimationCtrl"
+      :listAnimationCtrl="listAnimationCtrl"
       :currentFile="currentFile"
       :queryTags="queryTags"
       @ClickItem="LoadAritcle($event)"
       @ClearQueryTags="ClearTags()"
-    ></Toc>
+    ></ArticleList>
     <div
       id="list_shift_button"
       class="button"
@@ -73,23 +73,23 @@
 </template>
 
 <script>
-import Toc from "./components/Toc.vue";
+import ArticleList from "./components/ArticleList.vue";
 import AtxtArticle from "./components/AtxtArticle.vue";
 
 export default {
   name: "App",
   components: {
-    Toc,
+    ArticleList,
     AtxtArticle,
   },
   data() {
     return {
       title: "",
       indexItems: [],
-      tocState: 0,
-      tocAnimationVar: "",
-      tocAnimationCtrl: 0,
-      tocWidth: 100,
+      listState: 0,
+      listAnimationVar: "",
+      listAnimationCtrl: 0,
+      listWidth: 100,
       queryFilename: "",
       queryTags: [],
       queryPassword: "",
@@ -155,11 +155,11 @@ export default {
         }
       }
       this.$nextTick(() => {
-        this.$refs.toc.ScrollDisplay(this.currentFile);
+        this.$refs.list.ScrollDisplay(this.currentFile);
       });
     },
     ListShift() {
-      if (this.tocState == 0) {
+      if (this.listState == 0) {
         this.ListOpen();
       } else {
         this.ListClose();
@@ -167,31 +167,31 @@ export default {
     },
     ListOpen() {
       let start = 0;
-      if (this.tocState == 1) {
-        start = this.tocWidth;
+      if (this.listState == 1) {
+        start = this.listWidth;
       }
-      this.tocState = 1;
+      this.listState = 1;
       this.$nextTick(function () {
-        this.tocWidth = this.$refs.toc.GetWidth();
+        this.listWidth = this.$refs.list.GetWidth();
 
-        this.tocAnimationVar =
-          "--toc-move-start:" +
+        this.listAnimationVar =
+          "--list-move-start:" +
           start +
           "px;" +
-          "--toc-move-end:" +
-          this.tocWidth +
+          "--list-move-end:" +
+          this.listWidth +
           "px;";
-        this.tocAnimationCtrl = (this.tocAnimationCtrl + 1) % 2;
+        this.listAnimationCtrl = (this.listAnimationCtrl + 1) % 2;
       });
     },
     ListClose() {
-      if (this.tocState == 0) return;
-      let start = this.tocWidth;
-      this.tocState = 0;
+      if (this.listState == 0) return;
+      let start = this.listWidth;
+      this.listState = 0;
       this.$nextTick(function () {
-        this.tocAnimationVar =
-          "--toc-move-start:" + start + "px;" + "--toc-move-end:0px;";
-        this.tocAnimationCtrl = (this.tocAnimationCtrl + 1) % 2;
+        this.listAnimationVar =
+          "--list-move-start:" + start + "px;" + "--list-move-end:0px;";
+        this.listAnimationCtrl = (this.listAnimationCtrl + 1) % 2;
       });
     },
     LoadAritcle(filename) {
@@ -199,7 +199,7 @@ export default {
       this.flowIndexList = [];
       this.queryFilename = filename;
       this.$refs.aritcle.Read(this.currentFile);
-      this.$refs.toc.ScrollDisplay(filename);
+      this.$refs.list.ScrollDisplay(filename);
       this.ListClose();
       this.PushState();
     },
@@ -227,7 +227,7 @@ export default {
         this.$refs.aritcle.Read(this.currentFile);
       } else {
         this.$nextTick(() => {
-          this.$refs.toc.ScrollDisplay(this.currentFile);
+          this.$refs.list.ScrollDisplay(this.currentFile);
         });
       }
       this.ListOpen();
@@ -238,7 +238,7 @@ export default {
       this.flowIndexList = [];
       this.queryTags = [];
       this.$nextTick(() => {
-        this.$refs.toc.ScrollDisplay(this.currentFile);
+        this.$refs.list.ScrollDisplay(this.currentFile);
       });
       this.ListOpen();
       this.PushState();
@@ -246,7 +246,7 @@ export default {
     ActiveFlow() {
       if (this.flowTrigger == 0) {
         this.flowTrigger = 1;
-        let next = this.$refs.toc.GetNext(this.currentIndex);
+        let next = this.$refs.list.GetNext(this.currentIndex);
         if (next) this.flowIndexList.push(next);
       }
     },
@@ -256,7 +256,7 @@ export default {
           window.innerHeight + document.documentElement.scrollTop >
           document.body.scrollHeight - 200
         ) {
-          let next = this.$refs.toc.GetNext(
+          let next = this.$refs.list.GetNext(
             this.flowIndexList[this.flowIndexList.length - 1]
           );
           if (next) this.flowIndexList.push(next);
@@ -328,30 +328,30 @@ b {
   text-indent: 0;
 }
 
-/* 给这里的主要div和Toc.vue里的生效 */
-@keyframes TocMove {
+/* 给这里的主要div和list.vue里的生效 */
+@keyframes listMove {
   from {
-    transform: translate(var(--toc-move-start), 0);
+    transform: translate(var(--list-move-start), 0);
   }
   to {
-    transform: translate(var(--toc-move-end), 0);
+    transform: translate(var(--list-move-end), 0);
   }
 }
-@keyframes TocMove2 {
+@keyframes listMove2 {
   from {
-    transform: translate(var(--toc-move-start), 0);
+    transform: translate(var(--list-move-start), 0);
   }
   to {
-    transform: translate(var(--toc-move-end), 0);
+    transform: translate(var(--list-move-end), 0);
   }
 }
 
-[data-toc-play="0"] {
-  animation: TocMove 0.3s;
+[data-list-play="0"] {
+  animation: listMove 0.3s;
   animation-fill-mode: forwards;
 }
-[data-toc-play="1"] {
-  animation: TocMove2 0.3s;
+[data-list-play="1"] {
+  animation: listMove2 0.3s;
   animation-fill-mode: forwards;
 }
 </style>

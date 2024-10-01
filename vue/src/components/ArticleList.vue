@@ -1,7 +1,7 @@
 <template>
   <nav
-    ref="toc"
-    id="toc"
+    ref="list"
+    id="ArticleList"
     style="
       position: fixed;
       width: auto;
@@ -12,7 +12,7 @@
       border-right: 1px solid brown;
       background: rgba(0, 0, 0, 0.5);
     "
-    :data-toc-play="tocAnimationCtrl"
+    :data-list-play="listAnimationCtrl"
     data-nosnippet
   >
     <div style="margin: 1em 0.5em" v-if="queryTags.length > 0">
@@ -28,11 +28,11 @@
         {{ tag }}
       </div>
     </div>
-    <a class="toc_item_dummy"></a>
+    <a class="list_item_dummy"></a>
     <a
-      :class="'toc_item ' + (needDrawOut(item.title) ? 'toc_drawout' : '')"
+      :class="'list_item ' + (needDrawOut(item.title) ? 'list_drawout' : '')"
       v-for="item in items"
-      :ref="'tocItem_' + item.filename"
+      :ref="'listItem_' + item.filename"
       :key="item.filename"
       :data-select="item.filename == currentFile"
       :data-display="isDisplay(item)"
@@ -47,12 +47,12 @@
 
 <script>
 export default {
-  name: "TableOfContents",
+  name: "ArticleList",
   emits: ["ClickItem", "ClearQueryTags"],
   props: {
     items: Array,
     currentFile: String,
-    tocAnimationCtrl: Number,
+    listAnimationCtrl: Number,
     queryTags: Array,
   },
   methods: {
@@ -72,7 +72,7 @@ export default {
       return false;
     },
     GetWidth() {
-      return this.$refs.toc.offsetWidth;
+      return this.$refs.list.offsetWidth;
     },
     GetNext(indexItem) {
       let flag = false;
@@ -90,9 +90,9 @@ export default {
       return null;
     },
     ScrollDisplay(filename) {
-      let a = "tocItem_" + filename;
+      let a = "listItem_" + filename;
       let e = this.$refs[a];
-      if (e) this.$refs.toc.scroll(0, e.offsetTop - window.innerHeight / 3);
+      if (e) this.$refs.list.scroll(0, e.offsetTop - window.innerHeight / 3);
     },
     needDrawOut(content) {
       if (!content) return false;
@@ -115,11 +115,11 @@ function Contains(array, target) {
 </script>
 
 <style scoped>
-.toc_item:hover {
+.list_item:hover {
   background: #303030;
 }
 
-.toc_item {
+.list_item {
   display: block;
   text-decoration: none;
   color: inherit;
@@ -136,21 +136,21 @@ function Contains(array, target) {
   text-align: left;
   text-indent: 0.5em;
 }
-.toc_item_dummy {
+.list_item_dummy {
   border-bottom: #660000 solid 2px;
   margin-left: 3em;
   display: block;
 }
 
-.toc_item:link {
+.list_item:link {
   color: inherit;
 }
 
-.toc_item:visited {
+.list_item:visited {
   color: inherit;
 }
 
-.toc_drawout {
+.list_drawout {
   text-indent: 0em;
 }
 
@@ -158,11 +158,11 @@ function Contains(array, target) {
   display: none;
 }
 
-#toc {
+#list {
   overflow: scroll;
 }
 
-#toc::-webkit-scrollbar {
+#list::-webkit-scrollbar {
   display: none;
 }
 
