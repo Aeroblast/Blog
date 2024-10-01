@@ -37,7 +37,7 @@ gl_FragColor = color;
 
 
 
-async function ApplyToAllImage(selector) {
+export async function RetroFilter_ApplyToImages(selector) {
     var imgs = document.querySelectorAll(selector + ":not(.filtered)");
     if (imgs.length == 0) return;
     let canvas = initGL();
@@ -58,7 +58,7 @@ async function ApplyToAllImage(selector) {
     canvas.remove();
 }
 
-function ApplyToAllVideo(selector) {
+export function RetroFilter_ApplyToVideos(selector) {
     let vs = document.querySelectorAll(selector + ":not(.filtered)");
     [].forEach.call(vs,
         (v) => {
@@ -256,6 +256,3 @@ function createProgram(gl, vertexShader, fragmentShader) {
     }
     return program;
 }
-
-exports.ApplyToAllImage = ApplyToAllImage;
-exports.ApplyToAllVideo = ApplyToAllVideo;

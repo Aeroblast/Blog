@@ -5,13 +5,8 @@
         <tr>
           <td><span @click="activeFilenameInput = true">文档</span></td>
           <td>
-            【<a
-              class="hide_link"
-              ref="filename"
-              @click.prevent
-              :href="'?n=' + filename"
-              >{{ filename }}</a
-            >】;<span class="article_log">{{ log }}</span>
+            【<a class="hide_link" ref="filename" @click.prevent :href="'?n=' + filename">{{ filename }}</a>】;<span
+              class="article_log">{{ log }}</span>
           </td>
         </tr>
         <tr v-if="indexItem.title">
@@ -21,12 +16,8 @@
         <tr v-if="indexItem.tags.length > 0">
           <td>标签:</td>
           <td>
-            <div
-              class="tag"
-              v-for="tag in indexItem.tags"
-              :key="tag"
-              @click.stop="$emit('tag', { name: tag, index: indexItem })"
-            >
+            <div class="tag" v-for="tag in indexItem.tags" :key="tag"
+              @click.stop="$emit('tag', { name: tag, index: indexItem })">
               {{ tag }}
             </div>
           </td>
@@ -34,20 +25,11 @@
       </table>
     </div>
     <p class="password_zone" :data-display="waitPassword">
-      加密内容：<input
-        @keyup.enter="TryLoadEncrypted(passwordInput)"
-        v-model="passwordInput"
-        class="password_input"
-        type="text"
-      />
+      加密内容：<input @keyup.enter="TryLoadEncrypted(passwordInput)" v-model="passwordInput" class="password_input"
+        type="text" />
     </p>
   </div>
-  <article
-    :data-mode="mode"
-    class="main_width"
-    v-html="renderedContent"
-    ref="article"
-  ></article>
+  <article :data-mode="mode" class="main_width" v-html="renderedContent" ref="article"></article>
   <div class="footer main_width">
     <div>
       ©<span> Aeroblast </span><br /><a href="./"> Home </a>|<a href="?n=about">
@@ -59,8 +41,8 @@
 <script>
 import { TryGetDate } from "../utils.js";
 import { CryptoJS } from "../lib/aes.js";
-import hljs from "../lib/highlight.min.js";
-import RetroFilter from "./RetroFilter.js";
+import hljs from "highlight.js";
+import { RetroFilter_ApplyToImages, RetroFilter_ApplyToVideos } from "./RetroFilter.js";
 
 export default {
   name: "Atxt-Article",
@@ -125,7 +107,7 @@ export default {
       this.renderedContent = RenderContent(content, this.filename);
       this.$nextTick(() => {
         this.$refs.article.querySelectorAll("code").forEach((block) => {
-          hljs.highlightBlock(block);
+          hljs.highlightElement(block);
         });
         let vm = this;
         let inlineTags = this.$refs.article.getElementsByClassName("tag");
@@ -135,8 +117,8 @@ export default {
             e.stopPropagation();
           };
         }
-        RetroFilter.ApplyToAllImage("img.retro");
-        RetroFilter.ApplyToAllVideo("video.retro");
+        RetroFilter_ApplyToImages("img.retro");
+        RetroFilter_ApplyToVideos("video.retro");
       });
     },
     TryLoadEncrypted(password) {
@@ -362,9 +344,8 @@ function RenderContent(lines, filename) {
           }
         }
         let html;
-        let sizeStyle = `${w ? "width:" + w + ";" : ""}${
-          h ? "height:" + h + ";" : ""
-        }`;
+        let sizeStyle = `${w ? "width:" + w + ";" : ""}${h ? "height:" + h + ";" : ""
+          }`;
         if (tag == "video") {
           html = ` <video class='aimg${classNames}'
             style='${sizeStyle}'
@@ -372,9 +353,8 @@ function RenderContent(lines, filename) {
             src='${imageRoot + path}' 
             onclick='this.paused?this.play():this.pause()'></video>`;
         } else {
-          html = `<img class='aimg${classNames}' style='${sizeStyle}' src='${
-            imageRoot + path
-          }'>`;
+          html = `<img class='aimg${classNames}' style='${sizeStyle}' src='${imageRoot + path
+            }'>`;
         }
         rendered = rendered.replace(match[0], html);
       } while (match);
@@ -440,24 +420,24 @@ function ReplaceEntity(c) {
 }
 
 function needDrawOut(content) {
-  const list = ["「", "『", "（","【"];
+  const list = ["「", "『", "（", "【"];
   for (const k of list) {
     if (content[0] == k) return true;
   }
   return false;
 }
 </script>
-<style src="./article.css">
-</style>
-<style src="../lib/highlightjs.css">
-</style>
-<style  scoped>
+<style src="./article.css"></style>
+<style src="../lib/highlightjs.css"></style>
+<style scoped>
 *[data-display="false"] {
   display: none;
 }
+
 input[type="text"] {
   font-size: 16px;
 }
+
 .index_info,
 .info_container {
   line-height: 1.5;
@@ -465,14 +445,17 @@ input[type="text"] {
   margin-bottom: 0.2em;
   padding: 0;
 }
+
 table {
   border: none;
   border-spacing: 0;
 }
+
 td {
   vertical-align: super;
 }
-tr > td:nth-child(1) {
+
+tr>td:nth-child(1) {
   white-space: nowrap;
 }
 </style>
