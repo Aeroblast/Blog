@@ -55,21 +55,21 @@ article .drawout-h {
 
 /* 各自不超过普通1em */
 article h1 {
-    font-size: 1.8em;
+    font-size: 1.5em;
     margin-left: 0.7em;
 }
 
 article h2 {
-    font-size: 1.6em;
+    font-size: 1.5em;
     font-weight: normal;
 }
 
 article h3 {
-    font-size: 1.4em;
+    font-size: 1.35em;
 }
 
 article h4 {
-    font-size: 1.4em;
+    font-size: 1.35em;
     font-weight: normal;
 }
 
@@ -182,7 +182,7 @@ video, canvas.video {
 }
 
 article .title0 {
-    font-size: 1.8em;
+    font-size: 1.5em;
     text-indent: 0;
     text-align: center !important;
     font-weight: bold;
