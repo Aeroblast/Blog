@@ -1,25 +1,47 @@
 //For nodejs , not web page
 const fs = require("fs");
+const path = require("path");
 var aes = require("./aes");
 var args = process.argv.splice(2);
 
 if (args.length == 0) PostBlog();
 else {
     switch (args[0]) {
-        case "en": {
+        case "en-post": {
             let pw = args[1];
             console.log(pw)
             PostBlog(pw);
         } break;
+        case "en": {
+            console.log(`encrypt ${args[2]}`);
+            let data = fs.readFileSync(args[2], 'utf-8').replaceAll('\r', '');
+            const name = path.parse(args[2]).name;
+            let pw = args[1];
+            let encrypted = aes.encrypt(pw + "\n" + data, pw).toString();
+            const output_name = name.endsWith("_decrypted") ?
+                name.substring(0, name.length - "_decrypted".length)
+                : name + "_encrypted";
+            console.log(`write ${output_name}.atxt`)
+            fs.writeFileSync(output_name + '.atxt', "ENCRYPTED\n" + encrypted);
+        } break;
         case "de": {
+            console.log(`decrypt ${args[2]}`);
+            let data = fs.readFileSync(args[2], 'utf-8').replaceAll('\r', '');
+            const name = path.parse(args[2]).name;
             let pw = args[1];
             let ds = data.split('\n');
             if (ds[0] == 'ENCRYPTED') {
                 let decrypted = aes.decrypt(ds[1], pw).toString(aes.enc);
                 if (pw == decrypted.split('\n')[0]) {
                     console.log('Success');
-                    fs.writeFileSync('temp_decrypted.atxt', decrypted.substring(decrypted.indexOf('\n') + 1));
+                    console.log(`write ${name}_decrypted.atxt`)
+                    fs.writeFileSync(name + '_decrypted.atxt', decrypted.substring(decrypted.indexOf('\n') + 1));
+                } else {
+                    console.error("Failure");
+                    console.log(decrypted)
                 }
+            } else {
+                console.log(`Not ENCRYPTED: ${ds[0]}`)
             }
         } break;
         default:
