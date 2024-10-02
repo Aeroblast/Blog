@@ -229,8 +229,7 @@ export default {
       this.PushState();
     },
     ScrollArticle(entry) {
-      console.log(entry)
-      const e = document.getElementById(entry.id);
+      const e = document.querySelector(entry.selector);
       const eRect = e.getBoundingClientRect();
       const bodyRect = document.body.getBoundingClientRect();
       window.scroll({

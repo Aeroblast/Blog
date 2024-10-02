@@ -93,7 +93,7 @@ export default {
 
 #TableOfContent ol {
   text-align: left;
-  padding-left: 0;
+  padding-left: 1em;
 }
 
 #TableOfContent>ol {
@@ -105,43 +105,55 @@ export default {
 }
 
 #TableOfContent [data-level] {
-  text-indent: -1em;
-  margin-left: 1em;
+  box-sizing: border-box;
 }
 
 #TableOfContent [data-level] .text {
   padding: 0.3em 0;
   cursor: pointer;
   display: inline-block;
-  width: 100%;
+  text-indent: -1.3em;
+  margin-left: 1.3em;
   line-height: 1.4;
+  box-sizing: border-box;
 }
 
 #TableOfContent [data-level] .text:hover {
   background: #303030;
 }
 
+#TableOfContent [data-level] .text:before {
+  display: inline-block;
+  width: 1.3em;
+  text-indent: 0;
+  margin: 0;
+}
+
+#TableOfContent [data-level="0"] .text:before {
+  content: "■";
+}
+
 #TableOfContent [data-level="1"] .text:before {
-  content: "◉ ";
+  content: "◉";
 }
 
 #TableOfContent [data-level="2"] .text:before {
-  content: "● ";
+  content: "●";
 }
 
 #TableOfContent [data-level="3"] .text:before {
-  content: "\25B6 \FE0E ";
+  content: "\25B6\FE0E";
 }
 
 #TableOfContent [data-level="4"] .text:before {
-  content: "▷ ";
+  content: "▷";
 }
 
 #TableOfContent [data-level="5"] .text:before {
-  content: "◆ ";
+  content: "◆";
 }
 
 #TableOfContent [data-level="6"] .text:before {
-  content: "◇ ";
+  content: "◇";
 }
 </style>

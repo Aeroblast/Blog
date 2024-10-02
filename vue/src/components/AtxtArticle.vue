@@ -4,11 +4,12 @@
       <table>
         <tbody>
           <tr>
-            <td><span @click="SwitchFilenameInput">文档</span></td>
+            <td><span style="cursor: pointer" @click="SwitchFilenameInput">文档</span></td>
             <td>
               【<!--
               --><a v-if="!activeFilenameInput" class="hide_link" ref="filename"
-                @click.prevent="$emit('direct', filename)" :href="'?n=' + filename" :data-exist="indexItem != null">{{
+                @click.prevent="$emit('direct', filename)" :href="'?n=' + filename"
+                :data-exist="loading || indexItem != null">{{
               filename }}</a><!--
               --><input ref="filename_input" v-model="filenameInput" @focus="$event.target.select()"
                 @keyup.enter="$emit('direct', filenameInput.trim())" class="filename_input" type="text"
@@ -67,7 +68,8 @@ export default {
       rawText: "",
       passwordInput: "",
       mode: "",
-      toc: null
+      toc: null,
+      loading: true,
     };
   },
   computed: {},
@@ -83,6 +85,7 @@ export default {
       this.rawText = "";
       this.passwordInput = "";
       this.mode = "";
+      this.loading = true;
       let r = await fetch(textRoot + filename + ".atxt");
       if (r.status != 200) {
         this.renderedContent =
@@ -92,6 +95,7 @@ export default {
           r.status +
           ": " +
           r.statusText;
+        this.loading = false;
         return;
       }
       this.rawText = await r.text();
@@ -103,9 +107,11 @@ export default {
         if (this.password) {
           this.TryLoadEncrypted(this.password);
         }
+        this.loading = false;
         return;
       }
       this.LoadContent(this.rawText);
+      this.loading = false;
     },
     LoadContent(content) {
       if (typeof content == "string") {
@@ -249,7 +255,8 @@ function RenderContent(lines, filename) {
     text: "文章",
     children: [],
     level: 0,
-    parent: null
+    parent: null,
+    selector: "article"
   };
   let currentTocParent = toc;
   for (const line of lines) {
@@ -313,6 +320,7 @@ function RenderContent(lines, filename) {
       currentTocParent.children.push(entry);
       entry.parent = currentTocParent;
       entry.id = `heading-${filename}-${count}`;
+      entry.selector = "#" + entry.id;
       leveledBlockStack.push(level);
 
 
