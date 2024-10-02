@@ -138,14 +138,19 @@ export default {
       }
     },
     TryDecrypt(encrypted, password) {
-      let r = CryptoJS.AES.decrypt(encrypted, password)
-        .toString(CryptoJS.enc.Utf8)
-        .split("\n");
-      if (r.shift() == password) {
-        console.log("decrypt success");
-        this.log += "解密成功；";
-        return r;
-      } else {
+      try {
+        let r = CryptoJS.AES.decrypt(encrypted, password)
+          .toString(CryptoJS.enc.Utf8)
+          .split("\n");
+        if (r.shift() == password) {
+          console.log("decrypt success");
+          this.log += "解密成功；";
+          return r;
+        } else {
+          console.log("decrypt fail");
+          return null;
+        }
+      } catch (err) {
         console.log("decrypt fail");
         return null;
       }
