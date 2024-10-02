@@ -2,26 +2,28 @@
   <div class="main_width info_container">
     <div class="index_info" v-if="indexItem">
       <table>
-        <tr>
-          <td><span @click="activeFilenameInput = true">文档</span></td>
-          <td>
-            【<a class="hide_link" ref="filename" @click.prevent :href="'?n=' + filename">{{ filename }}</a>】;<span
-              class="article_log">{{ log }}</span>
-          </td>
-        </tr>
-        <tr v-if="indexItem.title">
-          <td>标题:</td>
-          <td>{{ indexItem.title }}</td>
-        </tr>
-        <tr v-if="indexItem.tags.length > 0">
-          <td>标签:</td>
-          <td>
-            <div class="tag" v-for="tag in indexItem.tags" :key="tag"
-              @click.stop="$emit('tag', { name: tag, index: indexItem })">
-              {{ tag }}
-            </div>
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <td><span @click="activeFilenameInput = true">文档</span></td>
+            <td>
+              【<a class="hide_link" ref="filename" @click.prevent :href="'?n=' + filename">{{ filename }}</a>】;<span
+                class="article_log">{{ log }}</span>
+            </td>
+          </tr>
+          <tr v-if="indexItem.title">
+            <td>标题:</td>
+            <td>{{ indexItem.title }}</td>
+          </tr>
+          <tr v-if="indexItem.tags.length > 0">
+            <td>标签:</td>
+            <td>
+              <div class="tag" v-for="tag in indexItem.tags" :key="tag"
+                @click.stop="$emit('tag', { name: tag, index: indexItem })">
+                {{ tag }}
+              </div>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <p class="password_zone" :data-display="waitPassword">
