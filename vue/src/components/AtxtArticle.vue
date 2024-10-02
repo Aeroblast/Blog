@@ -1,20 +1,26 @@
 <template>
   <div class="main_width info_container">
-    <div class="index_info" v-if="indexItem">
+    <div class="index_info">
       <table>
         <tbody>
           <tr>
-            <td><span @click="activeFilenameInput = true">文档</span></td>
+            <td><span @click="SwitchFilenameInput">文档</span></td>
             <td>
-              【<a class="hide_link" ref="filename" @click.prevent :href="'?n=' + filename">{{ filename }}</a>】;<span
-                class="article_log">{{ log }}</span>
+              【<!--
+              --><a v-if="!activeFilenameInput" class="hide_link" ref="filename"
+                @click.prevent="$emit('direct', filename)" :href="'?n=' + filename" :data-exist="indexItem != null">{{
+              filename }}</a><!--
+              --><input ref="filename_input" v-model="filenameInput" @focus="$event.target.select()"
+                @keyup.enter="$emit('direct', filenameInput.trim())" class="filename_input" type="text"
+                v-if="activeFilenameInput" /><!--               
+              -->】;<span class="article_log">{{ log }}</span>
             </td>
           </tr>
-          <tr v-if="indexItem.title">
+          <tr v-if="indexItem && indexItem.title">
             <td>标题:</td>
             <td>{{ indexItem.title }}</td>
           </tr>
-          <tr v-if="indexItem.tags.length > 0">
+          <tr v-if="indexItem && indexItem.tags.length > 0">
             <td>标签:</td>
             <td>
               <div class="tag" v-for="tag in indexItem.tags" :key="tag"
@@ -48,11 +54,12 @@ import { RetroFilter_ApplyToImages, RetroFilter_ApplyToVideos } from "./RetroFil
 
 export default {
   name: "Atxt-Article",
-  emits: ["tag", "loaded"],
+  emits: ["tag", "loaded", "direct"],
   props: { password: String, indexItem: Object },
   data() {
     return {
       filename: "",
+      filenameInput: "",
       renderedContent: "加载中……",
       waitPassword: false,
       log: "",
@@ -66,8 +73,9 @@ export default {
   computed: {},
   methods: {
     async Read(filename) {
-      console.log(filename);
+      console.log("Load " + filename);
       this.filename = filename;
+      this.filenameInput = filename;
       this.renderedContent = "加载中……";
       this.waitPassword = false;
       this.log = "";
@@ -157,6 +165,16 @@ export default {
         return null;
       }
     },
+    SwitchFilenameInput() {
+      this.activeFilenameInput = !this.activeFilenameInput;
+      if (this.activeFilenameInput) {
+        this.$nextTick(() => {
+          const input = this.$refs.filename_input;
+          input.focus();
+        });
+
+      }
+    }
   },
 
   mounted() {
@@ -433,6 +451,16 @@ function needDrawOut(content) {
 
 input[type="text"] {
   font-size: 16px;
+  height: 1em;
+}
+
+.filename_input {
+  width: 7.5em;
+}
+
+.hide_link[data-exist="false"] {
+  text-decoration: line-through;
+  color: red;
 }
 
 .index_info,

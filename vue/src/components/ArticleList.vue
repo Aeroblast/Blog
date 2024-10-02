@@ -72,14 +72,16 @@ export default {
     },
     ScrollDisplay(filename) {
       let a = "listItem_" + filename;
-      let e = this.$refs[a][0];
-      if (e) {
-        this.$refs.list.scroll({
-          left: 0,
-          top: e.offsetTop - window.innerHeight / 3,
-          behavior: "smooth",
-        });
-      }
+      let e = this.$refs[a];
+      if (!e) { return; }
+      e = e[0];
+      if (!e) { return; }
+      this.$refs.list.scroll({
+        left: 0,
+        top: e.offsetTop - window.innerHeight / 3,
+        behavior: "smooth",
+      });
+
     },
     needDrawOut(content) {
       if (!content) return false;

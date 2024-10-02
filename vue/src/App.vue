@@ -16,11 +16,11 @@
           padding-top: 1em;
         ">
         <AtxtArticle ref="aritcle" :password="queryPassword" :indexItem="currentIndex" @tag="ActiveTag($event)"
-          @loaded="ArticleLoaded($event)">
+          @loaded="ArticleLoaded($event)" @direct="LoadAritcle($event)">
         </AtxtArticle>
         <div v-if="flowTrigger == 0" class="main_width" style="height: 3em; cursor: help" @click="ActiveFlow()"></div>
         <component v-for="f in flowIndexList" v-bind:is="'AtxtArticle'" :key="f.filename" :password="queryPassword"
-          :indexItem="f" @tag="ActiveTag($event)"></component>
+          :indexItem="f" @tag="ActiveTag($event)" @direct="LoadAritcle($event)"></component>
       </div>
     </div>
     <ArticleList ref="list" :items="indexItems" :currentFile="currentFile" :queryTags="queryTags"
@@ -99,8 +99,13 @@ export default {
   },
   watch: {
     currentIndex(val) {
+      if(val){
       document.title =
         "Floating Whirl Island" + (val.title ? " | " + val.title : "");
+      }else{
+        document.title =
+        "Floating Whirl Island | Not Found";
+      }
     },
   },
   mounted() {
@@ -208,6 +213,13 @@ export default {
       this.SidebarLeftClose();
     },
     LoadAritcle(filename) {
+      if (this.queryFilename == filename) { return }
+      const filename_reg = /^[a-zA-Z0-9_-]+$/;
+      if (!filename_reg.test(filename)) {
+        console.log("invalid filename: " + filename);
+        return;
+      }
+
       this.flowTrigger = 0;
       this.flowIndexList = [];
       this.queryFilename = filename;
