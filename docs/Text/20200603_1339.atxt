@@ -1,4 +1,4 @@
-[title]【CefSharp】设置首选中文字体的坑[/title]
+#title:【CefSharp】设置首选中文字体的坑
 设置CefSettings.Locale后，浏览器就会选定一些默认字体。比如日文Serif是Yu Mincho，默认Meiryo，其他也是在这俩字体里挑。中文基本上是宋体和微软雅黑。
 另外，存在ChromiumWebBrowser.BrowserSettings.SerifFontFamily，以及数个类似的属性可以规定无衬线、等宽字体。
 
@@ -11,10 +11,10 @@
 2.当Locale为zh/zh-cn/zh-Hans/zh-Hans-CN等写法时，浏览器可以正确地使用中文字体，默认字体是微软雅黑，serif是宋体。[b]但是[/b]自定义字体不起作用。
 3.当Locale为zh-CN时，浏览器可以正确地使用中文字体，并且可以自定义，符合预期。
 
-[h2]结论[/h2]
+#h2:结论
 把所有中文简体都归一化成zh-CN。同理，猜测zh-TW会更友好一些。
 
-[h2]一些猜测[/h2]
+#h2:一些猜测
 生成最终应用时，locales文件夹里，用的是zh-CN和zh-TW。所以，可能是其他写法fallback到zh-CN并指定默认字体晚于指定自定义字体。
 另外小写zh-cn估计是因为不符合标准被忽略了，等效于zh。
 [time]20200603 13:39:32[/time]
