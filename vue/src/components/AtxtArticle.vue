@@ -50,7 +50,6 @@
 <script>
 import { TryGetDate } from "../utils.js";
 import { CryptoJS } from "../lib/aes.js";
-import hljs from "highlight.js";
 import { RetroFilter_ApplyToImages, RetroFilter_ApplyToVideos } from "./RetroFilter.js";
 
 export default {
@@ -130,9 +129,16 @@ export default {
         this.toc = toc;
       }
       this.$nextTick(() => {
-        this.$refs.article.querySelectorAll("code").forEach((block) => {
-          hljs.highlightElement(block);
-        });
+        const codeBlocks = this.$refs.article.querySelectorAll("code");
+        if (codeBlocks.length > 0) {
+          import("highlight.js").then(module => {
+            const hljs = module.default;
+            codeBlocks.forEach((block) => {
+              hljs.highlightElement(block);
+            });
+          });
+        }
+
         let vm = this;
         let inlineTags = this.$refs.article.getElementsByClassName("tag");
         for (let inlineTag of inlineTags) {
