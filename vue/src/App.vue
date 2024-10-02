@@ -216,8 +216,17 @@ export default {
       this.SidebarClose();
       this.PushState();
     },
-    ScrollArticle(enrty) {
-
+    ScrollArticle(entry) {
+      console.log(entry)
+      const e = document.getElementById(entry.id);
+      const eRect = e.getBoundingClientRect();
+      const bodyRect = document.body.getBoundingClientRect();
+      window.scroll({
+        top: eRect.top - bodyRect.top,
+        left: 0,
+        behavior: "smooth",
+      });
+      this.SidebarClose();
     },
     PushState() {
       let querys = this.queryFilename ? "n=" + this.queryFilename : "";

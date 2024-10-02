@@ -8,9 +8,9 @@
         background: rgba(0, 0, 0, 0.5);
         padding-right: 3em;
       ">
-    <div style="height: 7em;"></div>
-    <ol v-if="toc != null">
-      <TocNestedList :data="toc"></TocNestedList>
+    <div style="height: 5em;"></div>
+    <ol style="margin-left: 1em;" v-if="toc != null">
+      <TocNestedList :data="toc" @click-item="$emit('ClickItem', $event)"></TocNestedList>
     </ol>
     <div style="height: 40%; width: 1px"><!--for scroll--></div>
   </nav>
@@ -109,27 +109,39 @@ export default {
   margin-left: 1em;
 }
 
-#TableOfContent [data-level="1"]:before {
+#TableOfContent [data-level] .text {
+  padding: 0.3em 0;
+  cursor: pointer;
+  display: inline-block;
+  width: 100%;
+  line-height: 1.4;
+}
+
+#TableOfContent [data-level] .text:hover {
+  background: #303030;
+}
+
+#TableOfContent [data-level="1"] .text:before {
   content: "◉ ";
 }
 
-#TableOfContent [data-level="2"]:before {
+#TableOfContent [data-level="2"] .text:before {
   content: "● ";
 }
 
-#TableOfContent [data-level="3"]:before {
+#TableOfContent [data-level="3"] .text:before {
   content: "\25B6 \FE0E ";
 }
 
-#TableOfContent [data-level="4"]:before {
+#TableOfContent [data-level="4"] .text:before {
   content: "▷ ";
 }
 
-#TableOfContent [data-level="5"]:before {
+#TableOfContent [data-level="5"] .text:before {
   content: "◆ ";
 }
 
-#TableOfContent [data-level="6"]:before {
+#TableOfContent [data-level="6"] .text:before {
   content: "◇ ";
 }
 </style>
