@@ -131,12 +131,14 @@ export default {
       this.$nextTick(() => {
         const codeBlocks = this.$refs.article.querySelectorAll("code");
         if (codeBlocks.length > 0) {
-          import("highlight.js").then(module => {
-            const hljs = module.default;
+          (async () => {
+            const hljs = (await import("highlight.js/lib/common")).default;
+            const lang_dos = (await import('highlight.js/lib/languages/dos')).default;
+            hljs.registerLanguage('dos', lang_dos);
             codeBlocks.forEach((block) => {
               hljs.highlightElement(block);
             });
-          });
+          })();
         }
 
         let vm = this;
