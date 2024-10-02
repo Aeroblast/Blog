@@ -99,12 +99,12 @@ export default {
   },
   watch: {
     currentIndex(val) {
-      if(val){
-      document.title =
-        "Floating Whirl Island" + (val.title ? " | " + val.title : "");
-      }else{
+      if (val) {
         document.title =
-        "Floating Whirl Island | Not Found";
+          "Floating Whirl Island" + (val.title ? " | " + val.title : "");
+      } else {
+        document.title =
+          "Floating Whirl Island | Not Found";
       }
     },
   },
