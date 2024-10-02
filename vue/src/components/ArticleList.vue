@@ -1,8 +1,5 @@
 <template>
-  <nav
-    ref="list"
-    id="ArticleList"
-    style="
+  <nav ref="list" id="ArticleList" style="
       position: fixed;
       width: auto;
       max-width: 100%;
@@ -11,33 +8,19 @@
       height: 100%;
       border-right: 1px solid brown;
       background: rgba(0, 0, 0, 0.5);
-    "
-    data-nosnippet
-  >
+    " data-nosnippet>
     <div style="margin: 1em 0.5em" v-if="queryTags.length > 0">
       Tag Search
       <span style="cursor: pointer" @click="$emit('ClearQueryTags')">❌</span>
       :<br />
-      <div
-        class="tag"
-        style="cursor: default"
-        v-for="tag in queryTags"
-        :key="tag"
-      >
+      <div class="tag" style="cursor: default" v-for="tag in queryTags" :key="tag">
         {{ tag }}
       </div>
     </div>
     <a class="list_item_dummy"></a>
-    <a
-      :class="'list_item ' + (needDrawOut(item.title) ? 'list_drawout' : '')"
-      v-for="item in items"
-      :ref="'listItem_' + item.filename"
-      :key="item.filename"
-      :data-select="item.filename == currentFile"
-      :data-display="isDisplay(item)"
-      :href="'?n=' + item.filename"
-      @click.prevent="$emit('ClickItem', item.filename)"
-    >
+    <a :class="'list_item ' + (needDrawOut(item.title) ? 'list_drawout' : '')" v-for="item in items"
+      :ref="'listItem_' + item.filename" :key="item.filename" :data-select="item.filename == currentFile"
+      :data-display="isDisplay(item)" :href="'?n=' + item.filename" @click.prevent="$emit('ClickItem', item.filename)">
       {{ item.title ? item.title : item.filename }}
     </a>
     <div style="height: 40%; width: 1px"><!--for scroll--></div>
@@ -89,8 +72,14 @@ export default {
     },
     ScrollDisplay(filename) {
       let a = "listItem_" + filename;
-      let e = this.$refs[a];
-      if (e) this.$refs.list.scroll(0, e.offsetTop - window.innerHeight / 3);
+      let e = this.$refs[a][0];
+      if (e) {
+        this.$refs.list.scroll({
+          left: 0,
+          top: e.offsetTop - window.innerHeight / 3,
+          behavior: "smooth",
+        });
+      }
     },
     needDrawOut(content) {
       if (!content) return false;
@@ -134,6 +123,7 @@ function Contains(array, target) {
   text-align: left;
   text-indent: 0.5em;
 }
+
 .list_item_dummy {
   border-bottom: #660000 solid 2px;
   margin-left: 3em;
