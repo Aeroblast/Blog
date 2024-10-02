@@ -1,6 +1,13 @@
 welcome,0
 about,0
 Tag-NovelReadOverRecord,100,TAG【小说读了记录】,小说读了记录
+extern20170520,Legacy/Archive_Lofter/index.html?post=1edd35cb_fbf4c68,【20170520】肝完NieR:Automata的碎碎念,游戏体验记录
+extern20170901,Legacy/Archive_Lofter/index.html?post=1edd35cb_110cbc57,【20170901】夏のGame Life,游戏体验记录
+extern20170914_2,Legacy/Archive_Lofter/index.html?post=1edd35cb_11239566,【20170914】「project OCTOPATH TRAVELER」试玩版Primrose线简单剧情流程&吐槽,游戏体验记录
+extern20170914_2,Legacy/Archive_Lofter/index.html?post=1edd35cb_11250330,【20170914】「project OCTOPATH TRAVELER」试玩版Olberic线简单剧情流程&吐槽,游戏体验记录
+extern20180104,Legacy/Archive_Lofter/index.html?post=1edd35cb_11f9a02a,【20180104】通关游戏后的日常碎碎念『异度神剑 2』,游戏体验记录
+extern20181231,Legacy/Archive_Lofter/home.html?lpost=1edd35cb_12d3ce5ad,【20181231】年终的游戏回顾,游戏体验记录,时间节点
+extern20191231,Legacy/Archive_Lofter/?post=1edd35cb_1c74fd7ce,【20191231】年终的ACG回顾,时间节点,游戏体验记录,游戏体验记录,时间节点
 20190910_0000,76,最初的Post,折腾
 20190910_1337,136,,Test,折腾
 20190911_1235,390,一些关于获取漫画的想法
