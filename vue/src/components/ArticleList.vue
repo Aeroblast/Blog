@@ -20,7 +20,7 @@
     <a class="list_item_dummy"></a>
     <a :class="'list_item ' + (needDrawOut(item.title) ? 'list_drawout' : '')" v-for="item in items"
       :ref="'listItem_' + item.filename" :key="item.filename" :data-select="item.filename == currentFile"
-      :data-display="isDisplay(item)" :href="'?n=' + item.filename" @click.prevent="$emit('ClickItem', item.filename)">
+      :data-display="isDisplay(item)" :href="GetHref(item)" @click.prevent="OnClickItem(item)">
       {{ item.title ? item.title : item.filename }}
     </a>
     <div style="height: 40%; width: 1px"><!--for scroll--></div>
@@ -38,12 +38,17 @@ export default {
   },
   methods: {
     isDisplay(item) {
-      if (item.special) {
-        if (item.special == "tag" && this.queryTags.length > 0) {
-          return Contains(this.queryTags, item.tags[0]);
-        }
+      if (item.special == "sp") {
         return false;
       }
+      if (item.special == "tag") {
+        if (this.queryTags.length > 0) {
+          return Contains(this.queryTags, item.tags[0]);
+        } else {
+          return false;
+        }
+      }
+
       if (this.queryTags.length == 0) return true;
       for (const e of this.queryTags) {
         if (Contains(item.tags, e)) {
@@ -69,6 +74,20 @@ export default {
         }
       }
       return null;
+    },
+    GetHref(item) {
+      if (item.special == "extern") {
+        return item.param;
+      }
+
+      return '?n=' + item.filename
+    },
+    OnClickItem(item) {
+      if (item.special == "extern") {
+        window.open(item.param, '_blank');
+        return;
+      }
+      this.$emit('ClickItem', item.filename);
     },
     ScrollDisplay(filename) {
       let a = "listItem_" + filename;

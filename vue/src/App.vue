@@ -135,7 +135,7 @@ export default {
         for (let i = indexPage.length - 1; i >= 0; i--) {
           let obj = Record2Object(indexPage[i].replace("\r", ""));
           if (obj) {
-            if (obj.special) {
+            if (obj.special == "tag") {
               this.indexItems.splice(0, 0, obj);
             } else this.indexItems.push(obj);
           }
@@ -316,7 +316,7 @@ function Record2Object(line) {
   if (args.length < 2) return null;
   let obj = {
     filename: args[0],
-    length: args[1],
+    param: args[1],
     title: args[2],
   };
   let tags = [];
@@ -327,6 +327,9 @@ function Record2Object(line) {
   if (obj.filename[0] < "0" || obj.filename[0] > "9") {
     if (obj.filename.startsWith("Tag-")) {
       obj.special = "tag";
+    } else if (obj.filename.startsWith("extern")) {
+      obj.special = "extern";
+      obj.title= "🗗" + obj.title;
     } else {
       obj.special = "sp";
     }
