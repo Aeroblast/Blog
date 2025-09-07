@@ -232,6 +232,10 @@ const atxtRegexList = [
     '<a class="asin" title="$1" href="https://www.google.com/search?q=$1" target="_blank">🔗<span class="underline">ASIN</span></a>',
   ],
   [
+    /\[ISBN\](.*?)\[\/ISBN\]/,
+    '<a class="isbn" title="$1" href="https://www.google.com/search?q=$1" target="_blank">🔗<span class="underline">ISBN</span></a>',
+  ],
+  [
     /\[ASIN=(.*?)\](.*?)\[\/ASIN\]/,
     '<a class="asin" href="https://www.google.com/search?q=$1" target="_blank">$2</a>',
   ],
