@@ -4,13 +4,36 @@ const path = require("path");
 var aes = require("./aes");
 var args = process.argv.splice(2);
 
+/**
+command
+post [filename] class? [classname]?
+en-post [pw] [filename] 
+en [pw] [filename]
+de [pw] [filename]
+ */
+
+
 if (args.length == 0) PostBlog();
 else {
     switch (args[0]) {
+        case "post": {
+            if (args.length < 2) { break; }
+            let src = args[1];
+            let className = null;
+            if (args.length >= 4 && args[2] == "class") {
+                className = args[3];
+            }
+            PostBlog(src, className);
+        } break;
         case "en-post": {
+            if (args.length < 3) { break; }
             let pw = args[1];
-            console.log(pw)
-            PostBlog(pw);
+            let src = args[2];
+            let className = null;
+            if (args.length >= 5 && args[3] == "class") {
+                className = args[4];
+            }
+            PostBlog(src, className, pw);
         } break;
         case "en": {
             console.log(`encrypt ${args[2]}`);
@@ -51,15 +74,10 @@ else {
 }
 
 
-function PostBlog(pw) {
-    var className = "";
-    if (args.length >= 2) {
-        if (args[0] == "class") {
-            className = args[1];
-        }
-    }
-    var stamp;
-    var filename;
+function PostBlog(src = null, className = null, pw = null) {
+    if (!src) { src = "temp.atxt"; }
+    let stamp;
+    let filename;
     {
         let d = new Date();
         let y = "" + d.getFullYear();
@@ -71,7 +89,7 @@ function PostBlog(pw) {
         stamp = y + mm + dd + " " + hh + ":" + mi + ":" + ss;
         filename = y + mm + dd + "_" + hh + mi;
     }
-    let data = fs.readFileSync("temp.atxt");
+    let data = fs.readFileSync(src);
     let blog_len = CleanText(data.toString()).replace("\n", "").replace("\r", "").length;
     data += "\n[time]" + stamp + "[/time]";
     let blog_path = "docs/Text/" + filename + ".atxt";
@@ -79,7 +97,7 @@ function PostBlog(pw) {
     let reg_title = /^#title:(.*)/;
     let title_match = data.match(reg_title);
     if (title_match != null) {
-        record += "【" + className + "】" + title_match[1];
+        record += (className ? `【${className}】` : "") + title_match[1];
     }
     if (className) {
         record += "," + className
