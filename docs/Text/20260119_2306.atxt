@@ -1,0 +1,48 @@
+#title:Unreal Engine 上手笔记
+
+面向过去的自己（有那么一些 Unity3D 的基础，完全没接触过 UE）。习惯边做边学，但官方教程都是非常散碎的知识（即使是那个面向 Unity3D 使用者的教程），让人一时间不知道如何下手。本笔记的目标是，假如消除这几天的记忆，看完笔记还是能光速开干。
+操作的 UE 版本是 5.6，英文 UI。不知道有效性能持续多久，5.7 都出了。
+
+#left:简写
++ BP = Blueprint
++ ABP = Animation Blueprint
+
+#h3:如何快速拿到程序的控制权
+问题的表述可能有点怪。下载完选个模板点 Play 就能跑样例了，但不知道怎么下手建立自己要做的世界。
+
+一个叫做 GameMode 的东西负责进行各种初始化。可以在 Project Settings => GameMode 设置全局的 GameModeBase Class，在每个 World 里可以单独覆盖。场景画面上方有快捷菜单。
+即使选择 None，UE 还是会擅自用一个 GameMode 初始化一堆东西，所以还是自己创建一个 GameMode 的子类比较好。这个东西没逻辑内容就是填字段，所以新建 BP 类就可以。
+接下来给新建的 GameMode BP 设置内容，它会负责把填写的 Class 实例化。按照自己需求来说，设置 Default Pawn 和 PlayerController 就可以了。从 UE 编辑器选择 Tools => New C++ Class，按照向导创建文件，会自动开始编译。过一会在 GameMode BP 的下拉菜单里就能看到自己的 C++ 类了，但是别急。
+实际用起来 BP 类才是一级公民，建 BP 类是躲不掉的。BP 不只是给非程序员的简化替代品，还承担了类似 Unity3D 的 perfab 的功能。大概即使把逻辑全都交给 C++，也必须建个 BP 类继承 C++ 类用来配置实例数据，尤其是动态加载的资源。（已踩坑，在 C++ 硬编码加载资源直接崩溃，都不知道怎么找问题。）由于 GameMode 就是动态加载了，感觉大部分 C++ 类都要老老实实建 BP。继承 C++ 类的 BP 类同样会出现在相应的下拉菜单里。
+
+要注意有些八股要写，比如 Actor 要初始化根组件，C++ 里自己加的组件都要初始化不然表现会很奇怪（已踩坑，关编辑器会丢 BP 的引用什么的）。Charactor 则是替你加了一堆组件，不用自己初始化。
+
+编译。任何 C++ 改动都要编译才能生效。UE 编辑器右下角一排里有个小按钮，重新编译热重载，这个应该是属于 Live Coding。（似乎上个版本按钮不在这里，总之搜一下如何编译应该会找到截图。）需要注意 Live Coding 只能让代码临时生效，关掉编辑器就没了（已踩坑）。完整编译需要关掉 UE 编辑器，用 VS 编译。各个编译模式有[url=https://dev.epicgames.com/documentation/zh-cn/unreal-engine/build-configurations-reference-for-unreal-engine]官方解释[/url]。正常是 Development 模式。似乎 Debug 模式的编辑器 exe 不一样。
+
+
+#h3:处理输入
+新建项目有个继承自 PlayerController 的类，里面用了 EnhancedInputComponent 啥的，查了下也算比较新的组件。这个类实例是唯一的，由 GameMode 生成。
+用法依然是 C++ 这边写完再建个 BP 类，绑定资源。建立一堆 InputAction，建立一个 InputMappingContext 设置输入到 InputAction 的映射，然后把这些都绑定给 BP 类。在 C++ 那边把 InputAction 绑定到自己写的函数。
+
+比较关心手柄问题，顺便试了下用 Steam 打开编辑器（可以用 Steam 打开 Epic Games Launcher 打开编辑器），可以让 DS4 和 NS Pro 手柄生效。似乎这样打开时不能用 Live Coding。Steam 对 NS Pro 的映射体现在 UE 里是 Face Button 上下左右对应物理位置，开“任天堂按键布局”的话 AB、XY 会互换，嗯大概做适配的话就不要选互换了。
+关于摇杆模拟方向键，各种修饰触发设置怎么试都不起作用。让 PlayerController 接管摇杆的 2D 值或许写起来很简单，但这样应该不符合这个系统的理念，查了下可能应该[url=https://historia.co.jp/archives/26608/]自己写 InputTrigger[/url]。这个问题往后放吧。
+
+
+#h3:从 VRoid Studio 到 UE 的角色
+捏人工具选从测试版就在关注的 VRoid，非常版权友好。VRoid 输出的是 VRM 文件。查了一下主流是用一个叫做 VRM4U 的插件。眼下的 20260101 版最高支持到 UE 5.3。不过查了一下发现更高版本也能用。实际用 5.6 打开会提示目标版本不一样，要不要编译，点确定等一下就行（之后可以改插件描述文件，打开时它就不问了）。新建个文件夹，把 VRM 文件拖进去就会生成各种 UE 的资源。SK_*（SkeletalMesh 资源）应该是核心资源。
+
+然后是动画重定向，比如要把 UE 自带的走路动画放到从 VRM 导入的人物上。VRM4U 的教程说看 UE 官方教程，而 UE 官方教程非常混乱，最新版的页面下甚至好像是上个大版本的内容，截图的 UI 都不一样。看来需要找找个人博客那种经验分享。
+查到[url=https://zenn.dev/daichi_gamedev/books/unreal-engine-tutorial-2/viewer/animation-retarget]一篇文章[/url]说从 5.4 开始动画重定向不一样，变简单了，然后导向[url=https://dev.epicgames.com/documentation/zh-cn/unreal-engine/auto-retargeting-in-unreal-engine]官方教程[/url]。在自带素材的 ABP_*（Animation Blueprint 资源）上右键，选 Retarget Animation，可以选择来源模型和目标模型。这里默认情况下是自动转换姿势，实际不能自动（毕竟初始姿势一个 A 一个 T），需要选择导入 VRM 时生成的 RTG_* (IK Retargeter 资源) 。
+实际试了下转换初始素材里的 ABP，相关动画素材都一起生成了目标模型的版本。把 SK_* 拖入场景，把新的 ABP 放在场景里的 SK_* 上，就可以看到角色正常进入初始站立状态。做自己的 Actor 类要用 SkeletalMesh 组件来加载 SK_* 和 ABP。继承 Character 自带一些组件。
+
+插曲。动画重定向后发现左右 Toe 部分有预料外的旋转，鞋变形了。仔细看 RTG_* 文件里就不对了，需要编辑一下。IK Retargeter 编辑器里这个 Op Stack 选项卡好像还是 5.6 新出的，找不到教程。好在还算直观，看上去是 FK Chains 的映射操作不对。根据 UE 人物的结构，脚趾部分跟腿一样属于 Leg（穿了鞋所以没有脚趾动作？），可能是按照名称匹配就错了。不知道为什么看上去一样的操作重复了好几遍，总之都改掉。看上去没问题了。
+
+然后是让角色动起来。这个 ABP 从角色的 CharacterMovement 组件里获取速度，还会判断胶囊体是否在空中之类的，然后自动决定播哪个动画。而角色类可以用 AddMovementInput 移动，内部有各种处理可以触发动画。UE 设计上需要有控制者才能用这个方法，不然不会动，但其实只需要在角色类的构造函数里加一句魔法（绕了好多弯才找到答案……）：
+[code=cpp]
+AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+[/code]
+
+
+#h3:结语和吐槽
+有了这些基础大约能从“学着做”变成“边做边学”了，进入舒适区。感想是，这玩意手感跟 Unity3D 完全不一样。不是说技术本身如何，而是学习的方式。Unity3D 是从文档找功能，看官方的定义、解释、例子，然后学会怎么用。UE（至少当前版本）是官方文档没怎么写最新版，也不重定向到旧版，有的新版下面内容是旧版，体感 404 比正常的还多，学起来重度依靠外部学习资料。好在被逼急了也不是不能看引擎源代码，这就是开源生态吗。然后大约是因为讨论丰富，聊天 AI 的解答精度（至少目前为止）还挺高，也算是赶上了好时代。不敢想像聊天 AI 时代之前要怎么独立入门。
+[time]20260119 23:06:10[/time]
