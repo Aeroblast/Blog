@@ -1,0 +1,57 @@
+#mode:tech
+#title:UE 上手笔记：把模型当成立绘
+UE 版本：5.6
+
+#h4:目标效果
+类似视觉小说，角色显示上半身，下面是对话框。只不过要用 3D 模型来达成这样的效果，且允许同步模型的动作。
+以前拿 Unity 做过，大概是在场景里放相机，设置只拍摄角色，渲染到贴图上，再把这个贴图放屏幕上。UE 大概思路差不多。
+
+#h4:关键操作
+AI 都能写。只记下关键步骤防止 AI 胡搞。
+
+SceneCapture 组件（USceneCaptureComponent2D）完成相机的任务。它像相机一样工作，但输出是贴图。
+关键选项：
++ Primitive Render Mode 选择 “Use ShowOnly List”。
++ Capture Source 选择“SceneColor (HDR) in RGB, Inv Opacity in A”（ESceneCaptureSource::SCS_SceneColorHDR）。这似乎是唯一能输出透明通道的选项。需要注意输出的透明通道是 1 - Opacity。
++ 在 General Show Flags 里找到 Atomsphere，去掉。不然会画天空盒。我们需要透明背景。
+其他的看着办，关掉每帧捕获啥的。
+
+之后在代码里设置输出的贴图：
+[code=cpp]
+UTextureRenderTarget2D* NewRT = NewObject<UTextureRenderTarget2D>(SomeActor);
+CaptureComponent->TextureTarget = NewRT;
+[/code]
+
+此外，按需求编辑显示列表：
+[code=cpp]
+CaptureComponent->ShowOnlyActors.Empty();
+CaptureComponent->ShowOnlyActors.Add(SomeActor);
+[/code]
+
+要把得到的贴图显示到屏幕上，就要建立 UI 相关的东西。
+
+首先建一个 Material。
+Material Domain 设为“User Interface”。
+Blend Mode 设为“Translucent”。
+在 Material Graph 添加 Texture Sample 节点，然后右键菜单里找到 Convert to Parameter。给这个变量起个名字，比如“PortraitTexture”。RGB 输出给 Final Color。A 通过“1-x”输出给 Opacity。
+最后保存前要给这个材质塞一个合法的贴图。之后我们要替换成动态生成的贴图，这个占位的贴图实际上没用，但[b]如果不放个占位的贴图，那它不仅会在保存时出警告，还会无声无息地不显示[/b]。
+这样材质就建好了。接下来需要用这个材质建一个动态材质，这样才能动态设置贴图。
+假如把这个材质素材塞给了某蓝图的变量 BaseMaterial，于是有：
+[code=cpp]
+UMaterialInstanceDynamic* DynMaterial = UMaterialInstanceDynamic::Create(BaseMaterial, this);
+DynMaterial->SetTextureParameterValue(FName("PortraitTexture"), CaptureComponent->TextureTarget);
+[/code]
+设置一次就行，不用每帧设置。
+
+建一个 Widget Blueprint。加 Image 控件，右键用 Size box 包裹。设置一下大小什么的。作为 TSubclassOf<UUserWidget> 塞给蓝图。
+假如这个图片控件叫“PortraitImage”，那么：
+[code=cpp]
+PortraitWidget = CreateWidget<UUserWidget>(GetWorld(), PortraitWidgetClass);
+PortraitImage = Cast<UImage>(PortraitWidget->GetWidgetFromName(TEXT("PortraitImage")));
+PortraitImage->SetBrushFromMaterial(DynMaterial);
+[/code]
+完结。实际项目里要拆出贴图做每个角色缓存什么的，还有暂停啥的功能。
+
+另外运行时看 UI 控件状态，找 Tools -> Debug -> Widget Reflector。设置一下 Filter 可以只显示游戏的内容，不然编辑器里的也会被选择。
+
+[time]20260513 22:28:56[/time]
