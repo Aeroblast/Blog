@@ -451,7 +451,7 @@ function RenderContentLine(line, reg) {
   return { result: r, matches: matches };
 }
 function ReplaceEntity(c) {
-  return c.replaceAll("<", "&lt;").replaceAll(">", "&rt;");
+  return c.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
 function needDrawOut(content) {

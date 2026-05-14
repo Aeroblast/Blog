@@ -24,6 +24,7 @@ article p {
 
 article[data-mode="tech"] p {
     text-indent: 0em;
+    text-align: left;
 }
 
 article .drawout {
