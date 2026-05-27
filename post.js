@@ -94,7 +94,7 @@ function PostBlog(src = null, className = null, pw = null) {
     data += "\n[time]" + stamp + "[/time]";
     let blog_path = "docs/Text/" + filename + ".atxt";
     let record = filename + "," + blog_len + ",";
-    let reg_title = /^#title:(.*)/;
+    let reg_title = /#title:(.*)/;
     let title_match = data.match(reg_title);
     if (title_match != null) {
         record += (className ? `【${className}】` : "") + title_match[1];
