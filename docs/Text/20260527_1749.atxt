@@ -1,0 +1,87 @@
+#mode:tech
+#title:UE 上手笔记：基于 VRM 的骨骼动画素材处理
+版本信息：UE 5.6。 VRM4U 20260101。Blender 5.1。
+上回说到用 VRM4U 导入了VRoid 的 VRM 模型，弄好了重定向 UE 自带素材，能走路了。现在想加入自己的攻击动作，尝试打通流程。
+
+#h3:动作素材来源：视频动捕
+以前玩过 3ds Max 所以 Blender 摸索起来还算顺利。但手动做了几个动作感觉太慢了，遂决定找找视频动捕方案。
+力求白手起家，且合规。初步考察一下。
+
+#h4:Rokoko Vision
+在线服务，上传视频或者调用摄像头，输出 fbx。
+多种搜索方式的结果这个都是第一个。实际单摄像头直出效果不太好，动作识别不准而且抖动很严重。说是协同 Rokoko Studio 可以做去抖动，结果安装之后用不了（网络问题？）那算了吧。双摄像头方案是付费服务就不试用了。
+貌似这个公司主要还是做带追踪器的业务。特别是跟开源方案对比效果之后发现做好这个事情需要的算力不高，所以感觉这个公司做成在线服务无非是不想暴露模型，免费版可能就是引流用的粗糙货。
+
+#h4:XR Animator（本次的选择）
+[url=https://github.com/ButzYung/SystemAnimatorOnline]开源个人项目[/url]，提供浏览器版和本地版（Electron）。输出 VMD、glTF、BVH、VRMA。
+二次元味很重的个人项目。UI 比较难懂需要摸索。是个跑在浏览器环境的模型，效果居然不错。当然单视频输入上限大概不高，但当原始素材也可以用。Electron 版是桌面宠物风格，全透明背景……当工具还是浏览器版比较好。
+先拿这个做初始素材。
+
+#h4:没试但姑且记下考察
+#h5:FreeMoCap
+开源。提供多相机方案（要打印一张标记来校准）。
+有网站，有友好的指南，看上去比较靠谱。
+
+#h5:偏学术：OpenPose、EasyMocap
+开源，但非商用才免费（不知道条款说的是作为工具使用还是二次开发）。社区讨论都是开发，大概都对用户支持比较差。OpenPose 似乎有些二次开发的工具。
+
+#h3:在 Blender 里调整动作
+捕捉的动作每一帧都是关键帧，然后很容易出现抖动。正统方法大概有什么算法降噪。
+但反正低精度动捕的动作需要调整，干脆从帧序列里摘几帧半手动制作。
+以下是一些 Blender 的基础操作，不太熟就记点（有点不适合文字记录）。
+进入「Pose Mode」制作动作。注意复制动作不能直接复制帧，而是要在上面切换到「Animation」，在菜单「Pose」里选择「Copy Pose」这样复制。
+最后用「Action Editor」新建动作，也可以直接把动捕的那些删了。导出应该只会导出当前动作。
+
+#h3:动画[ruby=Retarget]重定向[/ruby]
+XR Animator 本身就是重定向动作到 VRM 文件上跑的，技术本身是存在的，问题是有没有顺手的工具。
+
+#h4:弯路预警：不要忽视 VRM 的 Humanoid 定义
+紧急补充 VRM 相关小知识：VRM（以及 VRMA）格式实现人形骨骼动画重定向[b]并不是靠规范骨骼的名称[/b]，而是靠额外附加通用定义到实际骨骼的对应关系。在 Blender 里，物体的属性里找到 VRM - Humanoid 就可以看到 VRM 公用定义到实际模型骨骼名称的映射。在 Blender 里导入、编辑、再导出不会丢失这个信息。
+
+走了几条弯路，共同点是把 VRM 资源当成普通的动作动画处理。而 XR Animator 的骨骼定义与 VRoid 的骨骼定义不同，如果作为普通的骨骼做重定向，就要额外处理映射关系。
+弯路其一，尝试用 Blender 的 [url=https://extensions.blender.org/add-ons/retarget/]Retarget[/url] 插件。插件的名字起得很霸道，实际还挺亲民，里面有许多预设包括 VRoid。似乎如果使用的骨骼来源在预设里，用起来就很简单。但 XR Animator 的骨骼定义是啥呢……试了下最接近的预设是 Rigity_Metarig，手指和腿部动作没有生效。想正常用就需要手动做映射。
+弯路其二，输出 FBX 导入 UE 做重定向。选择导入 Skeletal Mesh 会提示没有内容，选择导入动画会跳过生成 IK Rig 定义（可以在预览里看到但无法选中）导致后续无法重定向。UE 似乎没考虑不包含模型只有骨骼的情况。
+弯路其三，误以为 VRM4U 的标准是重定向到 UE 样例素材 Mannequin 上（生成的 RTG_* 素材只有这个）。于是把动作 VRMA 重定向到 Mannequin 再重定向到 Vroid 的 VRM。倒不是不能用，但手动修正重个别定向规则非常繁琐，还会丢细节动作。在 UE 里有正确的方法，下面讲。
+
+#h4:将 VRMA 动画在 Blender 重定向给 VRM 模型 
+虽然把 VRMA 直接导入 UE 也可以，但在 Blender 重定向给目标模型还能顺便微调一下。
+插件装好。在 VRM 模型已经导入的情况下，选择导入 VRMA 即可。超简单。
+需要注意这么一搞就自动烘焙了一下（变成了每一帧都是关键帧）。没看到能控制的选项。大概应该在拿到动捕素材时就做重定向。
+
+导入 UE 有点问题。理想情况是，导入具有相同骨骼定义的 VRMA 时选好目标 SKEL_* 直接生成对应的 UE 素材，然而不知道为什么会报错（Failed MergeAllBonesToBoneTree）。
+导出 FBX 选 SKEL_* 倒是不会报错，但是动画的轴是不太对的。调了各种导出选项，要么动作对但人是倒着的，要么人是正的但动作扭曲。可能是 VRM 的座标有更多定义（查了下还有什么拇指方向定义，确实扭曲的时候拇指扭曲方向不一样）。幻想了一下微调动作重新导入只需要右键 reimport，真可惜。
+
+#h4:在 UE 里导入 VRMA 动画后重定向
+那只能走一下重定向的流程了。实际上，即使导入的 VRMA 动画与目标 VRM 模型具有不同的骨骼定义也是这样的流程。
++ 新建一个 IK Retargeter（RTG_*）
++ 选择Source 和 Target 的 IK Rig，分别选择 VRMA 动画和 VRM 模型的 IK_*_VrmHumanoid。
++ 在 Op Stack 选项卡下面， 点「Add New Retarget Op」增加操作，具体内容后述。
++ 找到导入的动作文件，右键用刚才建立的 RTG_* 重定向，得到目标模型的动作素材。
+编辑 RTG_* 时可以通过预览设置指定动作。
+
+关于 Op Stack。插件的文档似乎有点旧了，没提 Op Stack 。自动生成的 RTG_* 有一套映射操作，具体而言依次是 1. 盆骨动作、2. FK 链、4. IK Rig（3. 重定向 IK 目标）、5. 根动作、6. 重映射曲线。照抄确实能动，但经过半猜半试发现有更符合需求的写法。
+这次制作的动画很初级，不涉及 IK，所以 IK 相关是不需要的。没有什么特殊曲线。但是有盆骨的动作，照抄的版本盆骨动作明显没有生效。没有根动作，这个应该是走路什么的用的，如果有需要应该加上。最后试验出的结论是 1. FK 链、2.盆骨动作。FK 链会覆盖盆骨动作，所以把盆骨动作放在后面才符合预期。
+
+插曲，按照以上流程操作时有一次关节旋转方向莫名其妙都变成了反的。全部重启再重新导入就好了。看来相关工具还是有不稳定性。
+
+#h3: 播放动作
+[url=https://dev.epicgames.com/documentation/unreal-engine/graphing-in-animation-blueprints-in-unreal-engine]AnimGraph[/url]，[url=https://dev.epicgames.com/documentation/unreal-engine/animation-slots-in-unreal-engine]Slot[/url]，[url=https://dev.epicgames.com/documentation/unreal-engine/animation-montage-in-unreal-engine]Montage[/url]。
+这部分官方文档还比较完善，是不是因为这是给非程序员看的教程（
+简单来说有个适合播放一次性动画的 Slot 机制。Montage 是把 Animation Sequence 素材包装起来形成的素材。当与特定 Slot 关联起来的 Montage 被激活（调用 Montage_Play() 时），ABP 里对应的 Slot 就会生效。Slot 的定义保存在骨架素材里。
+自带素材的 ABP（比如 ABP_Unarmed）已经有了 DefaultGroup.DefaultSlot，需求不复杂的话可以直接用。
+
+关于接收动画事件。C++ 写继承自 UAnimNotify 的自定义通知类，编译后就会出现在 Montage 的编辑器里。似乎每种事件写一个类是最被推荐的。
+
+#h3:表情（Mopher Target）
+VRoid 给的模型自带整套表情。在 SK_* 文件里找到 Mopher Target 预览可以看到有整体的喜怒哀乐之类和各种五官单独控制。设置权重组合就可以做出各种表情。
+代码端控制也很简单，直接按照名称设置权重。
+[code=cpp]
+if (USkeletalMeshComponent* MeshComp = GetMesh())
+{
+	MeshComp->ClearMorphTargets();
+	MeshComp->SetMorphTarget(SomeName, SomeValue, true);
+}
+[/code]
+
+差不多先这样。
+[time]20260527 17:49:35[/time]
