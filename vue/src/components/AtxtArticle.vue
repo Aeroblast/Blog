@@ -10,7 +10,7 @@
               --><a v-if="!activeFilenameInput" class="hide_link" ref="filename"
                 @click.prevent="$emit('direct', filename)" :href="'?n=' + filename"
                 :data-exist="loading || indexItem != null">{{
-              filename }}</a><!--
+                  filename }}</a><!--
               --><input ref="filename_input" v-model="filenameInput" @focus="$event.target.select()"
                 @keyup.enter="$emit('direct', filenameInput.trim())" class="filename_input" type="text"
                 v-if="activeFilenameInput" /><!--               
@@ -197,6 +197,9 @@ export default {
     }
   },
 };
+
+const atxtTitleRegex = [/^#title:(.*)/, "<p class='title0'>$1</p>"];
+
 const atxtLeveledBlockRegex = [
   /^#h([1-6]):(.*)/,
   "<h$1>$2</h$1><div class='leveled-block h$1block'>",
@@ -247,16 +250,24 @@ const atxtRegexList = [
   [/^#left:(.*)/, "<p class='aligned' style='text-align:left'>$1</p>"],
   [/^#center:(.*)/, "<p class='aligned' style='text-align:center'>$1</p>"],
   [/^#right:(.*)/, "<p class='aligned' style='text-align:right'>$1</p>"],
-  [/^#title:(.*)/, "<p class='title0'>$1</p>"],
   [/^#quote:(.*)/, "<div class='quote aligned'>$1</div>"],
   [/^#mode:(.*)/, "<p><!--skip--></p>"],
-  [/\[link=(.*?)\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$2</a>'],
-  [/\[link\](.*?)\[\/link\]/, '<a href="$1"target="_blank">$1</a>'],
-  [/\[url=(.*?)\](.*?)\[\/url\]/, '<a href="$1"target="_blank">$2</a>'],
-  [/\[url\](.*?)\[\/url\]/, '<a href="$1"target="_blank">$1</a>'],
+  [/\[link=(.*?)\](.*?)\[\/link\]/, '<a href="$1" target="_blank">$2</a>'],
+  [/\[link\](.*?)\[\/link\]/, '<a href="$1" target="_blank">$1</a>'],
+  [/\[url=(.*?)\](.*?)\[\/url\]/, '<a href="$1" target="_blank">$2</a>'],
+  [/\[url\](.*?)\[\/url\]/, '<a href="$1" target="_blank">$1</a>'],
   [/^\+ (.*)/, '<p class="list_item">$1</p>'],
 ];
-
+const atxtRegexList_HeadingSubset = [
+  [/\[color=(.*?)\](.*?)\[\/color\]/, '<span style="color:$1">$2</span>'],
+  [/\[ruby=(.*?)\](.*?)\[\/ruby\]/, "<ruby>$2<rt>$1</rt></ruby>"],
+  [/\[s\](.*?)\[\/s\]/, "<s>$1</s>"],
+  [/\[tag\](.*?)\[\/tag\]/, '<span class="tag">$1</span>'],
+  [/\[link=(.*?)\](.*?)\[\/link\]/, '<span>$2</span>'],
+  [/\[link\](.*?)\[\/link\]/, '<span>$1</span>'],
+  [/\[url=(.*?)\](.*?)\[\/url\]/, '<span>$2</span>'],
+  [/\[url\](.*?)\[\/url\]/, '<span>$1</span>'],
+];
 
 function RenderContent(lines, filename) {
   let r = "";
@@ -265,6 +276,7 @@ function RenderContent(lines, filename) {
   let leveledBlockStack = [];
   const toc = {
     text: "文章",
+    html: "文章",
     children: [],
     level: 0,
     parent: null,
@@ -303,6 +315,14 @@ function RenderContent(lines, filename) {
       );
     }
 
+    let titleTest = RenderContentLine(rendered, [atxtTitleRegex]);
+    if (titleTest.matches.length > 0) {
+      rendered = titleTest.result;
+      const heading_text = titleTest.matches[0][1];
+      toc.html = RenderContentLine(heading_text, atxtRegexList_HeadingSubset).result;
+      toc.text = heading_text;
+    }
+
 
     let leveledBlockTest = RenderContentLine(rendered, [atxtLeveledBlockRegex]);
     rendered = leveledBlockTest.result;
@@ -312,6 +332,7 @@ function RenderContent(lines, filename) {
       const entry = {
         level: level,
         text: heading_text,
+        html: RenderContentLine(heading_text, atxtRegexList_HeadingSubset).result,
         children: [],
       }
       while (leveledBlockStack.length > 0) {

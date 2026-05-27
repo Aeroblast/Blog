@@ -1,8 +1,8 @@
 <template>
     <div :data-level="data.level">
-        <div class="text" @click.stop="$emit('ClickItem', data)">{{ data.text }}</div>
+        <div class="text" @click.stop="$emit('ClickItem', data)" v-html="data.html"></div>
         <ol v-if="data.children.length > 0">
-            <li v-for="item in data.children">
+            <li v-for="item in data.children" :key="item.text">
                 <TocNestedList :data="item" @ClickItem="$emit('ClickItem', $event)"></TocNestedList>
             </li>
         </ol>
