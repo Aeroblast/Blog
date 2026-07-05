@@ -1,0 +1,48 @@
+#mode:tech
+#title:UE 上手笔记：从 Steam Input 获取手柄类型（附插曲：升级 UE 5.8）
+
+本来想作为 UI 的一环记录，但仔细一想这个博客框架更适合单个主题的短文，而且不想一篇花很久的时间。于是发布。
+
+手头有 Switch Pro 和 DS4，就是没有 PC 的第一公民 Xbox 系手柄，笑。Steam 客户端适配了这些主机手柄，提供了模拟成 XInput 设备的功能。非 Steam 游戏也可以通过添加到 Steam 库启动来使用这个功能，UnrealEditor 同理。但是若想得知具体是 Switch Pro 还是 DS4，就要真正通过 Steam SDK 连接到相关服务。
+
+#h3:意外插曲：升级到 UE 5.8.0
+Epic 启动器这个【哔——】反复报错拒绝工作（事后感觉是新的啥认证服务不吃网络代理导致的），尝试重装的时候启动器版 5.6 引擎本体被扬了。干脆换源码版 UE 5.8 看看最新的有啥好用的。用新版引擎打开项目提示要升级，升级后打开会报错。按照提示打开 IDE 把 *.Target.cs 里的 BuildSettingsVersion.V5 改成 V7。IncludeOrderVersion 删掉好像也没问题，毕竟咱项目小。
+但是当初的 VRM4U 插件 20260101 版编译报错，似乎有些 API 在 5.8 不能用了。作者这周刚更新[VRM4U_5_8_20260622](https://github.com/ruyo/VRM4U/releases/download/20260622/VRM4U_5_8_20260622.zip)，好耶了一下发现总是编译不过，建新项目只加插件也报错，然后发现这一版不在 release 列表，只在 release 外面显示，该不会是发了又删了吧……估计这版真有问题。换 20260513 版只有一个轻微错误（可能是检查升级了，改个预处理 else endif 就好），编译启动，正常启动了。
+
+随后发现通过 Steam 启动来使用 Switch pro / DS4 的方法不起作用了。UE 里能看到手柄但没反应。虽然折腾半天发现通过 Steam 启动打包 exe 或者以游戏模式启动编辑器（ -game）没问题，但后来了解到接入 SDK 的话就直接启动即可（见下文），又走了弯路。
+
+#h3:新学的小妙招
++ 像 showdebug enhancedinput 之类的调试工具需要在 GameMode 有一个 HUD（弹出来的“HUD”就行，不用新建）。
++ 给 VS 安装 UnrealVS 插件（位于引擎本体的Engine/Extras/UnrealVS），可以编译单个文件。在触发全体编译的时候可以先试着编译一个文件。
++ 游戏模式启动编辑器 UnrealEditor.exe path/to/name.uproject -game 。可以再加 -log 同时开 cmd 窗口的 Log。比打开整个编辑器快不少。
+
+#h3:通过 Steam Input 连接并识别手柄
+我们要连接到 Steam 的相关服务。UE 附带了必要的东西，但需要手动配置。
+
+首先启用内置插件 SteamShared（似乎负责加载 Steam SDK）和 SteamController（感觉只是给那个专用手柄的但总之带上了）。
+
+然后代码部分。项目.Build.cs 要加上这个：
+[code=cs]
+AddEngineThirdPartyPrivateStaticDependencies(Target, "Steamworks");
+[/code]
+插件也是这样引用了 Steam 的 SDK，但插件的 Private 依赖不会传播给我们的项目，所以要手动添加。我们实际要用的 API 所在的 #include <steam\isteaminput.h> 需要这个编译依赖。它实际在这个位置：
+Engine\Source\ThirdParty\Steamworks\Steamv164\sdk\public\steam\isteaminput.h
+此文件的注释和[url=https://partner.steamgames.com/doc/features/steam_controller/getting_started_for_devs]Steam的文档[/url]写得很详细。具体代码略，但 AI 自己写的话很容易瞎写，留个要点：
++ 实现一个管理类。按照喜好接入初始化、获取手柄列表等 API。要为 SteamInput 启用回调。
++ 在此类的声明里用 STEAM_CALLBACK 定义设备连接和断线的回调函数，实现此函数。
++ 每一帧要调用 SteamAPI_RunCallbacks() 来处理手柄连接或断开的回调。
+
+最后要在 DefaultEngine.ini 加入：
+[code=ini]
+[OnlineSubsystemSteam]
+bEnabled=true
+SteamDevAppId=480
+[/code]
+480 是Steam 指定的测试用 AppID，在 Steam 里显示为 SpaceWar。UE 会根据此配置主动创建 steam_appid.txt 且关闭时销毁，所以不要手动搞。此外，Steam 会使用 SpaceWar 的手柄映射配置，自带的是映射到键盘，记得改掉。
+
+接入 Steam SDK 以后就不需要通过 Steam 启动了（那样反而可能让 SDK 加载失败），直接启动即可。
+另外游戏模式启动后在重新获得焦点（Alt + Tab 一下就好）时启动前连接的手柄才会反映到游戏里。似乎此时手柄才被视为活动（比如此时 Switch Pro 的 Home 灯才会亮），很谜。所以写设备连接的回调是必要的。
+
+下一步就是根据手柄型号让 UI 变化按钮提示了。
+
+[time]20260705 22:48:31[/time]
