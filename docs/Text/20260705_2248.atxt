@@ -25,7 +25,7 @@ Epic 启动器这个【哔——】反复报错拒绝工作（事后感觉是新
 [code=cs]
 AddEngineThirdPartyPrivateStaticDependencies(Target, "Steamworks");
 [/code]
-插件也是这样引用了 Steam 的 SDK，但插件的 Private 依赖不会传播给我们的项目，所以要手动添加。我们实际要用的 API 所在的 #include <steam\isteaminput.h> 需要这个编译依赖。它实际在这个位置：
+插件也是这样引用了 Steam 的 SDK，但插件的 Private 依赖不会传播给我们的项目，所以要手动添加。我们实际要用的 API 所在的 #include &lt;steam\isteaminput.h&gt; 需要这个编译依赖。它实际在这个位置：
 Engine\Source\ThirdParty\Steamworks\Steamv164\sdk\public\steam\isteaminput.h
 此文件的注释和[url=https://partner.steamgames.com/doc/features/steam_controller/getting_started_for_devs]Steam的文档[/url]写得很详细。具体代码略，但 AI 自己写的话很容易瞎写，留个要点：
 + 实现一个管理类。按照喜好接入初始化、获取手柄列表等 API。要为 SteamInput 启用回调。
@@ -43,6 +43,7 @@ SteamDevAppId=480
 接入 Steam SDK 以后就不需要通过 Steam 启动了（那样反而可能让 SDK 加载失败），直接启动即可。
 另外游戏模式启动后在重新获得焦点（Alt + Tab 一下就好）时启动前连接的手柄才会反映到游戏里。似乎此时手柄才被视为活动（比如此时 Switch Pro 的 Home 灯才会亮），很谜。所以写设备连接的回调是必要的。
 
+识别的流程：等待设备接入的回调、更新手柄列表、获取类型。
 下一步就是根据手柄型号让 UI 变化按钮提示了。
 
 [time]20260705 22:48:31[/time]
