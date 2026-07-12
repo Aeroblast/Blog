@@ -257,6 +257,7 @@ const atxtRegexList = [
   [/\[url=(.*?)\](.*?)\[\/url\]/, '<a href="$1" target="_blank">$2</a>'],
   [/\[url\](.*?)\[\/url\]/, '<a href="$1" target="_blank">$1</a>'],
   [/^\+ (.*)/, '<p class="list_item">$1</p>'],
+  [/`(.+?)`/,'<span class="inline-code">$1</span>'],
 ];
 const atxtRegexList_HeadingSubset = [
   [/\[color=(.*?)\](.*?)\[\/color\]/, '<span style="color:$1">$2</span>'],
@@ -301,7 +302,7 @@ function RenderContent(lines, filename) {
       if (spMatch) {
         r += rendered.replace(/\[code=(.*?)\]/, "<pre><code class='lang-$1'>");
       } else {
-        r += "<pre><code>";
+        r += "<pre><code class='hljs nohighlight'>";
       }
       continue;
     }
