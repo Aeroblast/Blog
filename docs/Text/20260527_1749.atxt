@@ -54,7 +54,7 @@ XR Animator 本身就是重定向动作到 VRM 文件上跑的，技术本身是
 #h4:在 UE 里导入 VRMA 动画后重定向
 那只能走一下重定向的流程了。实际上，即使导入的 VRMA 动画与目标 VRM 模型具有不同的骨骼定义也是这样的流程。
 + 新建一个 IK Retargeter（RTG_*）
-+ 选择Source 和 Target 的 IK Rig，分别选择 VRMA 动画和 VRM 模型的 IK_*_VrmHumanoid。
++ 选择 Source 和 Target 的 IK Rig，分别选择 VRMA 动画和 VRM 模型的 IK_*_VrmHumanoid。
 + 在 Op Stack 选项卡下面， 点「Add New Retarget Op」增加操作，具体内容后述。
 + 找到导入的动作文件，右键用刚才建立的 RTG_* 重定向，得到目标模型的动作素材。
 编辑 RTG_* 时可以通过预览设置指定动作。
