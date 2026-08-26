@@ -1,0 +1,56 @@
+#mode:tech
+#title:UE 上手笔记：使用 Common UI 做根据手柄变化的图标
+版本信息：UE 5.8.0
+
+官方插件 Common UI 提供了一些便利的框架，但它的实现不一定符合需求，这时候就要多做一些东西。
+
+#h5:实现
+这个UI控件叫 Common Action Widget，是个能自动切换的图标。给它绑定一个 Input Action（旧版 Data Table 或新版 Enhanced Input Action），Common UI 会根据当前注册的控制器信息实时切换图标。
+
+控制器信息是 Common Input Base Controller Data。选择它是键盘还是手柄，以及手柄名称（Gamepad Name）。然后设置 Input Brush 什么的，也就是按键对应的图标。在项目设置的 Common Input Settings 的各个平台（咱用 Windows）的 Controller Data 下面加入各个控制器信息。做完这些，组件会自动根据当前控制器切换各个图标。
+不幸的是，在普通 Windows 上手柄名称只有一个 `Generic` 可用，没其他选项。似乎安装具体游戏机 SDK 才会注册相应的类型。
+
+咱要根据手柄类型（见前一篇笔记，从 Steam 获取）实时切换，显然不能只有一个泛用（对应 XInput 布局）。手柄类型是个选择框而不是文本输入，而注册选项看上去很复杂。
+
+解决方案是继承它然后强制设置手柄名称。假设我们要创建一个新的手柄类型的 `Switch`：
+[code=cpp]
+UCLASS(Blueprintable)
+class UCommonInputControllerDataSwitch : public UCommonInputBaseControllerData
+{
+	GENERATED_BODY()
+
+public:
+	UCommonInputControllerDataSwitch()
+	{
+		GamepadName = FName("Switch");
+	}
+};
+[/code]
+用蓝图继承它，可以看到手柄名称变成了咱想要的值（不过选项仍然只有 `Generic`）。配置图标，然后把蓝图加到上文所述的项目设置里即可。
+
+当 Steam 的回调表示产生手柄变化时：
+[code=cpp]
+FName CommonInputControllerNameSwitch = FName("Switch");
+// … 判断 Steam 给的手柄信息，决定要切换到这个手柄类型
+CommonInputSubsystem->SetGamepadInputType(CommonInputControllerNameSwitch);
+[/code]
+随后子系统会负责切换图标。
+
+实际行为：
++ 键盘和手柄哪个有输入就切换到哪组图标，自动更新。
++ 咱的代码设置手柄类型时，子系统会正常切换手柄这边的图标。
+
+#h5:为什么不用官方的手柄覆盖功能？
+Common Input Action Data Base（用于旧版输入 Action 的 Data Table）提供了 Gamepad Input Overrides。这里也只能选 `Generic` ，猜测需要写 C++ 把其他要用的名字比如 `Switch` 注册到选项。但由于咱希望向某种○×手柄用户提供两种确认键选择，这样直接覆盖确认和返回的按键根本不能达到目的，于是干脆没有考虑这个方案。此外，现在倾向于使用新版输入（Enhanced Input 系统），虽然它与 Common UI 协作还不是正式版。
+
+#h5:咱的应用场景
+Common UI 官方的方案是使用 Common Bound Action Bar，这是一个容器控件，通常在屏幕底部。你需要按照要求做一个 Common Bound Action Button（包含上文说的图标控件和一个 Common Text 控件）的控件。二者联系起来，Bar 会实时更新内部的按钮，每个按钮对应一个当前激活的 Action 和按钮。
+或许对于以键盘为主的输入是个好方案，但手柄优先的话，咱总是忘不掉塞尔达按照 Face Buttons 实际排列来提示按键的 UI。
+
+所以实现按键提示是：按照 Face Buttons 的排列画控件，然后设置一个 Input Mapping Context ，读取它的绑定列表，找到四个按键的 Action 绑定到对应的  Common Action Widget。这一套用的都是新版输入系统（Enhanced Input）的东西。
+另外，似乎当同一个按键有其他高优先级 Action 生效时（比如 Common UI 可以设置一个 IMC 实现确定和返回），被覆盖的 Action 图标会直接不显示。这个现象咱没有深究，直接规避（咱的游戏逻辑处理所有 Face Buttons 的输入）。毕竟即便搞清楚怎么覆盖也不应该用这个机制，感觉不好维护。
+
+#h5:附赠
+本次学到的小 Tip：删除 C++ 属性后，对应的蓝图仍然会残留引用（报警告，似乎无害），在蓝图手动编译保存一下就能消除。
+
+[time]20260827 01:24:23[/time]

@@ -1,0 +1,55 @@
+#mode:tech
+#title:UE 上手笔记：使用 Common UI 做支持多种输入的菜单
+版本信息：UE 5.8.0
+
+上回说到利用 Common Action Widget，这次从菜单方面找点能用的。咱的设想是先做一个宝可梦那种一列项目的菜单，并支持鼠标、键盘和手柄操作。
+
+#h5:容纳 UI 控件的 Stack
+Common Activatable Widget Stack。它可以用 Stack 的方式管理 Widget，很适合菜单。Common UI 的例子或者说推荐是做一个 Layout 包含 HUD 和 Stack。
+
+#h5:方向键导航
+事实上做好各个按钮然后勾选 Is Focusable 之后，就可以用内置的各个输入（键盘方向键、手柄的方向键和摇杆）控制焦点了，按钮持有焦点表现为 border。这个导航应该是 Slate（UE 的底层 UI）负责的，所以 Common Button Style 控制不了这个 border 样式，需要另外改。
+另外默认的键盘导航不包含 WASD，可以这样注册：
+[code=cpp]
+TSharedRef<FNavigationConfig> NavConfig = FSlateApplication::Get().GetNavigationConfig();
+NavConfig->KeyEventRules.Add(EKeys::W, EUINavigation::Up);
+NavConfig->KeyEventRules.Add(EKeys::A, EUINavigation::Left);
+NavConfig->KeyEventRules.Add(EKeys::S, EUINavigation::Down);
+NavConfig->KeyEventRules.Add(EKeys::D, EUINavigation::Right);
+[/code]
+需要注意（不知道是 Common UI 还是 Slate 做的），手柄在触发焦点导航时，有个看不见的光标被移到按钮上，触发 Hover 样式。但键盘不会触发，需要鼠标触发这个样式。
+
+想使用 Common Button Style 的 Selected 样式，需要勾选 Should Select Upon Receiving Focus 让按钮进入 Selected 状态。后来感觉检测 Selection 也比检测 Focus 靠谱一些。
+但这样的话焦点扫过的按钮都会被选中。解决方案是 Common Button Group。把按钮交给它管理，它会保证一组只有一个按钮被选中。用法很简单：
+[code=cpp]
+ButtonGroup = NewObject<UCommonButtonGroupBase>(this);
+ButtonGroup->AddWidget(DebugButton1);
+[/code]
+
+#h5:点按和返回
+看过上一篇笔记应该能猜到 UE 现成的东西思路是一个平台对应一个输入模式，没考虑到你在 PC 上换着各种风格手柄。如果只考虑 Xbox 风格，用 Common UI 的组件拼个菜单倒是非常开箱即用。
+
+咱的解决方案就是用自带的方向键导航处理选择，然后用游戏逻辑处理点按。让菜单组件的 GetDesiredInputConfig() 返回 ECommonInputMode::All，这样让游戏逻辑能接收输入。Common Button Group 直接提供当前选择的按钮：
+[code=cpp]
+UCommonButtonBase* SelectedButton = ButtonGroup->GetSelectedButtonBase();
+[/code]
+之后手动触发就行了。
+
+另外，完全没有输入 Action 绑定给 Common UI Input Data 的话会报错，所以也可以填一些无歧义的键盘输入数据。
+
+还有个问题，UI 处理输入优先级高于游戏逻辑，所以 UI 自带的确认和返回要关掉，不然会捣乱。有几个要注意的地方。
+
+1. 当前激活的 Common Activatable Widget（比如菜单）要去掉 Back Handler。
+
+2. 项目设置 Plugins - Common UI Frameworks 找到 Common Button Accept Key Handling，选 Ignore。
+
+3. 在 DefaultEngine.ini 加入：
+[code=ini]
+[ConsoleVariables]
+CommonUI.ShouldVirtualAcceptSimulateMouseButton=false
+[/code]
+Virtual Accept 就是依照平台变化的确认键，但我们要依照识别的手柄的型号或者用户设置改确认键。
+
+至此这个最基本的菜单就基本上符合预期了。
+
+[time]20260827 01:25:22[/time]
