@@ -382,3 +382,4 @@ extern20191231,Legacy/Archive_Lofter/?post=1edd35cb_1c74fd7ce,【20191231】年�
 20260808_2356,620,【小说读了记录】[4kaえんぴつ] 優等生がアダルトグッズを買いに来た 1 下,小说读了记录,4kaえんぴつ
 20260827_0124,2146,UE 上手笔记：使用 Common UI 做根据手柄变化的图标,技术,Unreal Engine
 20260827_0125,2002,UE 上手笔记：使用 Common UI 做支持多种输入的菜单,技术,Unreal Engine
+20260828_2358,2505,『Splatoon Raiders』打到终盘,游戏体验记录,Splatoon
