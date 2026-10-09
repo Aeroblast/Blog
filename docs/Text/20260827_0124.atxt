@@ -54,3 +54,9 @@ Common UI 官方的方案是使用 Common Bound Action Bar，这是一个容器�
 本次学到的小 Tip：删除 C++ 属性后，对应的蓝图仍然会残留引用（报警告，似乎无害），在蓝图手动编译保存一下就能消除。
 
 [time]20260827 01:24:23[/time]
+
+追记：使用 Common UI 设置手柄输入会导致编辑器内的鼠标光标被一起隐藏，超不方便。解决方案是设置这个变量：
+[code]
+CommonUI.AlwaysShowCursor 1
+[/code]
+[time]20261009 12:01:23[/time]
